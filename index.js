@@ -16,6 +16,7 @@ function DashPlatform(log, config, api) {
   self.log = log;
   self.config = config || { "platform": "AmazonDash-NG" };
   self.buttons = self.config.buttons || [];
+  self.timeout = self.config.timeout || 15000;
 
   self.accessories = {}; // MAC -> Accessory
   self.airodump = null;
@@ -80,7 +81,7 @@ DashPlatform.prototype.handleOutput = function(self, data) {
         
         var accessory = self.accessories[matches[1]];
         //rate limit the triggers to happen every 15 seconds
-        if (accessory && (accessory.lastTriggered == null || Math.abs((new Date()) - accessory.lastTriggered) > 15000)) { 
+        if (accessory && (accessory.lastTriggered == null || Math.abs((new Date()) - accessory.lastTriggered) > self.config.timeout)) { 
           self.log("Triggering " + matches[1]); 
           accessory.lastTriggered = new Date();
           self.dashEventWithAccessory(accessory); }
@@ -95,7 +96,7 @@ DashPlatform.prototype.dashEventWithAccessory = function(accessory) {
     .getCharacteristic(Characteristic.ProgrammableSwitchEvent);
 
   targetChar.setValue(1);
-  setTimeout(function(){targetChar.setValue(0);}, 10000);
+  setTimeout(function() { targetChar.setValue(0); }, self.config.timeout);
 }
 
 DashPlatform.prototype.addAccessory = function(mac, name) {

@@ -1,8 +1,12 @@
 {
   "name": "homebridge-amazondash-ng",
-  "version": "0.1.4",
-  "description": "Amazon Dash plugin for homebridge: https://github.com/nfarina/homebridge",
+  "version": "0.1.5",
+  "description": "Amazon Dash plugin for homebridge: https://github.com/nfarina/homebridge using airodump-ng.",
   "license": "ISC",
+  "contributors": [
+    {"name": "Khaos Tian", "email": "khaos.tian@gmail.com" },
+    {"name": "Jourdan Templeton", "email": "hello@jourdant.me" }  
+  ],
   "keywords": [
     "homebridge-plugin",
     "amazon-dash"

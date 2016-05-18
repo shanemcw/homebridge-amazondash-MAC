@@ -5,18 +5,21 @@ Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge)
 This project is a fork of [KhaosT's](https://github.com/KhaosT) [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
 ## Purpose
-There are a number of ways to trigger events based on the button press from an Amazon Dash button. This code is based off KhaosT's code mentioned above. 
+There are a number of ways to trigger events based on the button press from an Amazon Dash button. This code is based off KhaosT's code with a subtle difference. 
 
-This module doesn't listen for ARP packets. Instead, we use airodump-ng to search for Wi-Fi frames rather. This reduces the latency between the actual button press and the action you want to perform. IE, no need to wait for the button to connect to the Wi-Fi network before triggering an event. 
+_This module DOESN'T listen for ARP network packets._ **This module DOES use airodump-ng to listen for Wi-Fi frames.** 
+
+The latency is reduced between the actual button press and the action you want to perform. IE, we only need the button to power on instead of waiting for it to connect to the network before triggering an event. 
 
 ## Installation
 
-1. Follow the [instruction](https://github.com/hortinstein/node-dash-button) to setup node-dash-button and figure out the MAC Address of the Dash Button.
-2. Install this plugin using: npm install -g homebridge-amazondash
-3. Update configuration file or use Homebridge's configuration service on iOS device to setup plugin.
-4. Run Homebridge with elevated privileges.
+1. Install airodump-ng
+2. Set up monitor mode network interface
+3. Install this plugin using: `npm install -g homebridge-amazondash-ng`
+4. Update homebridge config.json
+5. Run Homebridge with elevated privileges
 
-### Config.json Example
+## Config.json Example
 
 	{
       "platform": "AmazonDash",
@@ -34,10 +37,15 @@ This module doesn't listen for ARP packets. Instead, we use airodump-ng to searc
       ]
     }
 
+**Interface** refers to the monitor interface for airodump-ng to listen on.
+**Channel** refers to the Wi-Fi channel that your button is using (the same channel as your network). Locking to a channel allows us to grab the first Wi-Fi frame within milliseconds of a button press.
 
-
-### Monitor mode
+## Monitor mode
+I have this set up on a Raspberry Pi 2 (running raspbian) and use the following commands to place my USB Wi-Fi dongle in monitor mode:
 ```
 iw dev wlan0 del
 iw phy phy0 interface add mon0 type monitor
 ```
+
+## Questions?
+I'll do my best to answer them! I'll post a link here to my [blog](https://blog.jourdant.me) where I'll be writing this module up.
