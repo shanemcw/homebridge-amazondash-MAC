@@ -1,4 +1,5 @@
-var dash_button = require('node-dash-button');
+var spawn = require('child_process').spawn;
+var airodump;
 var Accessory, Service, Characteristic, UUIDGen;
 
 module.exports = function(homebridge) {
@@ -7,14 +8,14 @@ module.exports = function(homebridge) {
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen = homebridge.hap.uuid;
 
-  homebridge.registerPlatform("homebridge-amazondash-ng", "AmazonDash-NG", DashPlatform, true);
+  homebridge.registerPlatform("homebridge-AmazonDash-NG-ng", "AmazonDash-NG-NG", DashPlatform, true);
 }
 
 function DashPlatform(log, config, api) {
   var self = this;
 
   self.log = log;
-  self.config = config || { "platform": "AmazonDash-NG" };
+  self.config = config || { "platform": "AmazonDash-NG-NG" };
   self.buttons = self.config.buttons || [];
 
   self.accessories = {}; // MAC -> Accessory
@@ -51,13 +52,33 @@ DashPlatform.prototype.didFinishLaunching = function() {
 
   var registedMACs = Object.keys(self.accessories);
   if (registedMACs.length > 0) {
-    self.dash = dash_button(registedMACs);
-    self.dash.on('detected', function(dash_id) {
-      var accessory = self.accessories[dash_id];
-      if (accessory) {
-        self.dashEventWithAccessory(accessory);
+    self.log("Starting airodump with if:" + self.config.interface + " on channel: " + self.config.channel);
+    
+    self.airodump = spawn('airodump-ng', [self.config.interface, '--channel', self.config.channel, '--berlin', 1]);
+    airodump.stdout.on('data', self.handleOutput);
+	  airodump.stderr.on('data', self.handleOutput);
+		airodump.on('close', function(code) { self.log('Process ended. Code: ' + code); });
+      
+    self.log("airodump started.")
+  }
+}
+
+DashPlatform.prototype.handleOutput = function(data) {
+  var self = this;
+  
+  //split lines
+  var lines = ('' + data).match(/[^\r\n]+/g);
+  for (line in lines) {
+      //clean out the linux control chars
+      line = lines[line].replace(/[\x00-\x1F\x7F-\x9F]/g, '').toLowerCase();
+      
+      //filter out mac addresses, only take the first occurence per line
+      var matches = /((?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2}))/.exec(line); // << includes all mac addresses
+      if (matches != null && matches.length > 0) {
+          //log(module.name, "STDOUT: '" + matches[1] + "'"); //for debugging
+          var accessory = self.accessories[matches[1]];
+          if (accessory) { self.dashEventWithAccessory(accessory); }
       }
-    });
   }
 }
 
@@ -71,7 +92,7 @@ DashPlatform.prototype.dashEventWithAccessory = function(accessory) {
 }
 
 DashPlatform.prototype.addAccessory = function(mac, name) {
-  var self = this;
+  /*var self = this;
   var uuid = UUIDGen.generate(mac);
 
   var newAccessory = new Accessory(name, uuid, 15);
@@ -79,24 +100,24 @@ DashPlatform.prototype.addAccessory = function(mac, name) {
   newAccessory.context.mac = mac;
   newAccessory.addService(Service.StatelessProgrammableSwitch, name);
   newAccessory
-  .getService(Service.AccessoryInformation)
-  .setCharacteristic(Characteristic.Manufacturer, "Amazon")
-  .setCharacteristic(Characteristic.Model, "JK76PL")
-  .setCharacteristic(Characteristic.SerialNumber, mac);
+    .getService(Service.AccessoryInformation)
+    .setCharacteristic(Characteristic.Manufacturer, "Amazon")
+    .setCharacteristic(Characteristic.Model, "JK76PL")
+    .setCharacteristic(Characteristic.SerialNumber, mac);
 
   this.accessories[mac] = newAccessory;
-  this.api.registerPlatformAccessories("homebridge-amazondash", "AmazonDash", [newAccessory]);
+  this.api.registerPlatformAccessories("homebridge-AmazonDash-NG", "AmazonDash-NG", [newAccessory]);
 
   var dashButton = dash_button(mac);
   dashButton.on('detected', function() {
     self.dashEventWithAccessory(newAccessory);
-  });
+  });*/
 }
 
 DashPlatform.prototype.removeAccessory = function(accessory) {
   if (accessory) {
     var mac = accessory.context.mac;
-    this.api.unregisterPlatformAccessories("homebridge-amazondash", "AmazonDash", [accessory]);
+    this.api.unregisterPlatformAccessories("homebridge-AmazonDash-NG", "AmazonDash-NG", [accessory]);
     delete this.accessories[mac];
   }
 }
