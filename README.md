@@ -22,7 +22,7 @@ The latency is reduced between the actual button press and the action you want t
 ## Config.json Example
 
 	{
-      "platform": "AmazonDash",
+      "platform": "AmazonDash-NG",
       "interface": "mon0",
       "channel": 7,
       "buttons": [

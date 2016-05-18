@@ -1,6 +1,6 @@
 {
   "name": "homebridge-amazondash-ng",
-  "version": "0.1.5",
+  "version": "0.1.51",
   "description": "Amazon Dash plugin for homebridge: https://github.com/nfarina/homebridge using airodump-ng.",
   "license": "ISC",
   "contributors": [
