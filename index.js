@@ -67,7 +67,7 @@ DashPlatform.prototype.didFinishLaunching = function() {
 
 DashPlatform.prototype.handleOutput = function(self, data) {
   //no point processing the output if there are no buttons...
-  if (self.accessories) {
+  if (self.accessories && Object.keys(self.accessories).length > 0) {
     //split lines
     var lines = ('' + data).match(/[^\r\n]+/g);
     for (line in lines) {
@@ -81,22 +81,22 @@ DashPlatform.prototype.handleOutput = function(self, data) {
         
         var accessory = self.accessories[matches[1]];
         //rate limit the triggers to happen every 15 seconds
-        if (accessory && (accessory.lastTriggered == null || Math.abs((new Date()) - accessory.lastTriggered) > self.config.timeout)) { 
+        if (accessory && (accessory.lastTriggered == null || Math.abs((new Date()) - accessory.lastTriggered) > self.timeout)) { 
           self.log("Triggering " + matches[1]); 
           accessory.lastTriggered = new Date();
-          self.dashEventWithAccessory(accessory); }
+          self.dashEventWithAccessory(self, accessory); }
       }
     }
   }
 }
 
-DashPlatform.prototype.dashEventWithAccessory = function(accessory) {
+DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
   var targetChar = accessory
     .getService(Service.StatelessProgrammableSwitch)
     .getCharacteristic(Characteristic.ProgrammableSwitchEvent);
 
   targetChar.setValue(1);
-  setTimeout(function() { targetChar.setValue(0); }, self.config.timeout);
+  setTimeout(function() { targetChar.setValue(0); }, self.timeout);
 }
 
 DashPlatform.prototype.addAccessory = function(mac, name) {
@@ -125,124 +125,7 @@ DashPlatform.prototype.removeAccessory = function(accessory) {
   }
 }
 
-DashPlatform.prototype.configurationRequestHandler = function(context, request, callback) {
-  if (request && request.type === "Terminate") {
-    return;
-  }
 
-  if (!context.step) {
-    var instructionResp = {
-      "type": "Interface",
-      "interface": "instruction",
-      "title": "Before You Start...",
-      "detail": "Please make sure homebridge is running with elevated privileges and you have setup the dependency follow the tutorial.",
-      "showNextButton": true,
-      "buttonText": "View Tutorial",
-      "actionURL": "https://github.com/hortinstein/node-dash-button"
-    }
-
-    context.step = 1;
-    callback(instructionResp);
-  } else {
-    switch (context.step) {
-      case 1:
-        var respDict = {
-          "type": "Interface",
-          "interface": "list",
-          "title": "What do you want to do?",
-          "items": [
-            "Add New Dash Button",
-            "Disassociate Existed Dash Button"
-          ]
-        }
-        context.step = 2;
-        callback(respDict);
-        break;
-      case 2:
-        var selection = request.response.selections[0];
-        if (selection === 0) {
-          //Setup New
-          var respDict = {
-            "type": "Interface",
-            "interface": "input",
-            "title": "New Dash Button",
-            "items": [
-              {
-              "id": "name",
-              "title": "Name",
-              "placeholder": "Orange Dash"
-              }, 
-              {
-              "id": "mac",
-              "title": "MAC Address (lowercase)",
-              "placeholder": "11:22:33:44:aa:ff"
-              }
-            ]
-          }
-          context.step = 4;
-          callback(respDict);
-        } else {
-          //Remove Exist
-          var self = this;
-          var buttons = Object.keys(this.accessories).map(function(k){return self.accessories[k]});
-          var names = buttons.map(function(k){return k.displayName});
-
-          var respDict = {
-            "type": "Interface",
-            "interface": "list",
-            "title": "Which Dash Button do you want to remove?",
-            "items": names
-          }
-          context.buttons = buttons;
-          context.step = 6;
-          callback(respDict);
-        }
-        break;
-      case 4:
-        var userInputs = request.response.inputs;
-        var name = userInputs.name;
-        var MACAddress = userInputs.mac;
-        this.addAccessory(MACAddress, name);
-        var respDict = {
-          "type": "Interface",
-          "interface": "instruction",
-          "title": "Success",
-          "detail": "The new dash button is now added.",
-          "showNextButton": true
-        }
-        context.step = 5;
-        callback(respDict);
-        break;
-      case 5:
-        var self = this;
-        delete context.step;
-        var newConfig = this.config;
-        var newButtons = Object.keys(this.accessories).map(function(k){
-          var accessory = self.accessories[k];
-          var button = {
-            'name': accessory.displayName,
-            'mac': accessory.context.mac
-          };
-          return button;
-        });
-        newConfig.buttons = newButtons;
-
-        callback(null, "platform", true, newConfig);
-        break;
-      case 6:
-        var selection = request.response.selections[0];
-        var accessory = context.buttons[selection];
-        this.removeAccessory(accessory);
-        var respDict = {
-          "type": "Interface",
-          "interface": "instruction",
-          "title": "Success",
-          "detail": "The dash button is now removed.",
-          "showNextButton": true
-        }
-        context.step = 5;
-        callback(respDict);
-        break;
-    }
-  }
-}
+//removed the ARP configuration method. config.json will need to be filled in manually.
+//TODO: add a method to discover the MAC of a specific button and re-implement this function.
+DashPlatform.prototype.configurationRequestHandler = function(context, request, callback) { }
