@@ -8,14 +8,14 @@ module.exports = function(homebridge) {
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen = homebridge.hap.uuid;
 
-  homebridge.registerPlatform("homebridge-AmazonDash-NG-ng", "AmazonDash-NG-NG", DashPlatform, true);
+  homebridge.registerPlatform("homebridge-amazondash-ng", "AmazonDash-NG", DashPlatform, true);
 }
 
 function DashPlatform(log, config, api) {
   var self = this;
 
   self.log = log;
-  self.config = config || { "platform": "AmazonDash-NG-NG" };
+  self.config = config || { "platform": "AmazonDash-NG" };
   self.buttons = self.config.buttons || [];
 
   self.accessories = {}; // MAC -> Accessory
@@ -106,7 +106,7 @@ DashPlatform.prototype.addAccessory = function(mac, name) {
     .setCharacteristic(Characteristic.SerialNumber, mac);
 
   this.accessories[mac] = newAccessory;
-  this.api.registerPlatformAccessories("homebridge-AmazonDash-NG", "AmazonDash-NG", [newAccessory]);
+  this.api.registerPlatformAccessories("homebridge-amazondash-ng", "AmazonDash-NG", [newAccessory]);
 
   var dashButton = dash_button(mac);
   dashButton.on('detected', function() {
@@ -117,7 +117,7 @@ DashPlatform.prototype.addAccessory = function(mac, name) {
 DashPlatform.prototype.removeAccessory = function(accessory) {
   if (accessory) {
     var mac = accessory.context.mac;
-    this.api.unregisterPlatformAccessories("homebridge-AmazonDash-NG", "AmazonDash-NG", [accessory]);
+    this.api.unregisterPlatformAccessories("homebridge-amazondash-ng", "AmazonDash-NG", [accessory]);
     delete this.accessories[mac];
   }
 }
