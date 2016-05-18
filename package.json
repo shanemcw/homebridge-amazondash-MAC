@@ -1,23 +1,21 @@
 {
-  "name": "homebridge-amazondash",
-  "version": "0.0.3",
+  "name": "homebridge-amazondash-ng",
+  "version": "0.1.3",
   "description": "Amazon Dash plugin for homebridge: https://github.com/nfarina/homebridge",
   "license": "ISC",
   "keywords": [
-    "homebridge-plugin"
+    "homebridge-plugin",
+    "amazon-dash"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/KhaosT/homebridge-amazondash.git"
+    "url": "git://github.com/jourdant/homebridge-amazondash-ng.git"
   },
   "bugs": {
-    "url": "http://github.com/KhaosT/homebridge-amazondash/issues"
+    "url": "http://github.com/jourdant/homebridge-amazondash-ng/issues"
   },
   "engines": {
     "node": ">=0.12.0",
     "homebridge": ">=0.3.3"
-  },
-  "dependencies": {
-    "node-dash-button": "^0.3.0"
   }
 }

@@ -7,14 +7,14 @@ module.exports = function(homebridge) {
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen = homebridge.hap.uuid;
 
-  homebridge.registerPlatform("homebridge-amazondash", "AmazonDash", DashPlatform, true);
+  homebridge.registerPlatform("homebridge-amazondash-ng", "AmazonDash-NG", DashPlatform, true);
 }
 
 function DashPlatform(log, config, api) {
   var self = this;
 
   self.log = log;
-  self.config = config || { "platform": "AmazonDash" };
+  self.config = config || { "platform": "AmazonDash-NG" };
   self.buttons = self.config.buttons || [];
 
   self.accessories = {}; // MAC -> Accessory
