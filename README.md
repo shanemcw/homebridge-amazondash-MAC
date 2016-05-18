@@ -1,6 +1,13 @@
-# homebridge-amazondash
+# homebridge-amazondash-ng
 
 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge)
+
+This project is a fork of [KhaosT's](https://github.com/KhaosT) [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
+
+## Purpose
+There are a number of ways to trigger events based on the button press from an Amazon Dash button. This code is based off KhaosT's code mentioned above. 
+
+This module doesn't listen for ARP packets. Instead, we use airodump-ng to search for Wi-Fi frames rather. This reduces the latency between the actual button press and the action you want to perform. IE, no need to wait for the button to connect to the Wi-Fi network before triggering an event. 
 
 ## Installation
 
@@ -13,6 +20,8 @@ Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge)
 
 	{
       "platform": "AmazonDash",
+      "interface": "mon0",
+      "channel": 7,
       "buttons": [
         {
           "name": "Dash Blue",
@@ -25,3 +34,10 @@ Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge)
       ]
     }
 
+
+
+### Monitor mode
+```
+iw dev wlan0 del
+iw phy phy0 interface add mon0 type monitor
+```

@@ -1,5 +1,4 @@
 var spawn = require('child_process').spawn;
-var airodump;
 var Accessory, Service, Characteristic, UUIDGen;
 
 module.exports = function(homebridge) {
@@ -19,7 +18,8 @@ function DashPlatform(log, config, api) {
   self.buttons = self.config.buttons || [];
 
   self.accessories = {}; // MAC -> Accessory
-
+  self.airodump = null;
+  
   if (api) {
     self.api = api;
 
@@ -50,35 +50,42 @@ DashPlatform.prototype.didFinishLaunching = function() {
     }
   }
 
-  var registedMACs = Object.keys(self.accessories);
-  if (registedMACs.length > 0) {
+  
+  var registeredMACs = Object.keys(self.accessories);
+  if (registeredMACs.length > 0) {
     self.log("Starting airodump with if:" + self.config.interface + " on channel: " + self.config.channel);
     
     self.airodump = spawn('airodump-ng', [self.config.interface, '--channel', self.config.channel, '--berlin', 1]);
-    airodump.stdout.on('data', self.handleOutput);
-	  airodump.stderr.on('data', self.handleOutput);
-		airodump.on('close', function(code) { self.log('Process ended. Code: ' + code); });
+    self.airodump.stdout.on('data', function(data) {self.handleOutput(self, data); });
+	  self.airodump.stderr.on('data', function(data) {self.handleOutput(self, data); });
+		self.airodump.on('close', function(code) { self.log('Process ended. Code: ' + code); });
       
-    self.log("airodump started.")
+    self.log("airodump started.");
   }
 }
 
-DashPlatform.prototype.handleOutput = function(data) {
-  var self = this;
-  
-  //split lines
-  var lines = ('' + data).match(/[^\r\n]+/g);
-  for (line in lines) {
+DashPlatform.prototype.handleOutput = function(self, data) {
+  //no point processing the output if there are no buttons...
+  if (self.accessories) {
+    //split lines
+    var lines = ('' + data).match(/[^\r\n]+/g);
+    for (line in lines) {
       //clean out the linux control chars
       line = lines[line].replace(/[\x00-\x1F\x7F-\x9F]/g, '').toLowerCase();
       
       //filter out mac addresses, only take the first occurence per line
       var matches = /((?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2}))/.exec(line); // << includes all mac addresses
       if (matches != null && matches.length > 0) {
-          //log(module.name, "STDOUT: '" + matches[1] + "'"); //for debugging
-          var accessory = self.accessories[matches[1]];
-          if (accessory) { self.dashEventWithAccessory(accessory); }
+        //self.log("STDOUT: '" + matches[1] + "'"); //for debugging
+        
+        var accessory = self.accessories[matches[1]];
+        //rate limit the triggers to happen every 15 seconds
+        if (accessory && (accessory.lastTriggered == null || Math.abs((new Date()) - accessory.lastTriggered) > 15000)) { 
+          self.log("Triggering " + matches[1]); 
+          accessory.lastTriggered = new Date();
+          self.dashEventWithAccessory(accessory); }
       }
+    }
   }
 }
 
@@ -92,7 +99,7 @@ DashPlatform.prototype.dashEventWithAccessory = function(accessory) {
 }
 
 DashPlatform.prototype.addAccessory = function(mac, name) {
-  /*var self = this;
+  var self = this;
   var uuid = UUIDGen.generate(mac);
 
   var newAccessory = new Accessory(name, uuid, 15);
@@ -107,11 +114,6 @@ DashPlatform.prototype.addAccessory = function(mac, name) {
 
   this.accessories[mac] = newAccessory;
   this.api.registerPlatformAccessories("homebridge-amazondash-ng", "AmazonDash-NG", [newAccessory]);
-
-  var dashButton = dash_button(mac);
-  dashButton.on('detected', function() {
-    self.dashEventWithAccessory(newAccessory);
-  });*/
 }
 
 DashPlatform.prototype.removeAccessory = function(accessory) {
