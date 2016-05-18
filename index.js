@@ -23,7 +23,6 @@ function DashPlatform(log, config, api) {
   
   if (api) {
     self.api = api;
-
     self.api.on('didFinishLaunching', self.didFinishLaunching.bind(this));
   }
 }
