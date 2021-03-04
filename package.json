@@ -1,11 +1,12 @@
 {
-  "name": "homebridge-amazondash-ng",
-  "version": "0.1.51",
-  "description": "Amazon Dash plugin for homebridge: https://github.com/nfarina/homebridge using airodump-ng.",
+  "name": "homebridge-amazondash-mac",
+  "version": "0.1.0",
+  "description": "Amazon Dash plugin for Homebridge that doesn't require Dash button setup nor the Dash button connecting to your network. Requires privileges to run airodump-ng and a wifi device in monitor mode.",
   "license": "ISC",
   "contributors": [
     {"name": "Khaos Tian", "email": "khaos.tian@gmail.com" },
-    {"name": "Jourdan Templeton", "email": "hello@jourdant.me" }  
+    {"name": "Jourdan Templeton", "email": "hello@jourdant.me" },
+    {"name": "Shane McWhorter", "email": "shane.mcwhorter@uxphd.co" }  
   ],
   "keywords": [
     "homebridge-plugin",
@@ -13,10 +14,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/jourdant/homebridge-amazondash-ng.git"
+    "url": "git://github.com/shanemcw/homebridge-amazondash-mac.git"
   },
   "bugs": {
-    "url": "http://github.com/jourdant/homebridge-amazondash-ng/issues"
+    "url": "https://github.com/shanemcw/homebridge-amazondash-mac/issues"
   },
   "engines": {
     "node": ">=0.12.0",
