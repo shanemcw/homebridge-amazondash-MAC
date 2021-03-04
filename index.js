@@ -1,24 +1,33 @@
+// forked from jourdant/homebridge-amazondash-ng
+//    forked from KhaosT/homebridge-amazondash
+
+// shane.mcwhorter@uxphd.co
+
 var spawn = require('child_process').spawn;
 var Accessory, Service, Characteristic, UUIDGen;
 
 module.exports = function(homebridge) {
-  Accessory = homebridge.platformAccessory;
-  Service = homebridge.hap.Service;
+  Accessory      = homebridge.platformAccessory;
+  Service        = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
-  UUIDGen = homebridge.hap.uuid;
+  UUIDGen =        homebridge.hap.uuid;
 
-  homebridge.registerPlatform("homebridge-amazondash-ng", "AmazonDash-NG", DashPlatform, true);
+  homebridge.registerPlatform("homebridge-amazondash-ng", "AmazonDash-NG", DashPlatform, true); // dynamic
 }
 
 function DashPlatform(log, config, api) {
   var self = this;
 
-  self.log = log;
-  self.config = config || { "platform": "AmazonDash-NG" };
+  self.log     = log;
+  self.config  = config              || { "platform": "AmazonDash-NG" };
   self.buttons = self.config.buttons || [];
-  self.timeout = self.config.timeout || 15000;
+  self.timeout = self.config.timeout || 10000; 
+  self.debug   = self.config.debug   || 1; // 0-3, 10
+  
+  self.alias = {}; // additional macs can masquerade as accessory mac via this alias map
 
-  self.accessories = {}; // MAC -> Accessory
+  self.accessories = {};
+
   self.airodump = null;
   
   if (api) {
@@ -29,15 +38,28 @@ function DashPlatform(log, config, api) {
 
 DashPlatform.prototype.configureAccessory = function(accessory) {
   var self = this;
-
+  
+  if (self.debug >= 2) { self.log("configureAccessory " + accessory.context.mac + " as " + accessory.displayName); }
+  
   accessory.reachable = true;
+
+  // only expose single press (single is 0; double is 1, long press is 2)
   accessory
     .getService(Service.StatelessProgrammableSwitch)
     .getCharacteristic(Characteristic.ProgrammableSwitchEvent)
-    .setValue(0);
-
-  var accessoryMAC = accessory.context.mac;
-  self.accessories[accessoryMAC] = accessory;
+    .setProps({minValue: 0, maxValue: 0, validValues: [0]});
+  
+  self.accessories[accessory.context.mac] = accessory;
+  
+  self.alias[accessory.context.mac] = accessory.context.mac;
+  
+  // additional aliases if any
+  if (accessory.context.alias) {
+    for (var i in accessory.context.alias) {
+      if (self.debug >= 2) { self.log(accessory.displayName + " at " + accessory.context.mac + " also responding to " + accessory.context.alias[i]); }
+      self.alias[accessory.context.alias[i]] = accessory.context.mac;
+      }
+    }
 }
 
 DashPlatform.prototype.didFinishLaunching = function() {
@@ -46,85 +68,107 @@ DashPlatform.prototype.didFinishLaunching = function() {
   for (var i in self.buttons) {
     var button = self.buttons[i];
     if (!self.accessories[button.mac]) {
-      self.addAccessory(button.mac, button.name);
-    }
+      self.addAccessory(button); 
+      } else {
+      // use debug of 10 and restart homebridge when changing accessory configurations in testing to remove previous 
+      // set debug to not 10 and restart homebridge to add accessories fresh as configured
+      if (self.debug == 10) { self.removeAccessory(self.accessories[button.mac]); }
+      }
   }
 
-  
-  var registeredMACs = Object.keys(self.accessories);
-  if (registeredMACs.length > 0) {
-    self.log("Starting airodump with if:" + self.config.interface + " on channel: " + self.config.channel);
+  if (Object.keys(self.accessories).length > 0) {
+    if (self.debug >= 1) { self.log("airodump-ng starting on " + self.config.interface + " and channel " + self.config.channel); }
     
     self.airodump = spawn('airodump-ng', [self.config.interface, '--channel', self.config.channel, '--berlin', 1]);
-    self.airodump.stdout.on('data', function(data) {self.handleOutput(self, data); });
-	  self.airodump.stderr.on('data', function(data) {self.handleOutput(self, data); });
-		self.airodump.on('close', function(code) { self.log('Process ended. Code: ' + code); });
+    
+    self.airodump.stdout.on('data', function(data) { self.handleOutput(self, data); });
+    self.airodump.stderr.on('data', function(data) { self.handleOutput(self, data); });
+    self.airodump.on('close', function(code) { self.log('airodump-ng ended, code ' + code); });
       
-    self.log("airodump started.");
+    if (self.debug >= 1) { self.log("airodump-ng started."); }
   }
 }
 
 DashPlatform.prototype.handleOutput = function(self, data) {
-  //no point processing the output if there are no buttons...
   if (self.accessories && Object.keys(self.accessories).length > 0) {
-    //split lines
     var lines = ('' + data).match(/[^\r\n]+/g);
     for (line in lines) {
-      //clean out the linux control chars
-      line = lines[line].replace(/[\x00-\x1F\x7F-\x9F]/g, '').toLowerCase();
-      
-      //filter out mac addresses, only take the first occurence per line
-      var matches = /((?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2}))/.exec(line); // << includes all mac addresses
+      // grab all mac addresses, use first; alias to primary mac
+      var matches = /((?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2}))/.exec(lines[line]);
       if (matches != null && matches.length > 0) {
-        //self.log("STDOUT: '" + matches[1] + "'"); //for debugging
-        
-        var accessory = self.accessories[matches[1]];
-        //rate limit the triggers to happen every 15 seconds
-        if (accessory && (accessory.lastTriggered == null || Math.abs((new Date()) - accessory.lastTriggered) > self.timeout)) { 
-          self.log("Triggering " + matches[1]); 
-          accessory.lastTriggered = new Date();
-          self.dashEventWithAccessory(self, accessory); }
+        if (self.debug >= 3) { self.log("parsed MAC " + matches[0]); }
+        // additional macs can masquerade as the accessory mac
+        var accessory = self.accessories[self.alias[matches[0]]]; 
+        // also rate limit triggers
+        if (accessory && (accessory.context.lastTriggered == null || Math.abs((new Date()) - accessory.context.lastTriggered) > self.timeout)) { 
+          if (self.debug >= 1) { self.log("triggering " + accessory.displayName + " from " + matches[0]); }
+          accessory.context.lastTriggered = new Date();
+          self.dashEventWithAccessory(self, accessory);
+          }
       }
     }
   }
 }
 
 DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
-  var targetChar = accessory
+    accessory
     .getService(Service.StatelessProgrammableSwitch)
-    .getCharacteristic(Characteristic.ProgrammableSwitchEvent);
-
-  targetChar.setValue(1);
-  setTimeout(function() { targetChar.setValue(0); }, self.timeout);
+    .getCharacteristic(Characteristic.ProgrammableSwitchEvent)
+    .setValue(0); // single press
 }
 
-DashPlatform.prototype.addAccessory = function(mac, name) {
-  var self = this;
-  var uuid = UUIDGen.generate(mac);
+DashPlatform.prototype.addAccessory = function(button) {
+  if (this.debug >= 2) { this.log("addAccessory " + button.mac  + " as " + button.name); }
+  
+  var uuid = UUIDGen.generate(button.mac);
 
-  var newAccessory = new Accessory(name, uuid, 15);
+  var newAccessory = new Accessory(button.name, uuid, 15);
+  
   newAccessory.reachable = true;
-  newAccessory.context.mac = mac;
-  newAccessory.addService(Service.StatelessProgrammableSwitch, name);
+  
+  newAccessory.context.mac = button.mac;
+  
+  if (button.alias) {
+    newAccessory.context.alias = button.alias;
+    }
+    
+  newAccessory.addService(Service.StatelessProgrammableSwitch, button.name);
+    
   newAccessory
     .getService(Service.AccessoryInformation)
     .setCharacteristic(Characteristic.Manufacturer, "Amazon")
     .setCharacteristic(Characteristic.Model, "JK76PL")
-    .setCharacteristic(Characteristic.SerialNumber, mac);
+    .setCharacteristic(Characteristic.FirmwareRevision, button.firmware)
+    .setCharacteristic(Characteristic.SerialNumber, button.serial);
 
-  this.accessories[mac] = newAccessory;
+  newAccessory
+    .getService(Service.StatelessProgrammableSwitch)
+    .getCharacteristic(Characteristic.ProgrammableSwitchEvent)
+    .setProps({minValue: 0, maxValue: 0, validValues: [0]});
+    
+  this.accessories[newAccessory.context.mac] = newAccessory;
+  
+  this.alias[newAccessory.context.mac] = newAccessory.context.mac; // primary accessory is its own alias
+  
+  if (newAccessory.context.alias) {
+    // additional aliases if any
+    for (var i in newAccessory.context.alias) {
+      if (this.debug >= 2) { this.log(button.name + " also responding to " + newAccessory.context.alias[i]); }
+      this.alias[newAccessory.context.alias[i]] = newAccessory.context.mac;  
+      }
+    }
+  
   this.api.registerPlatformAccessories("homebridge-amazondash-ng", "AmazonDash-NG", [newAccessory]);
 }
 
-DashPlatform.prototype.removeAccessory = function(accessory) {
+DashPlatform.prototype.removeAccessory = function(accessory) { 
+  if (this.debug >= 2) { this.log("removeAccessory " + accessory.displayName); }
+  
   if (accessory) {
-    var mac = accessory.context.mac;
     this.api.unregisterPlatformAccessories("homebridge-amazondash-ng", "AmazonDash-NG", [accessory]);
-    delete this.accessories[mac];
+    delete this.accessories[accessory.context.mac];
   }
 }
 
-
-//removed the ARP configuration method. config.json will need to be filled in manually.
-//TODO: add a method to discover the MAC of a specific button and re-implement this function.
 DashPlatform.prototype.configurationRequestHandler = function(context, request, callback) { }
+
