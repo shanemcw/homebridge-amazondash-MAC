@@ -20,7 +20,7 @@
     "url": "https://github.com/shanemcw/homebridge-amazondash-mac/issues"
   },
   "engines": {
-    "node": ">=0.12.0",
-    "homebridge": ">=0.3.3"
+    "node": ">=8.9.0",
+    "homebridge": ">=1.3.0"
   }
 }
