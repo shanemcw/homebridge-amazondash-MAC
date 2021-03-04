@@ -62,6 +62,9 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 ## Getting a Dash Button MAC Address, Serial Number, Firmware Version
 …
 
+## About airodump-ng
+…
+
 ## Wifi Device and Monitor Mode
 A wifi device (such as a USB wifi dongle) that can be configured and run in monitor mode is required.
 ```
