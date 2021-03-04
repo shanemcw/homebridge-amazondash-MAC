@@ -1,8 +1,8 @@
 # homebridge-amazondash-mac
 
-Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge)
+Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash Button setup.
 
-This project is a fork of [jourdant's](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of [KhaosT's](https://github.com/KhaosT) [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
+This project is a fork of [jourdant's](https://github.com/jourdant/homebridge-amazondash-ng) [homebridge-amazondash-ng], which is a fork of [KhaosT's](https://github.com/KhaosT) [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
 ## Purpose
 There are a number of ways to trigger events based on the button press from an Amazon Dash button. This code is based off KhaosT's code with a subtle difference. 
