@@ -1,15 +1,18 @@
 # homebridge-amazondash-mac
 
-Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash Button setup.
+Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button setup nor the Dash button connecting to your network.
 
 This project is a fork of [jourdant's](https://github.com/jourdant/homebridge-amazondash-ng) [homebridge-amazondash-ng], which is a fork of [KhaosT's](https://github.com/KhaosT) [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
 ## Purpose
-There are a number of ways to trigger events based on the button press from an Amazon Dash button. This code is based off KhaosT's code with a subtle difference. 
-
-_This module DOESN'T listen for ARP network packets._ **This module DOES use airodump-ng to listen for Wi-Fi frames.** 
-
-The latency is reduced between the actual button press and the action you want to perform. IE, we only need the button to power on instead of waiting for it to connect to the network before triggering an event. 
+This is a fork of [jourdant's](https://github.com/jourdant/homebridge-amazondash-ng) [homebridge-amazondash-ng]
+* Code maintenance
+* Revised specification of single-press, long-press, double-press events
+* Expect and support a Dash button that is not connected to the network
+* Multiple buttons can appear and act as one button through aliasing
+* Firmware revision, serial number display
+* Multiple logging debug levels 
+* User ability to remove a stale button during setup experimentation
 
 ## Installation
 
