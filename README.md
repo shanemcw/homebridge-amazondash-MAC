@@ -1,4 +1,4 @@
-# homebridge-amazondash-ng
+# homebridge-amazondash-mac
 
 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge)
 
@@ -22,19 +22,34 @@ The latency is reduced between the actual button press and the action you want t
 ## Config.json Example
 
 	{
-      "platform": "AmazonDash-NG",
-      "interface": "mon0",
-      "channel": 7,
-      "buttons": [
+    "platform": "AmazonDash-NG",
+    "name": "AmazonDash-NG",
+    "interface": "wlx9cefd5fa2fdf",
+    "channel": 3,
+    "debug": 2,
+    "buttons": [
         {
-          "name": "Dash Blue",
-          "mac": "74:c2:46:0a:f9:3f"
+            "name": "Doorbell",
+            "mac": "FF:AA:FF:AA:00:00",
+            "serial": "G030QC0400868230",
+            "firmware": "50018520_US"
         },
         {
-          "name": "Dash Orange",
-          "mac": "10:ae:60:4d:6a:0b"
+            "name": "Scene One",
+            "mac": "FF:FF:00:00:00:00",
+            "serial": "G030MQ0370960407",
+            "firmware": "50018520_US",
+            "alias": [
+                "AA:00:00:FF:FF:FF"
+            ]
+        },
+        {
+            "name": "Scene Two",
+            "mac": "AA:FF:00:00:FF:FF",
+            "serial": "G030DN0400063351",
+            "firmware": "50018520_US"
         }
-      ]
+    ]
     }
 
 **Interface** refers to the monitor interface for airodump-ng to listen on.
@@ -46,6 +61,3 @@ I have this set up on a Raspberry Pi 2 (running raspbian) and use the following 
 iw dev wlan0 del
 iw phy phy0 interface add mon0 type monitor
 ```
-
-## Questions?
-I'll do my best to answer them! I'll post a link here to my [blog](https://blog.jourdant.me) where I'll be writing this module up.
