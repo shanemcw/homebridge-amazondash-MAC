@@ -2,7 +2,7 @@
 
 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge)
 
-This project is a fork of [KhaosT's](https://github.com/KhaosT) [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
+This project is a fork of [jourdant's](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of [KhaosT's](https://github.com/KhaosT) [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
 ## Purpose
 There are a number of ways to trigger events based on the button press from an Amazon Dash button. This code is based off KhaosT's code with a subtle difference. 
@@ -15,7 +15,7 @@ The latency is reduced between the actual button press and the action you want t
 
 1. Install airodump-ng
 2. Set up monitor mode network interface
-3. Install this plugin using: `npm install -g homebridge-amazondash-ng`
+3. Install this plugin using: `npm install -g homebridge-amazondash-mac`
 4. Update homebridge config.json
 5. Run Homebridge with elevated privileges
 
