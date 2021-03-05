@@ -2,6 +2,8 @@
 
 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button setup nor the Dash button connecting to your network.
 
+This plugin uses airodump-ng's ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
+
 This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of KhaosT's [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
 ## Purpose
@@ -13,6 +15,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 * Firmware revision, serial number, model number support
 * Multiple logging debug levels 
 * User ability to remove a stale button during setup experimentation
+* Installation and usage documenation
 
 ## Installation
 
@@ -22,7 +25,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 3. Run airodump-ng standalone to test usage and visibility of Dash activity
 4. Install this plugin using: `npm install -g homebridge-amazondash-mac`
 5. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
-6. Run Homebridge with elevated privileges
+6. **Run Homebridge with elevated privileges**
 7. Use `debug` levels during installation experimentation
 
 ## Example config.json
@@ -87,9 +90,9 @@ Use uppercase for the `mac` MAC addresses in the config.json file, e.g. `AA`, no
 ### Alias
 `alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
 
-To use this capability, configure one of the buttons as typical—this is the button that will be visible in Homekit. In the `alias` portion of its configuration, add the MAC addresses of other buttons to "alias for" or "masquerade as" that button. When buttons with those MAC addresses are pushed, it will appear to Homekit as if the visible button was pushed. The buttons corresponding to the MAC addresses in the `alias` list will not be visible as distinct accessories in Homekit.
+To use this capability, configure one of the buttons as typical—this is the button that will be visible in Homekit. In the `alias` portion of its configuration, add the MAC addresses of other buttons to "alias for" or "masquerade as" that button. When buttons with those MAC addresses are pushed, it will appear to Homekit as if the visible button was pushed.
 
-Do not add the buttons corresponding to the MAC addresses in the `alias` list as seperate button accessories.
+The buttons corresponding to the MAC addresses in the `alias` list are not intended to be visible as seperate accessories in Homekit—do not add the buttons corresponding to the MAC addresses in the `alias` list as seperate button accessories.
 
 ## Wifi Device and Monitor Mode
 It is required that wifi device (such as a USB wifi dongle) can be configured and run in monitor mode. An example USB wifi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
@@ -98,7 +101,7 @@ It is required that wifi device (such as a USB wifi dongle) can be configured an
 
 This is example-only. There are several and different ways to do this.
 
-Confirming the wifi device is working, visible and to get the interface name
+Confirming the wifi device is working, visible and to get the `Interface` name
 ```
 sudo iw dev
 ```
@@ -118,19 +121,17 @@ Confirm monitor mode and wifi monitoring interface name (confim "Mode:Monitor")
 ```
 iwconfig
 ```
-Test airodump with the wifi monitoring interface name (`wlan0` is for example only)
+Test airodump stand-alone with the wifi monitoring interface name (`wlan0` is for example only)
 ```
 airodump-ng wlan0
 ```
 ## About airodump-ng
 airodump-ng was created for packet capturing of raw 802.11 frames as a component of the aircrack-ng suite of tools supporting WiFi network security assessment. This plugin uses airodump-ng's ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
 
-airodump-ng must be run with elevated privileges.
-
 * [Ubuntu Man Page for airodump-ng](http://manpages.ubuntu.com/manpages/xenial/man8/airodump-ng.8.html)
 * [aircrack-ng.org](https://www.aircrack-ng.org/doku.php?id=airodump-ng)
 
-### Installing airodump-ng
+### Installing airodump-ng (example)
 ```
 sudo apt-get install aircrack-ng
 ```
