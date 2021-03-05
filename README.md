@@ -67,7 +67,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 ### Interface
 `Interface` refers to the monitoring wifi interface for airodump-ng to listen on. Once hte wifi monitoring interface is properly set up, this identifier is reported by the `iwconfig` command.
 ### Channel
-`Channel` refers to a single channel for airodump-ng to listen on. As the Dash button is not connected to the network (i.e. not using a channel), choose a channel *not* or *least* visible in the vicinity to reduce airodump-ng's overhead
+`Channel` refers to a single channel for airodump-ng to listen on. As the Dash button is not connected to the network (i.e. not using a channel), choose a channel *not* or *least* visible in the vicinity to reduce airodump-ng's overhead.
 ### Debug
 * `0` No reporting.
 * `1` *Default.* Reports airodump-ng at initialization, and other than that only when a button is triggered. This debug level is recommended for day-to-day working installations. 
