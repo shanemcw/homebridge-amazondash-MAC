@@ -70,7 +70,15 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 * 10 …
 
 ## Getting a Dash Button MAC Address, Serial Number, Firmware Version, Model Number
-…
+### Model Number
+The model number is printed on the back of the Dash button
+### MAC Address, Serial Number, Firmware Version
+* Long press on the Dash button until the light flashes blue
+* Join the network Amazon ConfigureMe created by that Dash button
+* Open the URL 192.168.0.1 on the device connect to Amazon ConfigureMe
+* These values and battery level are reported
+
+Use uppercase for the mac address in the config.json file.
 
 ## Wifi Device and Monitor Mode
 A wifi device (such as a USB wifi dongle) that can be configured and run in monitor mode is required. An example USB wifi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
