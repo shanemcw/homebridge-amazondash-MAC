@@ -7,7 +7,7 @@ This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.c
 ## Purpose
 This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng) with
 * Code maintenance, bug fixes
-* Revised specification of single-press, long-press, double-press events
+* Revised specification as single-press (not long-press, double-press) events
 * Expect and support a Dash button that is not connected to the network
 * Multiple buttons can appear and act as one button through aliasing
 * Firmware revision, serial number, model number support
@@ -16,12 +16,13 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 
 ## Installation
 
-1. Install airodump-ng
-1. Set up a network interface in monitor mode
-1. Install this plugin using: `npm install -g homebridge-amazondash-mac`
-1. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
-1. Run Homebridge with elevated privileges
-1. Use `debug` levels during installation experimentation
+1. Set up a network interface to persist in monitor mode
+2. Install airodump-ng
+3. Run airodump-ng standalone to test usage and visibility of Dash activity
+4. Install this plugin using: `npm install -g homebridge-amazondash-mac`
+5. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
+6. Run Homebridge with elevated privileges
+7. Use `debug` levels during installation experimentation
 
 ## Example config.json
 
@@ -81,8 +82,15 @@ The model number is printed on the back of the Dash button
 
 Use uppercase for the `mac` MAC addresses in the config.json file, e.g. `AA`, not `aa`.
 
+### Alias
+`alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
+
+To use this capability, specify one of the buttons as typical—this is the button that will be visible in Homekit. In the `alias` portion of its configuration, add the MAC addresses of other buttons to "alias for" or "masquerade as" that button. When buttons with those MAC addresses are pushed, it will appear to Homekit as if the visible button was pushed. The buttons corresponding to the MAC addresses in the `alias` list will not be visible as distint accessories in Homekit.
+
+Do not add the buttons corresponding to the MAC addresses in the `alias` list as seperate button accessories.
+
 ## Wifi Device and Monitor Mode
-A wifi device (such as a USB wifi dongle) that can be configured and run in monitor mode is required. An example USB wifi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
+It is required that wifi device (such as a USB wifi dongle) can be configured and run in monitor mode. An example USB wifi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
 ### Example Wifi Device Configuration
 This is example-only. There are several and different ways to do this.
 ```
