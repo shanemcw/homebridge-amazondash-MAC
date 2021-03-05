@@ -60,9 +60,9 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
    	}
 
 ### Interface
-**Interface** refers to the monitor interface for airodump-ng to listen on.
+`Interface` refers to the monitor interface for airodump-ng to listen on.
 ### Channel
-**Channel** refers to a single channel for airodump-ng to listen on. As the Dash button is not connected to the network (i.e. not using a channel), choose a channel *not* or *least* used in the vicinity.
+`Channel` refers to a single channel for airodump-ng to listen on. As the Dash button is not connected to the network (i.e. not using a channel), choose a channel *not* or *least* used in the vicinity.
 ### Debug
 * **0** No reporting.
 * **1** *Default.* Reports airodump-ng at initialization, and other than that when a button is triggered. This debug level is recommended for day-to-day working installations. 
