@@ -32,14 +32,14 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
    	"channel": 3,
    	"debug": 2,
    	"buttons": [
-     	{
+   		{
    		"name": "Doorbell",
    		"mac": "FF:AA:FF:AA:00:00",
    		"serial": "G030QC0400868230",
    		"firmware": "50018520_US",
 		"model": "JK29LP"
-        },
-        {
+   		},
+   		{
    		"name": "Button One",
    		"mac": "FF:FF:00:00:00:00",
    		"serial": "G030MQ0370960400",
@@ -47,17 +47,17 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 		"model": "JK29LP",
   		"alias": [
                 "AA:00:00:FF:FF:FF"
-            ]
-        },
-        {
+   		]
+   		},
+   		{
    		"name": "Button Two",
    		"mac": "AA:FF:00:00:FF:FF",
 		"serial": "G030DN0400063350",
 		"firmware": "50018520_US",
 		"model": "JK29LP"
-        }
-    ]
-    }
+   		}
+   		]
+   	}
 
 ### Interface
 **Interface** refers to the monitor interface for airodump-ng to listen on.
