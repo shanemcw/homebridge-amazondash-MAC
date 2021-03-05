@@ -23,7 +23,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 5. Run Homebridge with elevated privileges
 6. Use *debug* levels during installation experimentation
 
-## Config.json Example
+## Example config.json
 
 	{
     "platform": "AmazonDash-NG",
@@ -36,13 +36,15 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
             "name": "Doorbell",
             "mac": "FF:AA:FF:AA:00:00",
             "serial": "G030QC0400868230",
-            "firmware": "50018520_US"
+            "firmware": "50018520_US",
+	    "model": "JK29LP"
         },
         {
             "name": "Button One",
             "mac": "FF:FF:00:00:00:00",
             "serial": "G030MQ0370960400",
             "firmware": "50018520_US",
+	    "model": "JK29LP",
             "alias": [
                 "AA:00:00:FF:FF:FF"
             ]
@@ -51,19 +53,27 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
             "name": "Button Two",
             "mac": "AA:FF:00:00:FF:FF",
             "serial": "G030DN0400063350",
-            "firmware": "50018520_US"
+            "firmware": "50018520_US",
+	    "model": "JK29LP"
         }
     ]
     }
 
+### Interface
 **Interface** refers to the monitor interface for airodump-ng to listen on.
+### Channel
 **Channel** refers to a single channel for airodump to listen on. As the Dash button is not connected to the network (i.e. not using a channel), choose a channel *not* or *least* used in the vicinity.
+### Debug
+* 1 …
+* 2 …
+* 3 …
+* 10 …
 
-## Getting a Dash Button MAC Address, Serial Number, Firmware Version
+## Getting a Dash Button MAC Address, Serial Number, Firmware Version, Model Number
 …
 
 ## Wifi Device and Monitor Mode
-A wifi device (such as a USB wifi dongle) that can be configured and run in monitor mode is required.
+A wifi device (such as a USB wifi dongle) that can be configured and run in monitor mode is required. An example USB wifi device known to work in some contexts for these purposes is the Panda 300Mbps Wireless 802.11n USB Adapter (PAU05).
 ```
 …
 ```
