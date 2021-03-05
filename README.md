@@ -20,13 +20,13 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 ## Installation
 
 1. Administrator privileges are required
-1. Set up a network interface to persist in monitor mode
+1. Set up a wifi device to persist in monitor mode
 2. Install airodump-ng
 3. Run airodump-ng standalone to test usage and visibility of Dash activity
 4. Install this plugin using: `npm install -g homebridge-amazondash-mac`
-5. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
-6. **Run Homebridge with elevated privileges**
-7. Use `debug` levels during installation experimentation
+5.  **Run Homebridge with elevated privileges**
+6. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
+8. Use `debug` levels during installation experimentation
 
 ## Example config.json
 
@@ -67,7 +67,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 ### Interface
 `Interface` refers to the monitoring wifi interface for airodump-ng to listen on. Once hte wifi monitoring interface is properly set up, this identifier is reported by the `iwconfig` command.
 ### Channel
-`Channel` refers to a single channel for airodump-ng to listen on. As the Dash button is not connected to the network (i.e. not using a channel), choose a channel *not* or *least* used in the vicinity.
+`Channel` refers to a single channel for airodump-ng to listen on. As the Dash button is not connected to the network (i.e. not using a channel), choose a channel *not* or *least* visible in the vicinity.
 ### Debug
 * `0` No reporting.
 * `1` *Default.* Reports airodump-ng at initialization, and other than that only when a button is triggered. This debug level is recommended for day-to-day working installations. 
