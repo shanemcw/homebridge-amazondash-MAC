@@ -1,4 +1,5 @@
-// forked from jourdant/homebridge-amazondash-ng
+// shanemcw/homebridge-amazondash-mac
+//   forked from jourdant/homebridge-amazondash-ng
 //    forked from KhaosT/homebridge-amazondash
 
 // shane.mcwhorter@uxphd.co
@@ -18,11 +19,12 @@ module.exports = function(homebridge) {
 function DashPlatform(log, config, api) {
   var self = this;
 
-  self.log     = log;
-  self.config  = config              || { "platform": "AmazonDash-NG" };
-  self.buttons = self.config.buttons || [];
-  self.timeout = self.config.timeout || 10000; 
-  self.debug   = self.config.debug   || 1; // 0-3, 10
+  self.log          = log;
+  self.config       = config                   || { "platform": "AmazonDash-MAC" };
+  self.buttons      = self.config.buttons      || [];
+  self.timeout      = self.config.timeout      || 10000; 
+  self.debug        = self.config.debug        || 1; // 0-3, 10
+  self.manufacturer = self.config.manufacturer || "Amazon";
   
   self.alias = {}; // additional macs can masquerade as accessory mac via this alias map
 
@@ -42,6 +44,13 @@ DashPlatform.prototype.configureAccessory = function(accessory) {
   if (self.debug >= 2) { self.log("configureAccessory " + accessory.context.mac + " as " + accessory.displayName); }
   
   accessory.reachable = true;
+
+  accessory
+    .getService(Service.AccessoryInformation)
+    .setCharacteristic(Characteristic.Manufacturer,     self.manufacturer)
+    .setCharacteristic(Characteristic.Model,            accessory.context.model)
+    .setCharacteristic(Characteristic.FirmwareRevision, accessory.context.firmware)
+    .setCharacteristic(Characteristic.SerialNumber,     accessory.context.serial);
 
   // only expose single press (single is 0; double is 1, long press is 2)
   accessory
@@ -70,7 +79,8 @@ DashPlatform.prototype.didFinishLaunching = function() {
     if (!self.accessories[button.mac]) {
       self.addAccessory(button); 
       } else {
-      // use debug of 10 and restart homebridge when changing accessory configurations in testing to remove previous 
+      // set debug to 10 in config.json and restart homebridge
+      //  when changing accessory configurations in testing to remove previous 
       // set debug to not 10 and restart homebridge to add accessories fresh as configured
       if (self.debug == 10) { self.removeAccessory(self.accessories[button.mac]); }
       }
@@ -132,14 +142,18 @@ DashPlatform.prototype.addAccessory = function(button) {
     newAccessory.context.alias = button.alias;
     }
     
+  newAccessory.context.serial   = button.serial   || 0;
+  newAccessory.context.firmware = button.firmware || 0;
+  newAccessory.context.model    = button.model    || 0;
+ 
   newAccessory.addService(Service.StatelessProgrammableSwitch, button.name);
     
   newAccessory
     .getService(Service.AccessoryInformation)
-    .setCharacteristic(Characteristic.Manufacturer, "Amazon")
-    .setCharacteristic(Characteristic.Model, "JK76PL")
-    .setCharacteristic(Characteristic.FirmwareRevision, button.firmware)
-    .setCharacteristic(Characteristic.SerialNumber, button.serial);
+    .setCharacteristic(Characteristic.Manufacturer,     this.manufacturer)
+    .setCharacteristic(Characteristic.Model,            newAccessory.context.model)
+    .setCharacteristic(Characteristic.FirmwareRevision, newAccessory.context.firmware)
+    .setCharacteristic(Characteristic.SerialNumber,     newAccessory.context.serial);
 
   newAccessory
     .getService(Service.StatelessProgrammableSwitch)
