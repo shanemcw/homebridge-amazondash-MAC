@@ -10,7 +10,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 * Revised specification of single-press, long-press, double-press events
 * Expect and support a Dash button that is not connected to the network
 * Multiple buttons can appear and act as one button through aliasing
-* Firmware revision, serial number, model number suport
+* Firmware revision, serial number, model number support
 * Multiple logging debug levels 
 * User ability to remove a stale button during setup experimentation
 
@@ -19,7 +19,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 1. Install airodump-ng
 1. Set up a network interface in monitor mode
 1. Install this plugin using: `npm install -g homebridge-amazondash-mac`
-1. Update the Homebridge Amazondash MAC config.json via plugin settings
+1. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
 1. Run Homebridge with elevated privileges
 1. Use `debug` levels during installation experimentation
 
@@ -75,7 +75,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 The model number is printed on the back of the Dash button
 ### MAC Address, Serial Number, Firmware Version
 * Long press on the Dash button until the light flashes blue
-* Join the network `Amazon ConfigureMe` created by that Dash button
+* Join the network `Amazon ConfigureMe` newly created by that Dash button
 * Open the URL `http://192.168.0.1` on the device connected to `Amazon ConfigureMe`
 * These values and battery level are reported
 
@@ -83,9 +83,16 @@ Use uppercase for the `mac` MAC addresses in the config.json file, e.g. `AA`, no
 
 ## Wifi Device and Monitor Mode
 A wifi device (such as a USB wifi dongle) that can be configured and run in monitor mode is required. An example USB wifi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
+### Example Wifi Device Configuration
+This is example-only. There are several and different ways to do this.
 ```
 …
 ```
 
 ## About airodump-ng
-…
+airodump-ng was created for packet capturing of raw 802.11 frames as a component of the aircrack-ng suite of tools supporting WiFi network security assessment. This plugin uses airodump-ng's ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
+
+airodump-ng must be run with elevated privileges.
+
+* [Ubuntu Man Page for airodump-ng](http://manpages.ubuntu.com/manpages/xenial/man8/airodump-ng.8.html)
+* [aircrack-ng.org](https://www.aircrack-ng.org/doku.php?id=airodump-ng)
