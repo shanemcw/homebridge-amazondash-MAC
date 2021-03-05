@@ -10,18 +10,18 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 * Revised specification of single-press, long-press, double-press events
 * Expect and support a Dash button that is not connected to the network
 * Multiple buttons can appear and act as one button through aliasing
-* Firmware revision, serial number display
+* Firmware revision, serial number, model number suport
 * Multiple logging debug levels 
 * User ability to remove a stale button during setup experimentation
 
 ## Installation
 
 1. Install airodump-ng
-2. Set up a network interface in monitor mode
-3. Install this plugin using: `npm install -g homebridge-amazondash-mac`
-4. Update Homebridge config.json 
-5. Run Homebridge with elevated privileges
-6. Use *debug* levels during installation experimentation
+1. Set up a network interface in monitor mode
+1. Install this plugin using: `npm install -g homebridge-amazondash-mac`
+1. Update the Homebridge Amazondash MAC config.json via plugin settings
+1. Run Homebridge with elevated privileges
+1. Use `debug` levels during installation experimentation
 
 ## Example config.json
 
