@@ -16,6 +16,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 
 ## Installation
 
+1. Administrator privileges are required
 1. Set up a network interface to persist in monitor mode
 2. Install airodump-ng
 3. Run airodump-ng standalone to test usage and visibility of Dash activity
@@ -61,7 +62,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
    	}
 
 ### Interface
-`Interface` refers to the monitor interface for airodump-ng to listen on.
+`Interface` refers to the monitoring wifi interface for airodump-ng to listen on. Once hte wifi monitoring interface is properly set up, this identifier is reported by the `iwconfig` command.
 ### Channel
 `Channel` refers to a single channel for airodump-ng to listen on. As the Dash button is not connected to the network (i.e. not using a channel), choose a channel *not* or *least* used in the vicinity.
 ### Debug
@@ -86,18 +87,41 @@ Use uppercase for the `mac` MAC addresses in the config.json file, e.g. `AA`, no
 ### Alias
 `alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
 
-To use this capability, configure one of the buttons as typical—this is the button that will be visible in Homekit. In the `alias` portion of its configuration, add the MAC addresses of other buttons to "alias for" or "masquerade as" that button. When buttons with those MAC addresses are pushed, it will appear to Homekit as if the visible button was pushed. The buttons corresponding to the MAC addresses in the `alias` list will not be visible as distint accessories in Homekit.
+To use this capability, configure one of the buttons as typical—this is the button that will be visible in Homekit. In the `alias` portion of its configuration, add the MAC addresses of other buttons to "alias for" or "masquerade as" that button. When buttons with those MAC addresses are pushed, it will appear to Homekit as if the visible button was pushed. The buttons corresponding to the MAC addresses in the `alias` list will not be visible as distinct accessories in Homekit.
 
 Do not add the buttons corresponding to the MAC addresses in the `alias` list as seperate button accessories.
 
 ## Wifi Device and Monitor Mode
 It is required that wifi device (such as a USB wifi dongle) can be configured and run in monitor mode. An example USB wifi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
-### Example Wifi Device Configuration
-This is example-only. There are several and different ways to do this.
-```
-…
-```
 
+### Example Wifi Device Configuration
+
+This is example-only. There are several and different ways to do this.
+
+Confirming the wifi device is working, visible and to get the interface name
+```
+sudo iw dev
+```
+Set the wifi device to monitor mode (`wlan0` is for example only) (method one)
+```
+sudo ip link set wlan0 down
+sudo iw wlan0 set monitor none
+sudo ip link set wlan0 up
+```
+Set the wifi device to monitor mode (`wlan0` is for example only) (method two)
+```
+sudo ifconfig wlan0 down
+sudo iwconfig wlan0 mode monitor
+sudo ifconfig wlan0 up
+```
+Confirm monitor mode and wifi monitoring interface name (confim "Mode:Monitor")
+```
+iwconfig
+```
+Test airodump with the wifi monitoring interface name (`wlan0` is for example only)
+```
+airodump-ng wlan0
+```
 ## About airodump-ng
 airodump-ng was created for packet capturing of raw 802.11 frames as a component of the aircrack-ng suite of tools supporting WiFi network security assessment. This plugin uses airodump-ng's ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
 
@@ -105,3 +129,8 @@ airodump-ng must be run with elevated privileges.
 
 * [Ubuntu Man Page for airodump-ng](http://manpages.ubuntu.com/manpages/xenial/man8/airodump-ng.8.html)
 * [aircrack-ng.org](https://www.aircrack-ng.org/doku.php?id=airodump-ng)
+
+### Installing airodump-ng
+```
+sudo apt-get install aircrack-ng
+```
