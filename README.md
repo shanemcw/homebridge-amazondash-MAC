@@ -26,35 +26,35 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 ## Example config.json
 
 	{
-    "platform": "AmazonDash-NG",
-    "name": "AmazonDash-NG",
-    "interface": "wlx9cefd5fa2fdf",
-    "channel": 3,
-    "debug": 2,
-    "buttons": [
-        {
-            "name": "Doorbell",
-            "mac": "FF:AA:FF:AA:00:00",
-            "serial": "G030QC0400868230",
-            "firmware": "50018520_US",
-	    "model": "JK29LP"
+   	"platform": "AmazonDash-NG",
+   	"name": "AmazonDash-NG",
+   	"interface": "wlx9cefd5fa2fdf",
+   	"channel": 3,
+   	"debug": 2,
+   	"buttons": [
+     	{
+   		"name": "Doorbell",
+   		"mac": "FF:AA:FF:AA:00:00",
+   		"serial": "G030QC0400868230",
+   		"firmware": "50018520_US",
+		"model": "JK29LP"
         },
         {
-            "name": "Button One",
-            "mac": "FF:FF:00:00:00:00",
-            "serial": "G030MQ0370960400",
-            "firmware": "50018520_US",
-	    "model": "JK29LP",
-            "alias": [
+   		"name": "Button One",
+   		"mac": "FF:FF:00:00:00:00",
+   		"serial": "G030MQ0370960400",
+   		"firmware": "50018520_US",
+		"model": "JK29LP",
+  		"alias": [
                 "AA:00:00:FF:FF:FF"
             ]
         },
         {
-            "name": "Button Two",
-            "mac": "AA:FF:00:00:FF:FF",
-            "serial": "G030DN0400063350",
-            "firmware": "50018520_US",
-	    "model": "JK29LP"
+   		"name": "Button Two",
+   		"mac": "AA:FF:00:00:FF:FF",
+		"serial": "G030DN0400063350",
+		"firmware": "50018520_US",
+		"model": "JK29LP"
         }
     ]
     }
@@ -73,7 +73,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 …
 
 ## Wifi Device and Monitor Mode
-A wifi device (such as a USB wifi dongle) that can be configured and run in monitor mode is required. An example USB wifi device known to work in some contexts for these purposes is the Panda 300Mbps Wireless 802.11n USB Adapter (PAU05).
+A wifi device (such as a USB wifi dongle) that can be configured and run in monitor mode is required. An example USB wifi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
 ```
 …
 ```
