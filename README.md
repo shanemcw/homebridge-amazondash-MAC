@@ -26,8 +26,8 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 ## Example config.json
 
 	{
-   	"platform": "AmazonDash-NG",
-   	"name": "AmazonDash-NG",
+   	"platform": "AmazonDash-MAC",
+   	"name": "AmazonDash-MAC",
    	"interface": "wlx9cefd5fa2fdf",
    	"channel": 3,
    	"debug": 2,
