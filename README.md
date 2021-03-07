@@ -39,14 +39,14 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
    	"buttons": [
    		{
    		"name": "Doorbell",
-   		"mac": "FF:AA:FF:AA:00:00",
+   		"MAC": "FF:AA:FF:AA:00:00",
    		"serial": "G030QC0400868230",
    		"firmware": "50018520_US",
 		"model": "JK29LP"
    		},
    		{
    		"name": "Button One",
-   		"mac": "FF:FF:00:00:00:00",
+   		"MAC": "FF:FF:00:00:00:00",
    		"serial": "G030MQ0370960400",
    		"firmware": "50018520_US",
 		"model": "JK29LP",
@@ -56,7 +56,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
    		},
    		{
    		"name": "Button Two",
-   		"mac": "AA:FF:00:00:FF:FF",
+   		"MAC": "AA:FF:00:00:FF:FF",
 		"serial": "G030DN0400063350",
 		"firmware": "50018520_US",
 		"model": "JK29LP"
@@ -85,7 +85,7 @@ An Amazon Dash button creates a wifi access point and can provide its informatio
 * Open the URL `http://192.168.0.1` on the device connected to `Amazon ConfigureMe`
 * These values and battery level are reported
 
-Use uppercase for the `mac` MAC addresses in the config.json file, e.g. `AA`, not `aa`.
+Use uppercase for the `MAC` MAC addresses in the config.json file, e.g. `AA`, not `aa`.
 
 ### Alias
 `alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
