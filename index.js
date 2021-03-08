@@ -11,14 +11,14 @@ module.exports = function(homebridge) {
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen        = homebridge.hap.uuid;
 
-  homebridge.registerPlatform("homebridge-amazondash-ng", "AmazonDash-NG", DashPlatform, true); // dynamic
+  homebridge.registerPlatform("homebridge-amazondash-MAC", "AmazonDash-MAC", DashPlatform, true); // dynamic
 }
 
 function DashPlatform(log, config, api) {
   var self = this;
 
   self.log          = log;
-  self.config       = config                   || { "platform": "AmazonDash-NG" };
+  self.config       = config                   || { "platform": "AmazonDash-MAC" };
   self.buttons      = self.config.buttons      || [];
   self.timeout      = self.config.timeout      || 9000; 
   self.debug        = self.config.debug        || 1; // 0-3, 10
@@ -190,7 +190,7 @@ DashPlatform.prototype.addAccessory = function(button) {
       }
     }
   
-  this.api.registerPlatformAccessories("homebridge-amazondash-ng", "AmazonDash-NG", [newAccessory]);
+  this.api.registerPlatformAccessories("homebridge-amazondash-MAC", "AmazonDash-MAC", [newAccessory]);
 }
 
 DashPlatform.prototype.removeAccessory = function(accessory) { 
@@ -202,7 +202,7 @@ DashPlatform.prototype.removeAccessory = function(accessory) {
   if (this.debug >= 2) { this.log("removeAccessory " + accessory.displayName); }
   
   if (accessory) {
-    this.api.unregisterPlatformAccessories("homebridge-amazondash-ng", "AmazonDash-NG", [accessory]);
+    this.api.unregisterPlatformAccessories("homebridge-amazondash-MAC", "AmazonDash-MAC", [accessory]);
     delete this.accessories[accessory.context.mac];
   }
 }
