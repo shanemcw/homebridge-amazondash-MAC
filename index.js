@@ -87,12 +87,12 @@ DashPlatform.prototype.didFinishLaunching = function() {
     }
  
   for (var i in self.buttons) {
-    if (!self.buttons[i].mac) {
+    if (!self.buttons[i].MAC) {
       self.log("ERROR: required accessory settings (e.g. \"mac\") missing");
       return;
       }
     
-    if (!self.accessories[self.buttons[i].mac]) {
+    if (!self.accessories[self.buttons[i].MAC]) {
       self.addAccessory(self.buttons[i]); 
       }
   }
