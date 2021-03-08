@@ -1,8 +1,6 @@
-// shanemcw/homebridge-amazondash-mac
+// https://github.com/shanemcw/homebridge-amazondash-MAC
 //   forked from jourdant/homebridge-amazondash-ng
 //    forked from KhaosT/homebridge-amazondash
-
-// shane.mcwhorter@uxphd.co
 
 var spawn = require('child_process').spawn;
 var Accessory, Service, Characteristic, UUIDGen;
@@ -11,7 +9,7 @@ module.exports = function(homebridge) {
   Accessory      = homebridge.platformAccessory;
   Service        = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
-  UUIDGen =        homebridge.hap.uuid;
+  UUIDGen        = homebridge.hap.uuid;
 
   homebridge.registerPlatform("homebridge-amazondash-ng", "AmazonDash-NG", DashPlatform, true); // dynamic
 }
@@ -20,9 +18,9 @@ function DashPlatform(log, config, api) {
   var self = this;
 
   self.log          = log;
-  self.config       = config                   || { "platform": "AmazonDash-MAC" };
+  self.config       = config                   || { "platform": "AmazonDash-NG" };
   self.buttons      = self.config.buttons      || [];
-  self.timeout      = self.config.timeout      || 10000; 
+  self.timeout      = self.config.timeout      || 9000; 
   self.debug        = self.config.debug        || 1; // 0-3, 10
   self.manufacturer = self.config.manufacturer || "Amazon";
   
@@ -40,10 +38,17 @@ function DashPlatform(log, config, api) {
 
 DashPlatform.prototype.configureAccessory = function(accessory) {
   var self = this;
-  
+
   if (self.debug >= 2) { self.log("configureAccessory " + accessory.context.mac + " as " + accessory.displayName); }
+
+  if (!accessory.context.mac) {
+    self.log("ERROR: configureAccessory called for malformed accessory (e.g. \"mac\") missing");
+    return;
+    }
   
   accessory.reachable = true;
+  
+  accessory.context.lastTriggered = null;
 
   accessory
     .getService(Service.AccessoryInformation)
@@ -52,7 +57,7 @@ DashPlatform.prototype.configureAccessory = function(accessory) {
     .setCharacteristic(Characteristic.FirmwareRevision, accessory.context.firmware)
     .setCharacteristic(Characteristic.SerialNumber,     accessory.context.serial);
 
-  // only expose single press (single is 0; double is 1, long press is 2)
+  // expose single press only (single is 0; double is 1, long press is 2)
   accessory
     .getService(Service.StatelessProgrammableSwitch)
     .getCharacteristic(Characteristic.ProgrammableSwitchEvent)
@@ -62,7 +67,7 @@ DashPlatform.prototype.configureAccessory = function(accessory) {
   
   self.alias[accessory.context.mac] = accessory.context.mac;
   
-  // additional aliases if any
+  // optional aliasing
   if (accessory.context.alias) {
     for (var i in accessory.context.alias) {
       if (self.debug >= 2) { self.log(accessory.displayName + " at " + accessory.context.mac + " also responding to " + accessory.context.alias[i]); }
@@ -74,15 +79,21 @@ DashPlatform.prototype.configureAccessory = function(accessory) {
 DashPlatform.prototype.didFinishLaunching = function() {
   var self = this;
 
+  if (self.debug == 10) {
+    self.log("DEBUG LEVEL 10: removing all cached accessories and recreating from current settings");
+    self.log("DEBUG LEVEL 10: change debug level to not 10 and restart homebridge");
+    for (var m in self.accessories) { self.removeAccessory(self.accessories[m]); }
+    self.debug = 2;
+    }
+ 
   for (var i in self.buttons) {
-    var button = self.buttons[i];
-    if (!self.accessories[button.mac]) {
-      self.addAccessory(button); 
-      } else {
-      // set debug to 10 in config.json and restart homebridge
-      //  when changing accessory configurations in testing to remove previous 
-      // set debug to not 10 and restart homebridge to add accessories fresh as configured
-      if (self.debug == 10) { self.removeAccessory(self.accessories[button.mac]); }
+    if (!self.buttons[i].mac) {
+      self.log("ERROR: required accessory settings (e.g. \"mac\") missing");
+      return;
+      }
+    
+    if (!self.accessories[self.buttons[i].mac]) {
+      self.addAccessory(self.buttons[i]); 
       }
   }
 
@@ -103,7 +114,7 @@ DashPlatform.prototype.handleOutput = function(self, data) {
   if (self.accessories && Object.keys(self.accessories).length > 0) {
     var lines = ('' + data).match(/[^\r\n]+/g);
     for (line in lines) {
-      // grab all mac addresses, use first; alias to primary mac
+      // grab all mac addresses, use first per line; alias to primary mac
       var matches = /((?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2}))/.exec(lines[line]);
       if (matches != null && matches.length > 0) {
         if (self.debug >= 3) { self.log("parsed MAC " + matches[0]); }
@@ -124,19 +135,26 @@ DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
     accessory
     .getService(Service.StatelessProgrammableSwitch)
     .getCharacteristic(Characteristic.ProgrammableSwitchEvent)
-    .setValue(0); // single press
+    .setValue(0); // 0 = single press event
 }
 
-DashPlatform.prototype.addAccessory = function(button) {
-  if (this.debug >= 2) { this.log("addAccessory " + button.mac  + " as " + button.name); }
+DashPlatform.prototype.addAccessory = function(button) {   
+  if (this.debug >= 2) { this.log("addAccessory " + button.MAC  + " as " + button.name); }
   
-  var uuid = UUIDGen.generate(button.mac);
+  if (!button.MAC) {
+    self.log("ERROR: addAccessory called without required accessory settings (e.g. \"mac\" missing)");
+    return;
+    }
+ 
+  var uuid = UUIDGen.generate(button.MAC);
 
   var newAccessory = new Accessory(button.name, uuid, 15);
   
   newAccessory.reachable = true;
   
-  newAccessory.context.mac = button.mac;
+  newAccessory.context.lastTriggered = null;
+  
+  newAccessory.context.mac = button.MAC;
   
   if (button.alias) {
     newAccessory.context.alias = button.alias;
@@ -165,7 +183,7 @@ DashPlatform.prototype.addAccessory = function(button) {
   this.alias[newAccessory.context.mac] = newAccessory.context.mac; // primary accessory is its own alias
   
   if (newAccessory.context.alias) {
-    // additional aliases if any
+    // additional aliases optional
     for (var i in newAccessory.context.alias) {
       if (this.debug >= 2) { this.log(button.name + " also responding to " + newAccessory.context.alias[i]); }
       this.alias[newAccessory.context.alias[i]] = newAccessory.context.mac;  
@@ -176,6 +194,11 @@ DashPlatform.prototype.addAccessory = function(button) {
 }
 
 DashPlatform.prototype.removeAccessory = function(accessory) { 
+  if (!accessory.context.mac) {
+    self.log("ERROR: removeAccessory called for malformed accessory (e.g. \"mac\" missing)");
+    return;
+    }
+    
   if (this.debug >= 2) { this.log("removeAccessory " + accessory.displayName); }
   
   if (accessory) {
