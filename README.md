@@ -23,7 +23,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 1. Set up a wifi device to persist in monitor mode
 2. Install airodump-ng
 3. Run airodump-ng standalone to test usage and visibility of Dash activity
-4. Install this plugin using: `npm install -g homebridge-amazondash-mac`
+4. Install this plugin using: `npm install -g homebridge-amazondash-MAC`
 5.  **Run Homebridge with elevated privileges**
 6. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
 8. Use `debug` levels during installation experimentation
