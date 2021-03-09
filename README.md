@@ -15,7 +15,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 * Firmware revision, serial number, model number support
 * Multiple logging debug levels 
 * User ability to remove a stale button during setup experimentation
-* Installation and usage documenation
+* Installation and usage documentation
 
 ## Installation
 
