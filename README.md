@@ -1,4 +1,4 @@
-# homebridge-amazondash-MAC
+# homebridge-amazondash-mac
 
 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button setup nor the Dash button connecting to your network.
 
