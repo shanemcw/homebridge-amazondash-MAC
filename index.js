@@ -1,4 +1,4 @@
-// https://github.com/shanemcw/homebridge-amazondash-MAC
+// https://github.com/shanemcw/homebridge-amazondash-mac
 //   forked from jourdant/homebridge-amazondash-ng
 //    forked from KhaosT/homebridge-amazondash
 
@@ -11,7 +11,7 @@ module.exports = function(homebridge) {
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen        = homebridge.hap.uuid;
 
-  homebridge.registerPlatform("homebridge-amazondash-MAC", "AmazonDash-MAC", DashPlatform, true); // dynamic
+  homebridge.registerPlatform("homebridge-amazondash-mac", "AmazonDash-MAC", DashPlatform, true); // dynamic
 }
 
 function DashPlatform(log, config, api) {
@@ -24,7 +24,7 @@ function DashPlatform(log, config, api) {
   self.debug        = self.config.debug        || 1; // 0-3, 10
   self.manufacturer = self.config.manufacturer || "Amazon";
   
-  self.alias = {}; // additional macs can masquerade as accessory mac via this alias map
+  self.alias = {}; // additional MACs can masquerade as accessory MAC via this alias map
 
   self.accessories = {};
 
@@ -42,7 +42,7 @@ DashPlatform.prototype.configureAccessory = function(accessory) {
   if (self.debug >= 2) { self.log("configureAccessory " + accessory.context.mac + " as " + accessory.displayName); }
 
   if (!accessory.context.mac) {
-    self.log("ERROR: configureAccessory called for malformed accessory (e.g. \"mac\") missing");
+    self.log("ERROR: configureAccessory called for malformed accessory (e.g. \"MAC\") missing");
     return;
     }
   
@@ -88,7 +88,7 @@ DashPlatform.prototype.didFinishLaunching = function() {
  
   for (var i in self.buttons) {
     if (!self.buttons[i].MAC) {
-      self.log("ERROR: required accessory settings (e.g. \"mac\") missing");
+      self.log("ERROR: required accessory settings (e.g. \"MAC\") missing");
       return;
       }
     
@@ -142,7 +142,7 @@ DashPlatform.prototype.addAccessory = function(button) {
   if (this.debug >= 2) { this.log("addAccessory " + button.MAC  + " as " + button.name); }
   
   if (!button.MAC) {
-    self.log("ERROR: addAccessory called without required accessory settings (e.g. \"mac\" missing)");
+    self.log("ERROR: addAccessory called without required accessory settings (e.g. \"MAC\" missing)");
     return;
     }
  
@@ -190,19 +190,19 @@ DashPlatform.prototype.addAccessory = function(button) {
       }
     }
   
-  this.api.registerPlatformAccessories("homebridge-amazondash-MAC", "AmazonDash-MAC", [newAccessory]);
+  this.api.registerPlatformAccessories("homebridge-amazondash-mac", "AmazonDash-MAC", [newAccessory]);
 }
 
 DashPlatform.prototype.removeAccessory = function(accessory) { 
   if (!accessory.context.mac) {
-    self.log("ERROR: removeAccessory called for malformed accessory (e.g. \"mac\" missing)");
+    self.log("ERROR: removeAccessory called for malformed accessory (e.g. \"MAC\" missing)");
     return;
     }
     
   if (this.debug >= 2) { this.log("removeAccessory " + accessory.displayName); }
   
   if (accessory) {
-    this.api.unregisterPlatformAccessories("homebridge-amazondash-MAC", "AmazonDash-MAC", [accessory]);
+    this.api.unregisterPlatformAccessories("homebridge-amazondash-mac", "AmazonDash-MAC", [accessory]);
     delete this.accessories[accessory.context.mac];
   }
 }
