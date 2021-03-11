@@ -1,0 +1,78 @@
+{
+  "pluginAlias": "AmazonDash-MAC",
+  "pluginType": "platform",
+  "singular": true,
+  "schema": {
+    "definitions": {
+      "buttons_obj": {
+        "type": "object",
+        "title": "Button",
+        "properties": {
+            "name": {
+                "type": "string",
+                "minLength": 1,
+                "required": true
+                },
+            "MAC": {
+                "type": "string",
+                "title": "MAC Address",
+                "pattern": "^([A-F0-9]{2}:){5}[A-F0-9]{2}$",
+                "required": true
+                },
+            "serial": {
+                "type": "string",
+                "title": "Serial Number"
+                },
+            "firmware": {
+                "type": "string",
+                "title": "Firmware"
+                },
+            "model": {
+                "type": "string",
+                "title": "Model"
+                },
+            "alias": {
+                "type": "array",
+                "items": {
+                "type": "string",
+                "pattern": "^([A-F0-9]{2}:){5}[A-F0-9]{2}$",
+                "required": true
+                }
+          }
+        }
+      }
+    },
+    "type": "object",
+    "properties": {
+        "interface": {
+            "title": "Interface",
+            "type": "string",
+            "minLength": 1,
+            "required": true
+          },
+            "channel": {
+            "title": "Channel",
+            "type": "number",
+            "minimum": 1,
+            "required": true
+          },
+           "debug": {
+            "title": "Debug",
+            "type": "number",
+            "default": 1,
+            "oneOf": [
+                { "title": "No Messages", "enum": [0]},
+                { "title": "Default Messages", "enum": [1] },
+                { "title": "Testing Messages", "enum": [2] },
+                { "title": "Clear Accessories", "enum": [10] }
+                ]
+          },
+      "buttons": {
+        "title": "Dash Buttons",
+        "type": "array",
+        "items": { "$ref": "#/definitions/buttons_obj", "extendRefs": true }
+      }
+    },
+    "required": [ "buttons" ]
+  }
+}
