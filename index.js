@@ -148,7 +148,7 @@ DashPlatform.prototype.addAccessory = function(button) {
  
   var uuid = UUIDGen.generate(button.MAC);
 
-  var newAccessory = new Accessory(button.name, uuid, 15);
+  var newAccessory = new Accessory(button.name, uuid, 15); // PROGRAMMABLE_SWITCH_TCTYPE
   
   newAccessory.reachable = true;
   
