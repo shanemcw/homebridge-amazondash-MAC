@@ -61,8 +61,8 @@
             "type": "number",
             "default": 1,
             "oneOf": [
-                { "title": "No Messages", "enum": [0]},
-                { "title": "Default Messages", "enum": [1] },
+                { "title": "Silent", "enum": [0]},
+                { "title": "Default Runtime Messages", "enum": [1] },
                 { "title": "Testing Messages", "enum": [2] },
                 { "title": "Clear Accessories", "enum": [10] }
                 ]
