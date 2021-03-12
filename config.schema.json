@@ -2,7 +2,7 @@
   "pluginAlias": "AmazonDash-MAC",
   "pluginType": "platform",
   "singular": true,
-  "headerDisplay" : "For requirements to run this plugin, see [homebridge-amazondash-mac#readme](https://github.com/shanemcw/homebridge-amazondash-mac#readme).",
+  "headerDisplay" : "For requirements to run this plugin including additional hardware and software, see [homebridge-amazondash-mac#readme](https://github.com/shanemcw/homebridge-amazondash-mac#readme).",
   "schema": {
     "definitions": {
       "buttons_obj": {
@@ -76,12 +76,12 @@
                 { "title": "Testing Messages", "enum": [2] },
                 { "title": "Clear Accessories", "enum": [10] }
                 ],
-            "description": "If you choose \"Clear Accessories,\" restart homebridge, then change this value to \"Testing Messages\" and restart homebridge again."
+            "description": "If and after you choose \"Clear Accessories,\" restart homebridge, then change this value to \"Testing Messages\" and restart homebridge again."
           },
       "buttons": {
         "title": "Dash Buttons",
         "type": "array",
-        "description": "Add more with \"Add Button\" below.",
+        "description": "Add more with \"Add Button\" below. See the readme linked above for more information about finding these values.",
         "items": { "$ref": "#/definitions/buttons_obj", "extendRefs": true }
       }
     },

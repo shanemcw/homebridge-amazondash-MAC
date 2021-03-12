@@ -16,6 +16,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 * Multiple logging debug levels 
 * User ability to remove a stale button during setup experimentation
 * Installation and usage documentation
+* Support for the Homebridge Plugin Settings GUI
 
 ## Installation
 
