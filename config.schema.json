@@ -76,7 +76,7 @@
                 { "title": "Testing Messages", "enum": [2] },
                 { "title": "Clear Accessories", "enum": [10] }
                 ],
-            "description": "If you choose \"Clear Accessories,\" restart homebridge, then change this value to \"Testing Messages\" and restart homebridge again."
+            "description": "If and after you choose \"Clear Accessories,\" restart homebridge, then change this value to \"Testing Messages\" and restart homebridge again."
           },
       "buttons": {
         "title": "Dash Buttons",
