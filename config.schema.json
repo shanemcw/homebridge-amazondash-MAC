@@ -56,14 +56,14 @@
             "type": "string",
             "minLength": 1,
             "required": true,
-            "description": "Try iwconfig or similar to get your device interface name."
+            "description": "Try iwconfig or similar to get your wifi device interface name."
           },
             "channel": {
             "title": "Channel",
             "type": "number",
             "minimum": 1,
             "required": true,
-            "description": "Choose a wifi channel not or least used in your environment to reduce overhead. This is not related to a Dash button connection's wifi channel."
+            "description": "Choose a wifi channel not or least used in your environment to reduce overhead. This is not related to a connected Dash button's wifi channel."
           },
            "debug": {
             "title": "Debug",
