@@ -36,8 +36,8 @@
                 },
             "alias": {
                 "type": "array",
-                "title": "An alias allows multiple buttons to act as one. If no aliases are needed, remove these elements.",
-                "description": "",
+                "title": "Aliases",
+                "description": "An alias allows multiple buttons to act as one. If no aliases are needed, remove these elements.",
                 "items": {
                 "type": "string",
                 "title": "Alias",
