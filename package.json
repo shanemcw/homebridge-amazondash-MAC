@@ -1,6 +1,6 @@
 {
   "name": "homebridge-amazondash-mac",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Amazon Dash plugin for Homebridge that doesn't require Dash button setup nor the Dash button connecting to your network. Requires elevated privileges to run airodump-ng and a wifi device in monitor mode.",
   "license": "ISC",
   "contributors": [
