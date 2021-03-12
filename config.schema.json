@@ -2,6 +2,7 @@
   "pluginAlias": "AmazonDash-MAC",
   "pluginType": "platform",
   "singular": true,
+  "headerDisplay" : "For requirements to run this plugin, see [homebridge-amazondash-mac#readme](https://github.com/shanemcw/homebridge-amazondash-mac#readme).",
   "schema": {
     "definitions": {
       "buttons_obj": {
@@ -36,8 +37,8 @@
                 },
             "alias": {
                 "type": "array",
-                "title": "An alias allows multiple buttons to act as one. If no aliases are needed, remove these elements.",
-                "description": "",
+                "title": "Aliases",
+                "description": "An alias allows multiple buttons to act as one. If no aliases are needed, remove these elements.",
                 "items": {
                 "type": "string",
                 "title": "Alias",
@@ -56,14 +57,14 @@
             "type": "string",
             "minLength": 1,
             "required": true,
-            "description": "Try iwconfig or similar to get your device interface name."
+            "description": "Try iwconfig or similar to get your wifi device interface name."
           },
             "channel": {
             "title": "Channel",
             "type": "number",
             "minimum": 1,
             "required": true,
-            "description": "Choose a wifi channel not or least used in your environment to reduce overhead. This is not related to a Dash button connection's wifi channel."
+            "description": "Choose a wifi channel not or least used in your environment to reduce overhead. This is not related to a connected Dash button's wifi channel."
           },
            "debug": {
             "title": "Debug",
@@ -78,9 +79,9 @@
             "description": "If you choose \"Clear Accessories,\" restart homebridge, then change this value to \"Testing Messages\" and restart homebridge again."
           },
       "buttons": {
-        "title": "Dash Buttons (add more with \"Add Button\" below)",
+        "title": "Dash Buttons",
         "type": "array",
-        "description": "",
+        "description": "Add more with \"Add Button\" below.",
         "items": { "$ref": "#/definitions/buttons_obj", "extendRefs": true }
       }
     },
