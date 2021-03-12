@@ -11,13 +11,15 @@
             "name": {
                 "type": "string",
                 "minLength": 1,
-                "required": true
+                "required": true,
+                "description": "The name to appear in HomeKit."
                 },
             "MAC": {
                 "type": "string",
                 "title": "MAC Address",
                 "pattern": "^([A-F0-9]{2}:){5}[A-F0-9]{2}$",
-                "required": true
+                "required": true,
+                "description": "This button's upper-case MAC address."
                 },
             "serial": {
                 "type": "string",
@@ -29,14 +31,19 @@
                 },
             "model": {
                 "type": "string",
-                "title": "Model"
+                "title": "Model",
+                "description": "The model number is printed on the back of the Dash button."
                 },
             "alias": {
                 "type": "array",
+                "title": "An alias allows multiple buttons to act as one. If no aliases are needed, remove these elements.",
+                "description": "",
                 "items": {
                 "type": "string",
+                "title": "Alias",
                 "pattern": "^([A-F0-9]{2}:){5}[A-F0-9]{2}$",
-                "required": true
+                "required": true,
+                "description": "Upper-case MAC address of the button to act as this button."
                 }
           }
         }
@@ -48,13 +55,15 @@
             "title": "Interface",
             "type": "string",
             "minLength": 1,
-            "required": true
+            "required": true,
+            "description": "Try iwconfig or similar to get your device interface name."
           },
             "channel": {
             "title": "Channel",
             "type": "number",
             "minimum": 1,
-            "required": true
+            "required": true,
+            "description": "Choose a wifi channel not or least used in your environment to reduce overhead. This is not related to a Dash button connection's wifi channel."
           },
            "debug": {
             "title": "Debug",
@@ -65,11 +74,13 @@
                 { "title": "Default Messages", "enum": [1] },
                 { "title": "Testing Messages", "enum": [2] },
                 { "title": "Clear Accessories", "enum": [10] }
-                ]
+                ],
+            "description": "If you choose \"Clear Accessories,\" restart homebridge, then change this value to \"Testing Messages\" and restart homebridge again."
           },
       "buttons": {
-        "title": "Dash Buttons",
+        "title": "Dash Buttons (add more with \"Add Button\" below)",
         "type": "array",
+        "description": "",
         "items": { "$ref": "#/definitions/buttons_obj", "extendRefs": true }
       }
     },
