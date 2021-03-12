@@ -2,6 +2,7 @@
   "pluginAlias": "AmazonDash-MAC",
   "pluginType": "platform",
   "singular": true,
+  "headerDisplay" : "For requirements to run this plugin, see [homebridge-amazondash-mac#readme](https://github.com/shanemcw/homebridge-amazondash-mac#readme).",
   "schema": {
     "definitions": {
       "buttons_obj": {
