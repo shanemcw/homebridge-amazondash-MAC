@@ -78,7 +78,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 
 ## Getting a Dash Button MAC Address, Serial Number, Firmware Version, Model Number
 ### Model Number
-The model number is printed on the back of the Dash button
+The model number is printed on the back of the Dash button.
 ### MAC Address, Serial Number, Firmware Version
 An Amazon Dash button creates a wifi access point and can provide its information via an internally-generated web page.
 * Long press on the Dash button until the light flashes blue
