@@ -78,9 +78,9 @@
             "description": "If you choose \"Clear Accessories,\" restart homebridge, then change this value to \"Testing Messages\" and restart homebridge again."
           },
       "buttons": {
-        "title": "Dash Buttons (add more with \"Add Button\" below)",
+        "title": "Dash Buttons",
         "type": "array",
-        "description": "",
+        "description": "Add more with \"Add Button\" below.",
         "items": { "$ref": "#/definitions/buttons_obj", "extendRefs": true }
       }
     },
