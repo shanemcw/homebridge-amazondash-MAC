@@ -126,7 +126,7 @@ Test airodump stand-alone with the wifi monitoring interface name (`wlan0` is fo
 ```
 sudo airodump-ng wlan0
 ```
-## About airodump-ng
+## About airodump-ng: Installing and Permitting
 airodump-ng was created for packet capturing of raw 802.11 frames as a component of the aircrack-ng suite of tools supporting WiFi network security assessment. This plugin uses airodump-ng's ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
 
 * [Ubuntu Man Page for airodump-ng](http://manpages.ubuntu.com/manpages/xenial/man8/airodump-ng.8.html)
