@@ -71,11 +71,11 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 ### Channel
 `Channel` refers to a single channel for `airodump-ng` to listen on. As the Dash button is not connected to the network (i.e. not using a channel), choose a channel *not* or *least* visible in the vicinity to reduce `airodump-ng`'s overhead.
 ### Debug
-* `0` No reporting.
-* `1` *Default.* Reports airodump-ng at initialization, and other than that only when a button is triggered. This debug level is recommended for day-to-day working installations. 
-* `2` Reports removal, creation or configuration of accessories at initialization. This level is useful when testing a configuration and as a debug level after using the special "10" debug level.
-* `3` Reports all visible MAC addresses as they are parsed live by airodump-ng. This debug is *very* verbose but helpful for initial installation and testing.
-* `10` A special debug level that removes all previously added accessories. This is useful when experimenting during initial configuration when "phantom" accessories may be displayed or accessory characteristics are not being updated due to caching of previous versions of those accessories during configuration experimentation. To use, set `debug` to 10 and restart Homebridge. Reset `debug` to the (non-10) desired debug level (2 is recommended) and restart Homebridge. This second restart will recreate the accessories fresh from the config.json file. Note any Homekit actions previously configured for the button accessories may not be retained and may need to be reconfigured for each.
+* `Silent` (`0`) No reporting.
+* `Default Runtime Messages` (`1`) Reports airodump-ng at initialization, and other than that only when a button is triggered. This debug level is recommended for day-to-day working installations. 
+* `Testing Messages` (`2`) Reports removal, creation or configuration of accessories at initialization. This level is useful when testing a configuration and as a debug level after using the special `Clear Accessories` debug level.
+* `MAC Address Streaming` (`3`) Reports all visible MAC addresses as they are parsed live by airodump-ng. This debug is *very* verbose but helpful for initial installation and testing.
+* `Clear Accessories` (`10`) A special debug level that removes all previously added accessories. This is useful when experimenting during initial configuration when "phantom" accessories may be displayed or accessory characteristics are not being updated due to caching of previous versions of those accessories during configuration experimentation. To use, set `debug` to 10 and restart Homebridge. Reset `debug` to the (non-10) desired debug level (2 is recommended) and restart Homebridge. This second restart will recreate the accessories fresh from the config.json file. Note any Homekit actions previously configured for the button accessories may not be retained and may need to be reconfigured for each.
 
 ## Getting a Dash Button MAC Address, Serial Number, Firmware Version, Model Number
 ### Model Number
