@@ -100,7 +100,7 @@ DashPlatform.prototype.didFinishLaunching = function() {
   if (Object.keys(self.accessories).length > 0) {
     if (self.debug >= 1) { self.log("airodump-ng starting on " + self.config.interface + " and channel " + self.config.channel); }
 
-    self.airodump = spawn('airodump-ng', [self.config.interface, '--channel', self.config.channel, '--berlin', 1]);
+    self.airodump = spawn('sudo', ['airodump-ng', self.config.interface, '--channel', self.config.channel, '--berlin', 1]);
 
     self.airodump.stdout.on('data', function(data) { self.handleOutput(self, data); });
     self.airodump.stderr.on('data', function(data) { self.handleOutput(self, data); });
