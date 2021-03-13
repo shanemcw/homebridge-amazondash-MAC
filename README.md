@@ -2,7 +2,7 @@
 
 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button setup nor the Dash button connecting to your network.
 
-This plugin uses airodump-ng's ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
+This plugin uses `airodump-ng`'s ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
 
 This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of KhaosT's [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
@@ -17,10 +17,11 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 * User ability to remove a stale button during setup experimentation
 * Installation and usage documentation
 * Support for the Homebridge Plugin Settings GUI
+* Removed requirement to run Homebridge with root privileges
 
 ## Installation
 
-1. Administrator privileges are required for these steps
+1. **Administrator privileges are required for these steps**
 1. Set up a wifi device to persist in monitor mode
 2. Install `airodump-ng`
 3. Give the `homebridge` user permission to also `sudo airodump-ng` without a password
@@ -29,7 +30,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 7. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
 8. Use `debug` levels during installation experimentation
 
-## Example config.json
+## Example config.json created by settings
 
 	{
    	"platform": "AmazonDash-MAC",
@@ -66,9 +67,9 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
    	}
 
 ### Interface
-`Interface` refers to the monitoring wifi interface for airodump-ng to listen on. Once the wifi monitoring interface is properly set up, this identifier is reported by the `iwconfig` command.
+`Interface` refers to the monitoring wifi interface for `airodump-ng` to listen on. Once the wifi monitoring interface is properly set up, this identifier is reported by the `iwconfig` command.
 ### Channel
-`Channel` refers to a single channel for airodump-ng to listen on. As the Dash button is not connected to the network (i.e. not using a channel), choose a channel *not* or *least* visible in the vicinity to reduce airodump-ng's overhead.
+`Channel` refers to a single channel for `airodump-ng` to listen on. As the Dash button is not connected to the network (i.e. not using a channel), choose a channel *not* or *least* visible in the vicinity to reduce `airodump-ng`'s overhead.
 ### Debug
 * `0` No reporting.
 * `1` *Default.* Reports airodump-ng at initialization, and other than that only when a button is triggered. This debug level is recommended for day-to-day working installations. 
@@ -122,22 +123,22 @@ Confirm monitor mode and wifi monitoring interface name (confim "Mode:Monitor")
 ```
 iwconfig
 ```
-Test airodump stand-alone with the wifi monitoring interface name (`wlan0` is for example only). Confirm sudo executes with no password prompt.
+Test `airodump-ng` stand-alone with the wifi monitoring interface name (`wlan0` is for example only).
 ```
 sudo airodump-ng wlan0
 ```
-## About airodump-ng: Installing and Permitting
-airodump-ng was created for packet capturing of raw 802.11 frames as a component of the aircrack-ng suite of tools supporting WiFi network security assessment. This plugin uses airodump-ng's ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
+Installing and Permitting `airodump-ng` for the Homebridge User
+`airodump-ng` was created for packet capturing of raw 802.11 frames as a component of the `aircrack-ng` suite of tools supporting WiFi network security assessment. This plugin uses `airodump-ng`'s ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
 
 * [Ubuntu Man Page for airodump-ng](http://manpages.ubuntu.com/manpages/xenial/man8/airodump-ng.8.html)
 * [aircrack-ng.org](https://www.aircrack-ng.org/doku.php?id=airodump-ng)
 
-### Installing airodump-ng (example)
+### Installing `airodump-ng` (example)
 ```
 sudo apt-get install aircrack-ng
 ```
-### Permit Homebridge to run airodump-ng via sudo without a password
-If airodump-ng is not (yet) permitted to run by homebridge via sudo without a password prompt, you will see the log entry on restarting Homebridge:
+### Permit Homebridge to run `airodump-ng` via `sudo` without a password
+If `airodump-ng` is not (yet) permitted to run by Homebridge via `sudo` without a password prompt, you will see this log entry on restarting Homebridge:
 ```
 [AmazonDash-MAC] airodump-ng ended, code 1
 ```
