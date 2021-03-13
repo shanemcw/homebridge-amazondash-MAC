@@ -122,9 +122,9 @@ Confirm monitor mode and wifi monitoring interface name (confim "Mode:Monitor")
 ```
 iwconfig
 ```
-Test airodump stand-alone with the wifi monitoring interface name (`wlan0` is for example only)
+Test airodump stand-alone with the wifi monitoring interface name (`wlan0` is for example only). Confirm sudo executes with no password prompt.
 ```
-airodump-ng wlan0
+sudo airodump-ng wlan0
 ```
 ## About airodump-ng
 airodump-ng was created for packet capturing of raw 802.11 frames as a component of the aircrack-ng suite of tools supporting WiFi network security assessment. This plugin uses airodump-ng's ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
@@ -135,4 +135,14 @@ airodump-ng was created for packet capturing of raw 802.11 frames as a component
 ### Installing airodump-ng (example)
 ```
 sudo apt-get install aircrack-ng
+```
+### Permit Homebridge to run airodump-ng via sudo without a password
+If you see the log entry on restarting Homebridge:
+```
+[AmazonDash-MAC] airodump-ng ended, code 1
+```
+airodump-ng is not yet permitted to run by homebridge via sudo without a password prompt.
+
+Add `/usr/sbin/airodump-ng` at the end of the `homebridge` entry in the `sudoers` file via `sudo visudo`
+```
 ```
