@@ -20,13 +20,13 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 
 ## Installation
 
-1. Administrator privileges are required
+1. Administrator privileges are required for these steps
 1. Set up a wifi device to persist in monitor mode
-2. Install airodump-ng
-3. Run airodump-ng standalone to test usage and visibility of Dash activity
-4. Install this plugin using: `npm install -g homebridge-amazondash-mac`
-5.  **Run Homebridge with elevated privileges**
-6. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
+2. Install `airodump-ng`
+3. Give the `homebridge` user permission to also `sudo airodump-ng` without a password
+4. Run `sudo airodump-ng` standalone to test usage and visibility of Dash activity
+5. Install this plugin using: `npm install -g homebridge-amazondash-mac`
+7. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
 8. Use `debug` levels during installation experimentation
 
 ## Example config.json
@@ -137,12 +137,17 @@ airodump-ng was created for packet capturing of raw 802.11 frames as a component
 sudo apt-get install aircrack-ng
 ```
 ### Permit Homebridge to run airodump-ng via sudo without a password
-If you see the log entry on restarting Homebridge:
+If airodump-ng is not (yet) permitted to run by homebridge via sudo without a password prompt, you will see the log entry on restarting Homebridge:
 ```
 [AmazonDash-MAC] airodump-ng ended, code 1
 ```
-airodump-ng is not yet permitted to run by homebridge via sudo without a password prompt.
-
-Add `/usr/sbin/airodump-ng` at the end of the `homebridge` entry in the `sudoers` file via `sudo visudo`
+* Add `/usr/sbin/airodump-ng` at the end of the `homebridge` entry in the `sudoers` file via the command to edit that file:
 ```
+sudo visudo
 ```
+`visudo` is required and is a text-only editor (e.g. `vi` or `GNU nano`) with editor-specific command keystrokes.
+* Add `, /usr/sbin/airodump-ng` to the end of the `homebridge` entry:
+```
+homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/bin/npm, /usr/local/bin/npm, /usr/sbin/airodump-ng
+```
+* Save the file and exit with that text editor's method.
