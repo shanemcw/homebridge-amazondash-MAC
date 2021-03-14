@@ -26,7 +26,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 2. Install `airodump-ng`
 3. Give the `homebridge` user permission to also `sudo airodump-ng` without a password
 4. Run `sudo airodump-ng` standalone to test usage and visibility of Dash activity
-5. Install this plugin using: `npm install -g homebridge-amazondash-mac`
+5. Install this plugin: `npm install -g homebridge-amazondash-mac`
 7. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
 8. Use `debug` levels during installation experimentation
 
@@ -72,7 +72,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 `Channel` refers to a single channel for `airodump-ng` to listen on. As the Dash button is not connected to the network (i.e. not using a channel), choose a channel *not* or *least* visible in the vicinity to reduce `airodump-ng`'s overhead.
 ### Debug
 * `Silent` (`0`) No reporting.
-* `Default Runtime Messages` (`1`) Reports airodump-ng at initialization, and other than that only when a button is triggered. This debug level is recommended for day-to-day working installations. 
+* `Default Runtime Messages` (`1`) Reports `airodump-ng` at initialization, and other than that only when a button is triggered. This debug level is recommended for day-to-day working installations. 
 * `Testing Messages` (`2`) Reports removal, creation or configuration of accessories at initialization. This level is useful when testing a configuration and as a debug level after using the special `Clear Accessories` debug level.
 * `MAC Address Streaming` (`3`) Reports all visible MAC addresses as they are parsed live by airodump-ng. This debug is *very* verbose but helpful for initial installation and testing.
 * `Clear Accessories` (`10`) A special debug level that removes all previously added accessories. This is useful when experimenting during initial configuration when "phantom" accessories may be displayed or accessory characteristics are not being updated due to caching of previous versions of those accessories during configuration experimentation. To use, set `debug` to 10 and restart Homebridge. Reset `debug` to the (non-10) desired debug level (2 is recommended) and restart Homebridge. This second restart will recreate the accessories fresh from the config.json file. Note any Homekit actions previously configured for the button accessories may not be retained and may need to be reconfigured for each.
@@ -87,7 +87,7 @@ An Amazon Dash button creates a wifi access point and can provide its informatio
 * Open the URL `http://192.168.0.1` on the device connected to `Amazon ConfigureMe`
 * These values and battery level are reported
 
-Use uppercase for the `MAC` MAC addresses in the config.json file, e.g. `AA`, not `aa`.
+Uppercase for the `MAC` MAC addresses are required by settings, e.g. `AA`, not `aa`.
 
 ### Alias
 `alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
@@ -103,31 +103,31 @@ It is required that wifi device (such as a USB wifi dongle) can be configured an
 
 This is example-only. There are several and different ways to do this.
 
-Confirming the wifi device is working, visible and to get the `Interface` name
+* Confirming the wifi device is working, visible and to get the `Interface` name:
 ```
 sudo iw dev
 ```
-Set the wifi device to monitor mode (`wlan0` is for example only) (method one)
+* Set the wifi device to monitor mode (`wlan0` is for example only) (method one):
 ```
 sudo ip link set wlan0 down
 sudo iw wlan0 set monitor none
 sudo ip link set wlan0 up
 ```
-Set the wifi device to monitor mode (`wlan0` is for example only) (method two)
+* Set the wifi device to monitor mode (`wlan0` is for example only) (method two):
 ```
 sudo ifconfig wlan0 down
 sudo iwconfig wlan0 mode monitor
 sudo ifconfig wlan0 up
 ```
-Confirm monitor mode and wifi monitoring interface name (confim "Mode:Monitor")
+* Confirm monitor mode and wifi monitoring interface name (confim "Mode:Monitor"):
 ```
 iwconfig
 ```
-Test `airodump-ng` stand-alone with the wifi monitoring interface name (`wlan0` is for example only).
+* Test `airodump-ng` stand-alone with the wifi monitoring interface name (`wlan0` is for example only):
 ```
 sudo airodump-ng wlan0
 ```
-Installing and Permitting `airodump-ng` for the Homebridge User
+## Installing and Permitting `airodump-ng` for the Homebridge User
 `airodump-ng` was created for packet capturing of raw 802.11 frames as a component of the `aircrack-ng` suite of tools supporting WiFi network security assessment. This plugin uses `airodump-ng`'s ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
 
 * [Ubuntu Man Page for airodump-ng](http://manpages.ubuntu.com/manpages/xenial/man8/airodump-ng.8.html)
