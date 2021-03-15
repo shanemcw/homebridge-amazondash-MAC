@@ -140,7 +140,8 @@ sudo apt-get install aircrack-ng
 ### Permit Homebridge to run `airodump-ng` via `sudo` without a password
 If `airodump-ng` is not (yet) permitted to run by Homebridge via `sudo` without a password prompt, you will see this log entry on restarting Homebridge:
 ```
-[AmazonDash-MAC] airodump-ng ended, code 1
+[AmazonDash-MAC] ERROR: sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+[AmazonDash-MAC] ERROR: airodump-ng exited, code 1
 ```
 * Add `/usr/sbin/airodump-ng` at the end of the `homebridge` entry in the `sudoers` file via the command to edit that file:
 ```
@@ -149,6 +150,6 @@ sudo visudo
 `visudo` is required and is a text-only editor (e.g. `vi` or `GNU nano`) with editor-specific command keystrokes.
 * Add `, /usr/sbin/airodump-ng` to the end of the `homebridge` entry:
 ```
-homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/bin/npm, /usr/local/bin/npm, /usr/sbin/airodump-ng
+homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/local/bin/npm, /usr/sbin/airodump-ng
 ```
 * Save the file and exit with that text editor's method.
