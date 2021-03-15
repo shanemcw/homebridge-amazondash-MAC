@@ -23,7 +23,7 @@ function DashPlatform(log, config, api) {
   self.timeout      = self.config.timeout      || 9000; // greater than --berlin * 1000
   self.debug        = self.config.debug        || 1; // 0-3, 10
   self.manufacturer = self.config.manufacturer || "Amazon";
-  
+
   self.alias = {}; // additional MACs can masquerade as accessory MAC via this alias map
 
   self.accessories = {};
@@ -103,7 +103,7 @@ DashPlatform.prototype.didFinishLaunching = function() {
     self.airodump = spawn('sudo', ['airodump-ng', self.config.interface, '--channel', self.config.channel, '--berlin', 1]);
 
     self.airodump.stdout.on('data', function(data) { self.handleOutput(self, data); });
-    self.airodump.stderr.on('data', function(data) { self.handleOutput(self, data); });
+    self.airodump.stderr.on('data', function(data) { self.handleError(self, data); });
     self.airodump.on('close', function(code) { self.log('airodump-ng ended, code ' + code); });
 
     if (self.debug >= 1) { self.log("airodump-ng started."); }
@@ -131,6 +131,13 @@ DashPlatform.prototype.handleOutput = function(self, data) {
   }
 }
 
+DashPlatform.prototype.handleError = function(self, data) {
+    var lines = ('' + data).match(/[^\r\n]+/g);
+    for (line in lines) {
+      //
+      }
+}
+    
 DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
     accessory
     .getService(Service.StatelessProgrammableSwitch)
