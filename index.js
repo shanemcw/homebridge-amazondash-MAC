@@ -103,10 +103,11 @@ DashPlatform.prototype.didFinishLaunching = function() {
     self.airodump = spawn('sudo', ['airodump-ng', self.config.interface, '--channel', self.config.channel, '--berlin', 1]);
 
     self.airodump.stdout.on('data', function(data) { self.handleOutput(self, data); });
-    self.airodump.stderr.on('data', function(data) { self.handleError(self, data); });
-    self.airodump.on('close', function(code) { self.log('airodump-ng ended, code ' + code); });
-
-    if (self.debug >= 1) { self.log("airodump-ng started."); }
+    self.airodump.stderr.on('data', function(data) { self.handleError(self, data);  });
+    
+    self.airodump.on('exit',  (code) => { self.log('ERROR: airodump-ng exited, code ' + code); });
+    self.airodump.on('close', (code) => { self.log('ERROR: airodump-ng closed, code ' + code); });
+    self.airodump.on('error', (err)  => { self.log('ERROR: airodump-ng ' + err);               });
   }
 }
 
@@ -133,9 +134,7 @@ DashPlatform.prototype.handleOutput = function(self, data) {
 
 DashPlatform.prototype.handleError = function(self, data) {
     var lines = ('' + data).match(/[^\r\n]+/g);
-    for (line in lines) {
-      //
-      }
+    for (line in lines) { self.log('ERROR: ' + lines[line]); }
 }
     
 DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
