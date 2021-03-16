@@ -61,21 +61,22 @@
           },
             "channel": {
             "title": "Channel",
-            "type": "number",
+            "type": "integer",
             "minimum": 1,
+            "maximum": 14,
             "required": true,
             "description": "Choose a wifi channel not or least used in your environment to reduce overhead. This is not related to a connected Dash button's wifi channel."
           },
            "debug": {
             "title": "Debug",
-            "type": "number",
+            "type": "integer",
             "default": 1,
             "oneOf": [
-                { "title": "Silent", "enum": [0]},
-                { "title": "Default Runtime Messages", "enum": [1] },
-                { "title": "Testing Messages", "enum": [2] },
-                { "title": "MAC Address Streaming", "enum": [3] },
-                { "title": "Clear Accessories", "enum": [10] }
+                { "title": "Silent",                   "enum": [0]  },
+                { "title": "Default Runtime Messages", "enum": [1]  },
+                { "title": "Testing Messages",         "enum": [2]  },
+                { "title": "MAC Address Streaming",    "enum": [3]  },
+                { "title": "Clear Accessories",        "enum": [10] }
                 ],
             "description": "If and after you choose \"Clear Accessories,\" restart homebridge, then change this value to \"Testing Messages\" and restart homebridge again."
           },
