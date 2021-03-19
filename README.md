@@ -7,7 +7,7 @@ By December 31, 2019, Amazon removed the capability to set up a Dash button for 
 This plugin:
 * uses `airodump-ng`'s ability to report on visible MAC addresses
 * converts the Dash button's *attempt* to connect to a network on button press as a Homekit button single-press
-* does not require modifying the Dash button
+* does not require [modifying](https://blog.christophermullins.com/2019/12/20/rescue-your-amazon-dash-buttons/) the Dash button
 
 This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of KhaosT's [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
