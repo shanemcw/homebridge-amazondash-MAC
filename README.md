@@ -1,8 +1,13 @@
 # homebridge-amazondash-mac
 
-Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button setup nor the Dash button connecting to your network.
+A 2021 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, setup nor the Dash button connecting to a network.
 
-This plugin uses `airodump-ng`'s ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
+By December 31, 2019, Amazon removed the capability to set up a Dash button for connection to a network. Also at that time, all Dash buttons that were connected to a network received an over-the-air update that disabled the connected button—a process Amazon refers to as "deregistration."
+
+This plugin:
+* uses `airodump-ng`'s ability to report on visible MAC addresses
+* converts the Dash button's attempt to connect to a network on button press as a Homekit button single-press
+* does not require modifying the Dash button
 
 This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of KhaosT's [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
