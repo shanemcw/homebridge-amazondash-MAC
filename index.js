@@ -20,7 +20,7 @@ function DashPlatform(log, config, api) {
   self.log          = log;
   self.config       = config                   || { "platform": "AmazonDash-MAC" };
   self.buttons      = self.config.buttons      || [];
-  self.timeout      = self.config.timeout      || 9000; // greater than --berlin * 1000
+  self.timeout      = self.config.timeout      || 9000; // greater than (--berlin * 1000)
   self.debug        = self.config.debug        || 1; // 0-3, 10
   self.manufacturer = self.config.manufacturer || "Amazon";
 
@@ -115,13 +115,13 @@ DashPlatform.prototype.handleOutput = function(self, data) {
   if (self.accessories && Object.keys(self.accessories).length > 0) {
     var lines = ('' + data).match(/[^\r\n]+/g);
     for (line in lines) {
-      // grab all mac addresses, use first per line; alias to primary mac
+      // parse all mac addresses, use first per line; alias to primary mac
       var matches = /((?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2}))/.exec(lines[line]);
       if (matches != null && matches.length > 0) {
-        if (self.debug >= 3) { self.log("parsed MAC " + matches[0]); }
+        if (self.debug >= 3) { self.log("parsed MAC " + matches[0]); } // very verbose
         // additional macs can masquerade as the accessory mac
         var accessory = self.accessories[self.alias[matches[0]]];
-        // also rate limit triggers
+        // also rate limit triggers longer than --berlin
         if (accessory && (accessory.context.lastTriggered == null || Math.abs((new Date()) - accessory.context.lastTriggered) > self.timeout)) {
           if (self.debug >= 1) { self.log("triggering " + accessory.displayName + " from " + matches[0]); }
           accessory.context.lastTriggered = new Date();
@@ -154,7 +154,7 @@ DashPlatform.prototype.addAccessory = function(button) {
 
   var uuid = UUIDGen.generate(button.MAC);
 
-  var newAccessory = new Accessory(button.name, uuid, 15); // PROGRAMMABLE_SWITCH_TCTYPE
+  var newAccessory = new Accessory(button.name, uuid, 15); // 15 = PROGRAMMABLE_SWITCH_TCTYPE
 
   newAccessory.reachable = true;
 
@@ -166,9 +166,9 @@ DashPlatform.prototype.addAccessory = function(button) {
     newAccessory.context.alias = button.alias;
   }
 
-  newAccessory.context.serial   = button.serial   || 0;
-  newAccessory.context.firmware = button.firmware || 0;
-  newAccessory.context.model    = button.model    || 0;
+  newAccessory.context.serial   = button.serial   || 'unspecified';
+  newAccessory.context.firmware = button.firmware || 'unspecified';
+  newAccessory.context.model    = button.model    || 'unspecified';
 
   newAccessory.addService(Service.StatelessProgrammableSwitch, button.name);
 
@@ -186,7 +186,7 @@ DashPlatform.prototype.addAccessory = function(button) {
 
   this.accessories[newAccessory.context.mac] = newAccessory;
 
-  this.alias[newAccessory.context.mac] = newAccessory.context.mac; // primary accessory is its own alias
+  this.alias[newAccessory.context.mac] = newAccessory.context.mac; // self-referential
 
   if (newAccessory.context.alias) {
     // additional aliases optional
