@@ -1,50 +1,50 @@
 {
-  "pluginAlias": "AmazonDash-MAC",
-  "pluginType": "platform",
-  "singular": true,
+  "pluginAlias"   : "AmazonDash-MAC",
+  "pluginType"    : "platform",
+  "singular"      : true,
   "headerDisplay" : "For requirements to run this plugin including additional hardware and software, see [homebridge-amazondash-mac#readme](https://github.com/shanemcw/homebridge-amazondash-mac#readme).",
   "schema": {
     "definitions": {
       "button_obj": {
-        "type": "object",
-        "title": "Button",
-        "properties": {
+        "type"       : "object",
+        "title"      : "Button",
+        "properties" : {
             "name": {
-                "type": "string",
-                "minLength": 1,
-                "required": true,
-                "description": "The name to appear in HomeKit."
+                "type"        : "string",
+                "minLength"   : 1,
+                "required"    : true,
+                "description" : "The name to appear in HomeKit."
                 },
             "MAC": {
-                "type": "string",
-                "title": "MAC Address",
-                "pattern": "^([A-F0-9]{2}:){5}[A-F0-9]{2}$",
-                "required": true,
-                "description": "This button's upper-case MAC address."
+                "type"        : "string",
+                "title"       : "MAC Address",
+                "pattern"     : "^([A-F0-9]{2}:){5}[A-F0-9]{2}$",
+                "required"    : true,
+                "description" : "This button's upper-case MAC address."
                 },
             "serial": {
-                "type": "string",
-                "title": "Serial Number"
+                "type"        : "string",
+                "title"       : "Serial Number"
                 },
             "firmware": {
-                "type": "string",
-                "title": "Firmware"
+                "type"        : "string",
+                "title"       : "Firmware"
                 },
             "model": {
-                "type": "string",
-                "title": "Model",
-                "description": "The model number is printed on the back of the Dash button."
+                "type"        : "string",
+                "title"       : "Model",
+                "description" : "The model number is printed on the back of the Dash button."
                 },
             "alias": {
-                "type": "array",
-                "title": "Aliases",
-                "description": "An alias allows multiple buttons to act as one. If no aliases are needed, remove these elements.",
-                "items": {
-                "type": "string",
-                "title": "Alias",
-                "pattern": "^([A-F0-9]{2}:){5}[A-F0-9]{2}$",
-                "required": true,
-                "description": "Upper-case MAC address of another button to act as this button."
+                "type"        : "array",
+                "title"       : "Aliases",
+                "description" : "An alias allows multiple buttons to act as one. If no aliases are needed, remove these elements.",
+                "items"       : {
+                "type"        : "string",
+                "title"       : "Alias",
+                "pattern"     : "^([A-F0-9]{2}:){5}[A-F0-9]{2}$",
+                "required"    : true,
+                "description" : "Upper-case MAC address of another button to act as this button."
                 }
           }
         }
@@ -53,38 +53,38 @@
     "type": "object",
     "properties": {
         "interface": {
-            "title": "Interface",
-            "type": "string",
-            "minLength": 1,
-            "required": true,
-            "description": "Try iwconfig or similar to get your wifi device interface name."
+            "title"       : "Interface",
+            "type"        : "string",
+            "minLength"   : 1,
+            "required"    : true,
+            "description" : "Try iwconfig or similar to get your wifi device interface name."
           },
             "channel": {
-            "title": "Channel",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 14,
-            "required": true,
-            "description": "Choose a wifi channel not or least used in your environment to reduce overhead. This is not related to a connected Dash button's wifi channel."
+            "title"       : "Channel",
+            "type"        : "integer",
+            "minimum"     : 1,
+            "maximum"     : 14,
+            "required"    : true,
+            "description" : "Choose a wifi channel not or least used in your environment to reduce overhead. This is not related to a connected Dash button's wifi channel."
           },
            "debug": {
-            "title": "Debug",
-            "type": "integer",
-            "default": 1,
-            "oneOf": [
+            "title"       : "Debug",
+            "type"        : "integer",
+            "default"     : 1,
+            "oneOf"       : [
                 { "title": "Silent",                   "enum": [0]  },
                 { "title": "Default Runtime Messages", "enum": [1]  },
                 { "title": "Testing Messages",         "enum": [2]  },
                 { "title": "MAC Address Streaming",    "enum": [3]  },
                 { "title": "Clear Accessories",        "enum": [10] }
                 ],
-            "description": "If and after you choose \"Clear Accessories,\" restart homebridge, then change this value to \"Testing Messages\" and restart homebridge again."
+            "description" : "If and after you choose \"Clear Accessories,\" restart homebridge, then change this value to \"Testing Messages\" and restart homebridge again."
           },
       "buttons": {
-        "title": "Dash Buttons",
-        "type": "array",
-        "description": "Add more with \"Add Button\" below. See the readme linked above for more information about finding these values.",
-        "items": { "$ref": "#/definitions/button_obj", "extendRefs": true }
+        "title"       : "Dash Buttons",
+        "type"        : "array",
+        "description" : "Add more with \"Add Button\" below. See the readme linked above for more information about finding these values.",
+        "items"       : { "$ref": "#/definitions/button_obj", "extendRefs": true }
       }
     },
     "required": [ "buttons" ]
