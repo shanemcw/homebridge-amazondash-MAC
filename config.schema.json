@@ -18,7 +18,7 @@
             "MAC": {
                 "type"        : "string",
                 "title"       : "MAC Address",
-                "pattern"     : "^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$",
+                "pattern"     : "^([A-Fa-f0-9]{2}:?){5}[A-Fa-f0-9]{2}$",
                 "required"    : true,
                 "description" : "This button's MAC address."
                 },
@@ -42,7 +42,7 @@
                 "items"       : {
                 "type"        : "string",
                 "title"       : "Alias",
-                "pattern"     : "^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$",
+                "pattern"     : "^([A-Fa-f0-9]{2}:?){5}[A-Fa-f0-9]{2}$",
                 "required"    : true,
                 "description" : "MAC address of another button to act as this button."
                 }
