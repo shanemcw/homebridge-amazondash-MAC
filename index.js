@@ -20,7 +20,7 @@ function DashPlatform(log, config, api) {
   self.log          = log;
   self.config       = config                   || { "platform": "AmazonDash-MAC" };
   self.buttons      = self.config.buttons      || [];
-  self.timeout      = self.config.timeout      || 9000; // greater than (--berlin * 1000)
+  self.timeout      = self.config.timeout      || 9000; 
   self.debug        = self.config.debug        || 1; // 0-3, 10
   self.manufacturer = self.config.manufacturer || "Amazon";
 
@@ -28,7 +28,8 @@ function DashPlatform(log, config, api) {
 
   self.accessories = {};
 
-  self.airodump = null;
+  //self.airodump = null;
+  self.wifidump = null;
 
   if (api) {
     self.api = api;
@@ -70,7 +71,9 @@ DashPlatform.prototype.configureAccessory = function(accessory) {
   // optional aliasing
   if (accessory.context.alias) {
     for (var i in accessory.context.alias) {
+      accessory.context.alias[i] = accessory.context.alias[i].toUpperCase();
       if (self.debug >= 2) { self.log(accessory.displayName + " at " + accessory.context.mac + " also responding to " + accessory.context.alias[i]); }
+      
       self.alias[accessory.context.alias[i]] = accessory.context.mac;
       }
     }
@@ -98,16 +101,14 @@ DashPlatform.prototype.didFinishLaunching = function() {
     }
 
   if (Object.keys(self.accessories).length > 0) {
-    if (self.debug >= 1) { self.log("airodump-ng starting on " + self.config.interface + " and channel " + self.config.channel); }
-
-    self.airodump = spawn('sudo', ['airodump-ng', self.config.interface, '--channel', self.config.channel, '--berlin', 1]);
-
-    self.airodump.stdout.on('data', function(data) { self.handleOutput(self, data); });
-    self.airodump.stderr.on('data', function(data) { self.handleError(self, data);  });
+    self.wifidump = spawn('sudo', ['tcpdump', '-i', self.config.interface, '--immediate-mode', '-t', '-q', '-N', '-l', '-e']);
     
-    self.airodump.on('exit',  (code) => { self.log('ERROR: airodump-ng exited, code ' + code); });
-    self.airodump.on('close', (code) => { self.log('ERROR: airodump-ng closed, code ' + code); });
-    self.airodump.on('error', (err)  => { self.log('ERROR: airodump-ng ' + err);               });
+    self.wifidump.stdout.on('data', function(data) { self.handleOutput(self, data); });
+    self.wifidump.stderr.on('data', function(data) { self.handleError(self, data);  });
+    
+    self.wifidump.on('exit',  (code) => { self.log('ERROR: tcpdump exited, code ' + code); });
+    self.wifidump.on('close', (code) => { self.log('ERROR: tcpdump closed, code ' + code); });
+    self.wifidump.on('error', (err)  => { self.log('ERROR: tcpdump error '        + err);  });
   }
 }
 
@@ -115,13 +116,13 @@ DashPlatform.prototype.handleOutput = function(self, data) {
   if (self.accessories && Object.keys(self.accessories).length > 0) {
     var lines = ('' + data).match(/[^\r\n]+/g);
     for (line in lines) {
-      // parse all mac addresses, use first per line; alias to primary mac
-      var matches = /((?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2}))/.exec(lines[line]);
+      // grab all mac addresses, use first per line; alias to primary mac
+      var matches = /((?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2}))/.exec(lines[line].toUpperCase());
       if (matches != null && matches.length > 0) {
         if (self.debug >= 3) { self.log("parsed MAC " + matches[0]); } // very verbose
         // additional macs can masquerade as the accessory mac
         var accessory = self.accessories[self.alias[matches[0]]];
-        // also rate limit triggers longer than --berlin
+        // also rate limit triggers
         if (accessory && (accessory.context.lastTriggered == null || Math.abs((new Date()) - accessory.context.lastTriggered) > self.timeout)) {
           if (self.debug >= 1) { self.log("triggering " + accessory.displayName + " from " + matches[0]); }
           accessory.context.lastTriggered = new Date();
@@ -134,7 +135,7 @@ DashPlatform.prototype.handleOutput = function(self, data) {
 
 DashPlatform.prototype.handleError = function(self, data) {
     var lines = ('' + data).match(/[^\r\n]+/g);
-    for (line in lines) { self.log('ERROR: ' + lines[line]); }
+    for (line in lines) { self.log(lines[line]); }
 }
     
 DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
@@ -145,12 +146,14 @@ DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
 }
 
 DashPlatform.prototype.addAccessory = function(button) {
-  if (this.debug >= 2) { this.log("addAccessory " + button.MAC  + " as " + button.name); }
-
-  if (!button.MAC) {
+  if (button.MAC) {
+    button.MAC = button.MAC.toUpperCase();
+  } else {
     self.log("ERROR: addAccessory called without required accessory settings (e.g. \"MAC\" missing)");
     return;
     }
+
+  if (this.debug >= 2) { this.log("addAccessory " + button.MAC  + " as " + button.name); }
 
   var uuid = UUIDGen.generate(button.MAC);
 
@@ -191,6 +194,7 @@ DashPlatform.prototype.addAccessory = function(button) {
   if (newAccessory.context.alias) {
     // additional aliases optional
     for (var i in newAccessory.context.alias) {
+      newAccessory.context.alias[i] = newAccessory.context.alias[i].toUpperCase();
       if (this.debug >= 2) { this.log(button.name + " also responding to " + newAccessory.context.alias[i]); }
       this.alias[newAccessory.context.alias[i]] = newAccessory.context.mac;
       }
