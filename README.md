@@ -5,7 +5,7 @@ A 2021 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge
 By December 31, 2019, Amazon removed the capability to set up a Dash button for connection to a network. Also at that time, all Dash buttons that were connected to a network received an over-the-air update that disabled the button—a process Amazon refers to as "deregistration."
 
 This plugin:
-* uses `airodump-ng`'s ability to report on visible MAC addresses
+* uses `tcpdump`'s ability to report on visible MAC addresses
 * converts the Dash button's *attempt* to connect to a network on button press as a Homekit button single-press
 * does not require [modifying](https://blog.christophermullins.com/2019/12/20/rescue-your-amazon-dash-buttons/) the Dash button
 
@@ -13,24 +13,25 @@ This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.c
 
 ## Purpose
 This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng) with
-* Code maintenance, bug fixes
-* Revised specification as single-press (not long-press, double-press) events
+* Removed requirement to run Homebridge with root privileges
+* Switch to `tcpdump` from `airodump-ng` 
+* Support for the Homebridge Plugin Settings GUI
 * Expect and support a Dash button that is not connected to the network
+* Revised specification as single-press (not long-press, double-press) events
 * Multiple buttons can appear and act as one button through aliasing
 * Firmware revision, serial number, model number support
 * Multiple logging debug levels 
 * User ability to remove a stale button during setup experimentation
 * Installation and usage documentation
-* Support for the Homebridge Plugin Settings GUI
-* Removed requirement to run Homebridge with root privileges
+* Code maintenance, bug fixes
 
 ## Installation
 
 1. **Administrator privileges are required for these steps**
 1. Set up a wifi device to persist in monitor mode
-2. Install `airodump-ng`
-3. Give the `homebridge` user permission to also `sudo airodump-ng` without a password
-4. Run `sudo airodump-ng` standalone to test usage and visibility of Dash activity
+2. Confirm availability of `tcpdump`
+3. Give the `homebridge` user permission to also `sudo tcpdump` without a password
+4. Run `sudo tcpdump` standalone with the wifi device to test usage and visibility of Dash activity
 5. Install this plugin: `npm install -g homebridge-amazondash-mac`
 7. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
 8. Use `debug` levels during installation experimentation
@@ -41,7 +42,6 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
    	"platform": "AmazonDash-MAC",
    	"name": "AmazonDash-MAC",
    	"interface": "wlx9cefd5fa2fdf",
-   	"channel": 3,
    	"debug": 2,
    	"buttons": [
    		{
@@ -72,14 +72,12 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
    	}
 
 ### Interface
-`Interface` refers to the monitoring wifi interface for `airodump-ng` to listen on. Once the wifi monitoring interface is properly set up, this identifier is reported by the `iwconfig` command.
-### Channel
-`Channel` refers to a single channel for `airodump-ng` to listen on. As the Dash button is not connected to the network (i.e. not using a channel), choose a channel *not* or *least* visible in the vicinity to reduce `airodump-ng`'s overhead.
+`Interface` refers to the monitoring wifi interface for `tcpdump` to listen on. Once the wifi monitoring interface is properly set up, this identifier is reported by the `iwconfig` or `tcpdump -D` command.
 ### Debug
 * `Silent` (`0`) No reporting.
-* `Default Runtime Messages` (`1`) Reports `airodump-ng` at initialization, and other than that only when a button is triggered. This debug level is recommended for day-to-day working installations. 
+* `Default Runtime Messages` (`1`) Reports when a button is triggered. This debug level is recommended for day-to-day working installations. 
 * `Testing Messages` (`2`) Reports removal, creation or configuration of accessories at initialization. This level is useful when testing a configuration and as a debug level after using the special `Clear Accessories` debug level.
-* `MAC Address Streaming` (`3`) Reports all visible MAC addresses as they are parsed live by airodump-ng. This debug is *very* verbose but helpful for initial installation and testing.
+* `MAC Address Streaming` (`3`) Reports all visible MAC addresses as they are parsed live. This debug is *very* verbose but helpful for initial installation and testing.
 * `Clear Accessories` (`10`) A special debug level that removes all previously added accessories. This is useful when experimenting during initial configuration when "phantom" accessories may be displayed or accessory characteristics are not being updated due to caching of previous versions of those accessories during configuration experimentation. To use, set `debug` to 10 and restart Homebridge. Reset `debug` to the (non-10) desired debug level (2 is recommended) and restart Homebridge. This second restart will recreate the accessories fresh from the config.json file. Note any Homekit actions previously configured for the button accessories may not be retained and may need to be reconfigured for each.
 
 ## Getting a Dash Button MAC Address, Serial Number, Firmware Version, Model Number
@@ -91,8 +89,6 @@ An Amazon Dash button creates a wifi access point and can provide its informatio
 * Join the network `Amazon ConfigureMe` newly created by that Dash button
 * Open the URL `http://192.168.0.1` on the device connected to `Amazon ConfigureMe`
 * These values and battery level are reported
-
-Uppercase for the `MAC` MAC addresses are required by settings, e.g. `AA`, not `aa`.
 
 ### Alias
 `alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
@@ -128,33 +124,28 @@ sudo ifconfig wlan0 up
 ```
 iwconfig
 ```
-* Test `airodump-ng` stand-alone with the wifi monitoring interface name (`wlan0` is for example only):
+* Test `tcpdump` stand-alone with the wifi monitoring interface name (`wlan0` is for example only):
 ```
-sudo airodump-ng wlan0
+sudo tcpdump -i wlan0
 ```
-## Installing and Permitting `airodump-ng` for the Homebridge User
-`airodump-ng` was created for packet capturing of raw 802.11 frames as a component of the `aircrack-ng` suite of tools supporting WiFi network security assessment. This plugin uses `airodump-ng`'s ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
+## Permitting the `homebridge` User to run `tcpdump` via `sudo` without a password 
+This plugin uses `tcpdump`'s ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
 
-* [Ubuntu Man Page for airodump-ng](http://manpages.ubuntu.com/manpages/xenial/man8/airodump-ng.8.html)
-* [aircrack-ng.org](https://www.aircrack-ng.org/doku.php?id=airodump-ng)
+* [Ubuntu Man Page for tcpdump](http://manpages.ubuntu.com/manpages/trusty/man8/tcpdump.8.html)
 
-### Installing `airodump-ng` (example)
+If `tcpdump` is not (yet) permitted to run by the `homebridge` user via `sudo` without a password prompt, you will see this log entry on restarting Homebridge:
 ```
-sudo apt-get install aircrack-ng
+[AmazonDash-MAC] sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+[AmazonDash-MAC] ERROR: tcpdump exited, code 1
+[AmazonDash-MAC] ERROR: tcpdump closed, code 1
 ```
-### Permit Homebridge to run `airodump-ng` via `sudo` without a password
-If `airodump-ng` is not (yet) permitted to run by Homebridge via `sudo` without a password prompt, you will see this log entry on restarting Homebridge:
-```
-[AmazonDash-MAC] ERROR: sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
-[AmazonDash-MAC] ERROR: airodump-ng exited, code 1
-```
-* Add `/usr/sbin/airodump-ng` at the end of the `homebridge` entry in the `sudoers` file via the command to edit that file:
+* Add `/usr/sbin/tcpdump` at the end of the `homebridge` entry in the `sudoers` file via the `visudo` command to edit that file:
 ```
 sudo visudo
 ```
 `visudo` is required and is a text-only editor (e.g. `vi` or `GNU nano`) with editor-specific command keystrokes.
-* Add `, /usr/sbin/airodump-ng` to the end of the `homebridge` entry:
+* Add `, /usr/sbin/tcpdump` to the end of the `homebridge` entry:
 ```
-homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/local/bin/npm, /usr/sbin/airodump-ng
+homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/local/bin/npm, /usr/sbin/tcpdump
 ```
 * Save the file and exit with that text editor's method.
