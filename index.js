@@ -72,6 +72,7 @@ DashPlatform.prototype.configureAccessory = function(accessory) {
   if (accessory.context.alias) {
     for (var i in accessory.context.alias) {
       accessory.context.alias[i] = accessory.context.alias[i].toUpperCase();
+      accessory.context.alias[i] = accessory.context.alias[i].replace(/([[:xdigit:]]{2})\B/g, '$1:');
       if (self.debug >= 2) { self.log(accessory.displayName + " at " + accessory.context.mac + " also responding to " + accessory.context.alias[i]); }
       
       self.alias[accessory.context.alias[i]] = accessory.context.mac;
@@ -195,6 +196,7 @@ DashPlatform.prototype.addAccessory = function(button) {
     // additional aliases optional
     for (var i in newAccessory.context.alias) {
       newAccessory.context.alias[i] = newAccessory.context.alias[i].toUpperCase();
+      newAccessory.context.alias[i] = newAccessory.context.alias[i].replace(/([[:xdigit:]]{2})\B/g, '$1:');
       if (this.debug >= 2) { this.log(button.name + " also responding to " + newAccessory.context.alias[i]); }
       this.alias[newAccessory.context.alias[i]] = newAccessory.context.mac;
       }
