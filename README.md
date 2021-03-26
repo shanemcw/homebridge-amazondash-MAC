@@ -29,7 +29,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 
 1. **Administrator privileges are required for these steps**
 1. Set up a wifi device to persist in monitor mode
-2. Confirm availability of `tcpdump`
+2. Test `tcpdump` and install if needed
 3. Give the `homebridge` user permission to also `sudo tcpdump` without a password
 4. Run `sudo tcpdump` standalone with the wifi device to test usage and visibility of Dash activity
 5. Install this plugin: `npm install -g homebridge-amazondash-mac`
@@ -98,6 +98,7 @@ To use this capability, configure one of the buttons as typical—this is the bu
 The buttons corresponding to the MAC addresses in the `alias` list are not intended to be visible as separate accessories in Homekit—do not add the buttons corresponding to the MAC addresses in the `alias` list as separate button accessories.
 
 ## Wifi Device and Monitor Mode
+
 It is required that wifi device (such as a USB wifi dongle) can be configured and run in monitor mode. An example USB wifi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
 
 ### Example Wifi Device Configuration
@@ -124,14 +125,26 @@ sudo ifconfig wlan0 up
 ```
 iwconfig
 ```
+
+## `tcpdump`
+
+This plugin uses `tcpdump`'s ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
+
+* [Ubuntu Man Page for tcpdump](http://manpages.ubuntu.com/manpages/trusty/man8/tcpdump.8.html)
+
+### Testing `tcpdump`
+
 * Test `tcpdump` stand-alone with the wifi monitoring interface name (`wlan0` is for example only):
 ```
 sudo tcpdump -i wlan0
 ```
-## Permitting the `homebridge` User to run `tcpdump` via `sudo` without a password 
-This plugin uses `tcpdump`'s ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
+### Installing `tcpdump`
 
-* [Ubuntu Man Page for tcpdump](http://manpages.ubuntu.com/manpages/trusty/man8/tcpdump.8.html)
+* if the above test failed becuase `tcpdump` is not installed, install `tcpdump`:
+```
+sudo apt-get install tcpdump
+```
+### Permitting the `homebridge` User to run `tcpdump` via `sudo` without a password 
 
 If `tcpdump` is not (yet) permitted to run by the `homebridge` user via `sudo` without a password prompt, you will see this log entry on restarting Homebridge:
 ```
