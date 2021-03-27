@@ -101,7 +101,7 @@ DashPlatform.prototype.didFinishLaunching = function() {
     }
 
   if (Object.keys(self.accessories).length > 0) {
-    self.wifidump = spawn('sudo', ['tcpdump', '-i', self.config.interface, '--immediate-mode', '-t', '-q', '-N', '-l', '-e']);
+    self.wifidump = spawn('sudo', ['tcpdump', '-i', self.config.interface, '--immediate-mode', '--monitor-mode', '-t', '-q', '-N', '-l', '-e']);
     
     self.wifidump.stdout.on('data', function(data) { self.handleOutput(self, data); });
     self.wifidump.stderr.on('data', function(data) { self.handleError(self, data);  });
