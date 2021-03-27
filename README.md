@@ -28,7 +28,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 ## Installation
 
 1. **Administrator privileges are required for these steps**
-1. Set up a wifi device to persist in monitor mode
+1. Set up a wifi device with monitor mode capability
 2. Test `tcpdump` and install if needed
 3. Give the `homebridge` user permission to also `sudo tcpdump` without a password
 4. Run `sudo tcpdump` standalone with the wifi device to test usage and visibility of Dash activity
@@ -46,24 +46,24 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
    	"buttons": [
    		{
    		"name": "Doorbell",
-   		"MAC": "FF:AA:FF:AA:00:00",
+   		"MAC": "AA:BB:CC:DD:EE:FF",
    		"serial": "G030QC0400868230",
    		"firmware": "50018520_US",
 		"model": "JK29LP"
    		},
    		{
    		"name": "Button One",
-   		"MAC": "FF:FF:00:00:00:00",
+   		"MAC": "AABBCCDDEEFF",
    		"serial": "G030MQ0370960400",
-   		"firmware": "50018520_US",
+   		"firmware": "40018220_US",
 		"model": "JK29LP",
   		"alias": [
-                "AA:00:00:FF:FF:FF"
+                "aabbccddeeff"
    		]
    		},
    		{
    		"name": "Button Two",
-   		"MAC": "AA:FF:00:00:FF:FF",
+   		"MAC": "aa:bb:cc:dd:ee:ff",
 		"serial": "G030DN0400063350",
 		"firmware": "50018520_US",
 		"model": "JK29LP"
@@ -105,17 +105,17 @@ It is required that wifi device (such as a USB wifi dongle) can be configured an
 
 This is example-only. There are several and different ways to do this.
 
-* Confirming the wifi device is working, visible and to get the `Interface` name:
+* Confirming the wifi device is working, visible and to get the `interface` name:
 ```
 sudo iw dev
 ```
-* Set the wifi device to monitor mode (`wlan0` is for example only) (method one):
+* Test the wifi device can be put in monitor mode (`wlan0` is for example only) (method one):
 ```
 sudo ip link set wlan0 down
 sudo iw wlan0 set monitor none
 sudo ip link set wlan0 up
 ```
-* Set the wifi device to monitor mode (`wlan0` is for example only) (method two):
+* Test the wifi device can be put in monitor mode (`wlan0` is for example only) (method two):
 ```
 sudo ifconfig wlan0 down
 sudo iwconfig wlan0 mode monitor
@@ -136,7 +136,7 @@ This plugin uses `tcpdump`'s ability to report on visible MAC addresses and conv
 
 * Test `tcpdump` stand-alone with the wifi monitoring interface name (`wlan0` is for example only):
 ```
-sudo tcpdump -i wlan0
+sudo tcpdump -i wlan0 --monitor-mode 
 ```
 ### Installing `tcpdump`
 
