@@ -57,7 +57,7 @@
             "type"        : "string",
             "minLength"   : 1,
             "required"    : true,
-            "description" : "Try iwconfig or similar to get your wifi device interface name."
+            "description" : "Try iwconfig, tcpdump -D or similar to get your wifi device interface name."
           },
            "debug": {
             "title"       : "Debug",
