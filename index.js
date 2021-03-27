@@ -119,7 +119,7 @@ DashPlatform.prototype.handleOutput = function(self, data) {
       // grab all mac addresses, use first per line; alias to primary mac
       var matches = /((?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2}))/.exec(lines[line].toUpperCase());
       if (matches != null && matches.length > 0) {
-        if (self.debug >= 3) { self.log("parsed MAC " + matches[0]); } // very verbose
+        if (self.debug >= 3) { self.log("MAC " + matches[0]); } // very verbose
         // additional macs can masquerade as the accessory mac
         var accessory = self.accessories[self.alias[matches[0]]];
         // also rate limit triggers
