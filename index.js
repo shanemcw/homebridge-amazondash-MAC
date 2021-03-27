@@ -71,8 +71,7 @@ DashPlatform.prototype.configureAccessory = function(accessory) {
   // optional aliasing
   if (accessory.context.alias) {
     for (var i in accessory.context.alias) {
-      accessory.context.alias[i] = accessory.context.alias[i].toUpperCase();
-      //accessory.context.alias[i] = accessory.context.alias[i].replace(/([[:xdigit:]]{2})\B/g, '$1:');
+      accessory.context.alias[i] = accessory.context.alias[i].toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
       if (self.debug >= 2) { self.log(accessory.displayName + " at " + accessory.context.mac + " also responding to " + accessory.context.alias[i]); }
       
       self.alias[accessory.context.alias[i]] = accessory.context.mac;
@@ -148,7 +147,7 @@ DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
 
 DashPlatform.prototype.addAccessory = function(button) {
   if (button.MAC) {
-    button.MAC = button.MAC.toUpperCase();
+    button.MAC = button.MAC.toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
   } else {
     self.log("ERROR: addAccessory called without required accessory settings (e.g. \"MAC\" missing)");
     return;
@@ -195,8 +194,7 @@ DashPlatform.prototype.addAccessory = function(button) {
   if (newAccessory.context.alias) {
     // additional aliases optional
     for (var i in newAccessory.context.alias) {
-      newAccessory.context.alias[i] = newAccessory.context.alias[i].toUpperCase();
-      //newAccessory.context.alias[i] = newAccessory.context.alias[i].replace(/([[:xdigit:]]{2})\B/g, '$1:');
+      newAccessory.context.alias[i] = newAccessory.context.alias[i].toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
       if (this.debug >= 2) { this.log(button.name + " also responding to " + newAccessory.context.alias[i]); }
       this.alias[newAccessory.context.alias[i]] = newAccessory.context.mac;
       }
