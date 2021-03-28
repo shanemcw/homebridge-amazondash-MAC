@@ -1,6 +1,6 @@
 # homebridge-amazondash-mac
 
-A 2021 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, setup nor the Dash button connecting to a network.
+A 2021 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button Amazon setup nor the Dash button connecting to a network.
 
 By December 31, 2019, Amazon removed the capability to set up a Dash button for connection to a network. Also at that time, all Dash buttons that were connected to a network received an over-the-air update that disabled the button—a process Amazon refers to as "deregistration."
 
@@ -161,4 +161,10 @@ sudo visudo
 ```
 homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/local/bin/npm, /usr/sbin/tcpdump
 ```
-* Save the file and exit with that text editor's method.
+* Save the file and exit with that text editor's method
+	* vi or vim sequence 
+		* esc key
+		* :wq
+		* enter key
+	* GNU Nano sequence
+		* control-x
