@@ -162,9 +162,9 @@ sudo visudo
 homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/local/bin/npm, /usr/sbin/tcpdump
 ```
 * Save the file and exit with that text editor's method
-	* vi or vim sequence 
+	* `vi` or `vim` sequence 
 		* esc key
 		* :wq
 		* enter key
-	* GNU Nano sequence
+	* `GNU nano` sequence
 		* control-x
