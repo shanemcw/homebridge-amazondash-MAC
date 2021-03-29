@@ -95,6 +95,8 @@ DashPlatform.prototype.didFinishLaunching = function() {
       return;
       }
 
+    self.buttons[i].MAC = self.buttons[i].MAC.toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
+   
     if (!self.accessories[self.buttons[i].MAC]) {
       self.addAccessory(self.buttons[i]);
       }
@@ -146,9 +148,7 @@ DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
 }
 
 DashPlatform.prototype.addAccessory = function(button) {
-  if (button.MAC) {
-    button.MAC = button.MAC.toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
-  } else {
+  if (!button.MAC) {
     self.log("ERROR: addAccessory called without required accessory settings (e.g. \"MAC\" missing)");
     return;
     }
