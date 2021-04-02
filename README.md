@@ -1,12 +1,13 @@
 # homebridge-amazondash-mac
 
-A 2021 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button Amazon setup nor the Dash button connecting to a network.
+A 2021 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network.
 
 By December 31, 2019, Amazon removed the capability to set up a Dash button for connection to a network. Also at that time, all Dash buttons that were connected to a network received an over-the-air update that disabled the button—a process Amazon refers to as "deregistration."
 
 This plugin:
-* uses `tcpdump`'s ability to report on visible MAC addresses
-* converts the Dash button's *attempt* to connect to a network on button press as a Homekit button single-press
+* Requires an addtional wifi device, e.g. USB wifi
+* uses `tcpdump`'s ability to report on MAC addresses visible to the wifi device
+* converts the Dash button's *(failed) attempt* to connect to a network on Dash button press as a Homekit button single-press
 * does not require [modifying](https://blog.christophermullins.com/2019/12/20/rescue-your-amazon-dash-buttons/) the Dash button
 
 This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of KhaosT's [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
@@ -128,7 +129,7 @@ iwconfig
 
 ## `tcpdump`
 
-This plugin uses `tcpdump`'s ability to report on visible MAC addresses and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
+This plugin uses `tcpdump`'s ability to report on MAC addresses visible to the wifi device and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
 
 * [Ubuntu Man Page for tcpdump](http://manpages.ubuntu.com/manpages/trusty/man8/tcpdump.8.html)
 
