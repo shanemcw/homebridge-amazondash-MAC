@@ -17,7 +17,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 * Removed requirement to run Homebridge with root privileges
 * Switch to `tcpdump` from `airodump-ng` 
 * Support for the Homebridge Plugin Settings GUI
-* Expect and support a Dash button that is not connected to the network
+* Expect and support a Dash button that is not connected to the local network
 * Revised specification as single-press (not long-press, double-press) events
 * Multiple buttons can appear and act as one button through aliasing
 * Firmware revision, serial number, model number support
@@ -89,7 +89,7 @@ An Amazon Dash button creates a wifi access point and can provide its informatio
 * Long press on the Dash button until the light flashes blue
 * Join the network `Amazon ConfigureMe` newly created by that Dash button
 * Open the URL `http://192.168.0.1` on the device connected to `Amazon ConfigureMe`
-* These values and battery level are reported
+* MAC address, serial number, firmware version (and battery level) are reported
 
 ### Alias
 `alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
