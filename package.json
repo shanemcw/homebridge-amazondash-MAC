@@ -3,6 +3,10 @@
   "version": "2.0.2",
   "description": "Amazon Dash plugin for Homebridge that doesn't require Dash button modification, Dash button Amazon setup nor the Dash button connecting to your network. Requires elevated privileges to configure and a wifi device in monitor mode.",
   "license": "ISC",
+  "funding": {
+  "type" : "paypal",
+  "url" : "https://paypal.me/shanemcw"
+  },
   "contributors": [
     "Khaos Tian <khaos.tian@gmail.com>",
     "Jourdan Templeton <hello@jourdant.me>",
