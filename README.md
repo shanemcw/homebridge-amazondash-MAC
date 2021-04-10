@@ -1,7 +1,7 @@
 [![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
 # homebridge-amazondash-mac
 
-A 2021 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network.
+A [Homebridge-verified](https://github.com/homebridge/homebridge/wiki/verified-Plugins) 2021 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network.
 
 By December 31, 2019, Amazon removed the capability to set up a Dash button for connection to a network. Also at that time, all Dash buttons that were connected to a network received an over-the-air update that disabled the button—a process Amazon refers to as "deregistration."
 
@@ -172,10 +172,10 @@ homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/
 		* control-x
 
 ## Ideas
-* Mount an Amazon Dash button as a doorbell and have a HomePod (or more) play a [doorbell sound effect](https://music.apple.com/us/album/door-bells-sound-effects/944475720), or a song about someone being at the door.
+* Mount an Amazon Dash button as a doorbell and have a HomePod (or more than one) play a [doorbell sound effect](https://music.apple.com/us/album/door-bells-sound-effects/944475720), or a song about someone being at the door.
 	* *Ring My Bell* by Anita Ward
 	* *Someone's Knocking at the Door* by Paul McCartney
 	* If you'd like only part of a song played:
-		* In *Apple Music*, listen the the song and write down the start and end times of the part of the song to play. Go to *Get Info* on the song and select the `Options` tab. On that screen you can set the start time and end time to play. You can also increase the song's default volume. In The Apple *Home* app, you can set to play the song on "repeat."
-* Keep the product brand sticker on several Amazon Dash buttons and use them to start different playlists. For example create playlists "Charmin" and "Tide" that are played when you push the Amazon Dash buttons for those products. 
+		* In Apple's *Music*, listen the the song and write down the start and end times of the part of the song to play. Go to *Get Info* on the song and select the `Options` tab. On that screen you can set the start time and end time to play. You can also increase the song's default volume. In Apple's *Home* app, you can set to play the song on "repeat."
+* Keep the product brand sticker on several Amazon Dash buttons and use them to start different playlists. For example create playlists "Mucinex" and "Kraft Mac & Cheese" that are played when you push the Amazon Dash buttons for those products. 
 * Buy me a beer: look for the `Donate` link and send me $2 USD for a draft PBR.
