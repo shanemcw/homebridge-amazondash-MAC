@@ -172,5 +172,10 @@ homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/
 		* control-x
 
 ## Ideas
-* Mount an Amazon Dash button as a doorbell and have a HomePod play a song that is a doorbell sound effect, or a song with lyrics about someone being at at door.
-* Keep the product brand sticker on several Amazon Dash buttons and use them to start different playlists. For example you can create playlists you name "Charmin" and "Tide" that are played when you push the Amazon Dash buttons for those products. 
+* Mount an Amazon Dash button as a doorbell and have a HomePod (or more) play a [doorbell sound effect](https://music.apple.com/us/album/door-bells-sound-effects/944475720), or a song about someone being at the door.
+	* *Ring My Bell* by Anita Ward
+	* *Someone's Knocking at the Door* by Paul McCartney
+	* If you'd like only part of a song played:
+		* In *Apple Music*, listen the the song and write down the start and end times of the part of the song to play. Go to *Get Info* on the song and select the `Options` tab. On that screen you can set the start time and end time to play. You can also increase the song's default volume. In The Apple *Home* app, you can set to play the song on "repeat."
+* Keep the product brand sticker on several Amazon Dash buttons and use them to start different playlists. For example create playlists "Charmin" and "Tide" that are played when you push the Amazon Dash buttons for those products. 
+* Buy me a beer: look for the `Donate` link and send me $2 USD for a draft PBR.
