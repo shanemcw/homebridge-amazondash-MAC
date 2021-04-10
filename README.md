@@ -1,3 +1,4 @@
+[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
 # homebridge-amazondash-mac
 
 A 2021 Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network.
@@ -7,7 +8,7 @@ By December 31, 2019, Amazon removed the capability to set up a Dash button for 
 This plugin:
 * Requires an addtional wifi device, e.g. USB wifi
 * uses `tcpdump`'s ability to report on MAC addresses visible to the wifi device
-* converts the Dash button's *(failed) attempt* to connect to a network on Dash button press as a Homekit button single-press
+* converts the Dash button's *(failed) attempt* to connect to a local network on Dash button press as a Homekit button single-press
 * does not require [modifying](https://blog.christophermullins.com/2019/12/20/rescue-your-amazon-dash-buttons/) the Dash button
 
 This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of KhaosT's [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
@@ -169,3 +170,7 @@ homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/
 		* enter key
 	* `GNU nano` sequence
 		* control-x
+
+## Ideas
+* Mount an Amazon Dash button as a doorbell and have a HomePod play a song that is a doorbell sound effect, or a song with lyrics about someone being at at door.
+* Keep the product brand sticker on several Amazon Dash buttons and use them to start different playlists. For example you can create playlists you name "Charmin" and "Tide" that are played when you push the Amazon Dash buttons for those products. 
