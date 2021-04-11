@@ -178,4 +178,4 @@ homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/
 	* If you'd like only part of a song played:
 		* In Apple's *Music*, listen the the song and write down the start and end times of the part of the song to play. Go to *Get Info* on the song and select the `Options` tab. On that screen you can set the start time and end time to play. You can also increase the song's default volume. In Apple's *Home* app, you can set to play the song on "repeat."
 * Keep the product brand sticker on several Amazon Dash buttons and use them to start different playlists. For example create playlists "Mucinex" and "Kraft Mac & Cheese" that are played when you push the Amazon Dash buttons for those products. 
-* Buy me a beer: look for the `Donate` link and send me $2 USD for a draft PBR.
+* Buy me a beer: look for the `Donate` link and send me $2 USD for a draft [PBR](https://pabstblueribbon.com).
