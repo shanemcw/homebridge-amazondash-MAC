@@ -137,8 +137,10 @@ DashPlatform.prototype.handleOutput = function(self, data) {
 
 DashPlatform.prototype.handleError = function(self, data) {
     var lines = ('' + data).match(/[^\r\n]+/g);
-    for (line in lines) { self.log(lines[line]); }
-}
+    for (line in lines) { 
+      if (/suppressed/.test(lines[line])) { continue; }
+      self.log(lines[line]); 
+      }
     
 DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
     accessory
