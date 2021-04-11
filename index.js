@@ -141,6 +141,7 @@ DashPlatform.prototype.handleError = function(self, data) {
       if (/suppressed/.test(lines[line])) { continue; }
       self.log(lines[line]); 
       }
+}
     
 DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
     accessory
