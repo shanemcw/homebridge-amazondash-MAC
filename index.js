@@ -137,8 +137,18 @@ DashPlatform.prototype.handleOutput = function(self, data) {
 
 DashPlatform.prototype.handleError = function(self, data) {
     var lines = ('' + data).match(/[^\r\n]+/g);
+    
     for (line in lines) { 
       if (/suppressed/.test(lines[line])) { continue; }
+      
+      if (/sudo/.test(lines[line])) {
+        let u = require("os").userInfo().username || "unknown";
+        self.log('ERROR: additional steps are required to allow user ' + u + ' to run tcpdump via sudo. See installation documentation for next steps.');
+        continue;
+      }
+      
+      if (/listening/.test(lines[line])) { self.log('now listening'); }
+      
       self.log(lines[line]); 
       }
 }
