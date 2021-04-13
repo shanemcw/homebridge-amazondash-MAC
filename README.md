@@ -6,20 +6,23 @@ A modern [Homebridge-verified](https://github.com/homebridge/homebridge/wiki/ver
 By December 31, 2019, Amazon removed the capability to set up a Dash button for connection to a network. Also at that time, all Dash buttons that were connected to a network received an over-the-air update that disabled the button—a process Amazon refers to as "deregistration."
 
 This plugin:
-* Requires an addtional wifi device, e.g. USB wifi
-* uses `tcpdump`'s ability to report on MAC addresses visible to the wifi device
-* converts the Dash button's *(failed) attempt* to connect to a local network on Dash button press as a Homekit button single-press
+* requires a second wifi device (e.g. USB wifi) if the Homebridge computer uses its wifi as its connection to the local network
+* requires the wifi device to support *monitor mode*
+* uses `tcpdump`'s ability to report on MAC addresses visible to the wifi device in *monitor mode*
+* converts the Dash button's *failed attempt* to connect to a local network on Dash button press as a Homekit button single-press
 * does not require [modifying](https://blog.christophermullins.com/2019/12/20/rescue-your-amazon-dash-buttons/) the Dash button
 
 This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of KhaosT's [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
 ## Purpose
+
 This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng) with
-* Removed requirement to run Homebridge with root privileges
+
+* Removal of requirement to run Homebridge with root privileges
 * Switch to `tcpdump` from `airodump-ng` 
 * Support for the Homebridge Plugin Settings GUI
-* Expect and support a Dash button that is not connected to the local network
-* Revised specification as single-press (not long-press, double-press) events
+* Expectation of and support a Dash button that is not connected to the local network
+* Revised specification as a single-press event (i.e. not long-press nor double-press)
 * Multiple buttons can appear and act as one button through aliasing
 * Firmware revision, serial number, model number support
 * Multiple logging debug levels 
@@ -27,18 +30,30 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 * Installation and usage documentation
 * Code maintenance, bug fixes
 
-## Installation
+## Ideas
+
+* Mount an Amazon Dash button as a doorbell and have a HomePod (or more than one) play a [doorbell sound effect](https://music.apple.com/us/album/door-bells-sound-effects/944475720), or a song about someone being at the door.
+	* *Ring My Bell* by Anita Ward
+	* *Someone's Knocking at the Door* by Paul McCartney
+	* If you'd like only part of a song played:
+		* In Apple's *Music*, listen the the song and write down the start and end times of the part of the song to play. Go to *Get Info* on the song and select the `Options` tab. On that screen you can set the start time and end time to play. You can also increase the song's default volume. In Apple's *Home* app, you can set to play the song on "repeat."
+* Keep the product brand sticker on several Amazon Dash buttons and use them to start different playlists. For example create playlists "Mucinex" and "Kraft Mac & Cheese" that are played when you push the Amazon Dash buttons for those products. 
+* Buy me a beer: look for the `Donate` link and send me $2 USD for a draft [PBR](https://pabstblueribbon.com).
+
+## Installation Summary
 
 1. **Administrator privileges are required for these steps**
 1. Set up a wifi device with monitor mode capability
 2. Test `tcpdump` and install if needed
-3. Give the `homebridge` user permission to also `sudo tcpdump` without a password
-4. Run `sudo tcpdump` standalone with the wifi device to test usage and visibility of Dash activity
-5. Install this plugin: `npm install -g homebridge-amazondash-mac`
+3. Run `sudo tcpdump --monitor-mode` standalone with the wifi device (i.e. `-i` and the wifi interface name) to test usage and visibility of Dash activity
+4. Give the `homebridge` user permission to also `sudo tcpdump` without a password
+6. Install this plugin: `npm install -g homebridge-amazondash-mac`
 7. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
 8. Use `debug` levels during installation experimentation
 
-## Example config.json created by settings
+## Settings
+
+### Example config.json created by settings
 
 	{
    	"platform": "AmazonDash-MAC",
@@ -74,8 +89,11 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
    	}
 
 ### Interface
+
 `Interface` refers to the monitoring wifi interface for `tcpdump` to listen on. Once the wifi monitoring interface is properly set up, this identifier is reported by the `iwconfig` or `tcpdump -D` command.
+
 ### Debug
+
 * `Silent` (`0`) No reporting.
 * `Default Runtime Messages` (`1`) Reports when a button is triggered. This debug level is recommended for day-to-day working installations. 
 * `Testing Messages` (`2`) Reports removal, creation or configuration of accessories at initialization. This level is useful when testing a configuration and as a debug level after using the special `Clear Accessories` debug level.
@@ -83,16 +101,21 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 * `Clear Accessories` (`10`) A special debug level that removes all previously added accessories. This is useful when experimenting during initial configuration when "phantom" accessories may be displayed or accessory characteristics are not being updated due to caching of previous versions of those accessories during configuration experimentation. To use, set `debug` to 10 and restart Homebridge. Reset `debug` to the (non-10) desired debug level (2 is recommended) and restart Homebridge. This second restart will recreate the accessories fresh from the config.json file. Note any Homekit actions previously configured for the button accessories may not be retained and may need to be reconfigured for each.
 
 ## Getting a Dash Button MAC Address, Serial Number, Firmware Version, Model Number
+
 ### Model Number
+
 The model number is printed on the back of the Dash button.
+
 ### MAC Address, Serial Number, Firmware Version
-An Amazon Dash button creates a wifi access point and can provide its information via an internally-generated web page.
+
+An Amazon Dash button can create a wifi access point and can provide its information via an internally-generated web page.
 * Long press on the Dash button until the light flashes blue
 * Join the network `Amazon ConfigureMe` newly created by that Dash button
 * Open the URL `http://192.168.0.1` on the device connected to `Amazon ConfigureMe`
 * MAC address, serial number, firmware version (and battery level) are reported
 
 ### Alias
+
 `alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
 
 To use this capability, configure one of the buttons as typical—this is the button that will be visible in Homekit. In the `alias` portion of its configuration, add the MAC addresses of other buttons to "alias for" or "masquerade as" that button. When buttons with those MAC addresses are pushed, it will appear to Homekit as if the visible button was pushed.
@@ -101,7 +124,7 @@ The buttons corresponding to the MAC addresses in the `alias` list are not inten
 
 ## Wifi Device and Monitor Mode
 
-It is required that wifi device (such as a USB wifi dongle) can be configured and run in monitor mode. An example USB wifi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
+A wifi device capable of *monitor mode* is needed for `tcpdump` to see Amazon Dash button activity. If your Homebridge computer's connection to the local network is via wifi, you'll need a second wifi device (such as a USB wifi dongle) capable of *monitor mode*. An example USB wifi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
 
 ### Example Wifi Device Configuration
 
@@ -130,7 +153,7 @@ iwconfig
 
 ## `tcpdump`
 
-This plugin uses `tcpdump`'s ability to report on MAC addresses visible to the wifi device and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press.
+This plugin uses `tcpdump`'s ability to report on MAC addresses visible to the wifi device (in *monitor mode*) and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press. `tcpdump` can only see Amazon Dash buttons when conencted to a wifi device in *monitor mode.*
 
 * [Ubuntu Man Page for tcpdump](http://manpages.ubuntu.com/manpages/trusty/man8/tcpdump.8.html)
 
@@ -171,11 +194,3 @@ homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/
 	* `GNU nano` sequence
 		* control-x
 
-## Ideas
-* Mount an Amazon Dash button as a doorbell and have a HomePod (or more than one) play a [doorbell sound effect](https://music.apple.com/us/album/door-bells-sound-effects/944475720), or a song about someone being at the door.
-	* *Ring My Bell* by Anita Ward
-	* *Someone's Knocking at the Door* by Paul McCartney
-	* If you'd like only part of a song played:
-		* In Apple's *Music*, listen the the song and write down the start and end times of the part of the song to play. Go to *Get Info* on the song and select the `Options` tab. On that screen you can set the start time and end time to play. You can also increase the song's default volume. In Apple's *Home* app, you can set to play the song on "repeat."
-* Keep the product brand sticker on several Amazon Dash buttons and use them to start different playlists. For example create playlists "Mucinex" and "Kraft Mac & Cheese" that are played when you push the Amazon Dash buttons for those products. 
-* Buy me a beer: look for the `Donate` link and send me $2 USD for a draft [PBR](https://pabstblueribbon.com).
