@@ -27,8 +27,7 @@ function DashPlatform(log, config, api) {
   self.alias = {}; // additional MACs can masquerade as accessory MAC via this alias map
 
   self.accessories = {};
-
-  //self.airodump = null;
+  
   self.wifidump = null;
 
   if (api) {
@@ -40,7 +39,7 @@ function DashPlatform(log, config, api) {
 DashPlatform.prototype.configureAccessory = function(accessory) {
   var self = this;
 
-  if (self.debug >= 2) { self.log("configureAccessory " + accessory.context.mac + " as " + accessory.displayName); }
+  if (self.debug >= 2) { self.log(accessory.context.mac + " configured as " + accessory.displayName); }
 
   if (!accessory.context.mac) {
     self.log("ERROR: configureAccessory called for malformed accessory (e.g. \"MAC\") missing");
@@ -171,7 +170,7 @@ DashPlatform.prototype.addAccessory = function(button) {
     return;
     }
 
-  if (this.debug >= 2) { this.log("addAccessory " + button.MAC  + " as " + button.name); }
+  if (this.debug >= 2) { this.log(button.MAC  + " added as " + button.name); }
 
   var uuid = UUIDGen.generate(button.MAC);
 
@@ -227,7 +226,7 @@ DashPlatform.prototype.removeAccessory = function(accessory) {
     return;
     }
 
-  if (this.debug >= 2) { this.log("removeAccessory " + accessory.displayName); }
+  if (this.debug >= 2) { this.log("removed: " + accessory.displayName); }
 
   if (accessory) {
     this.api.unregisterPlatformAccessories("homebridge-amazondash-mac", "AmazonDash-MAC", [accessory]);
