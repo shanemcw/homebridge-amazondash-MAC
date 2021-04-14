@@ -166,7 +166,7 @@ DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
 
 DashPlatform.prototype.addAccessory = function(button) {
   if (!button.MAC) {
-    self.log("ERROR: addAccessory called without required accessory settings (e.g. \"MAC\" missing)");
+    this.log("ERROR: addAccessory called without required accessory settings (e.g. \"MAC\" missing)");
     return;
     }
 
@@ -222,7 +222,7 @@ DashPlatform.prototype.addAccessory = function(button) {
 
 DashPlatform.prototype.removeAccessory = function(accessory) {
   if (!accessory.context.mac) {
-    self.log("ERROR: removeAccessory called for malformed accessory (e.g. \"MAC\" missing)");
+    this.log("ERROR: removeAccessory called for malformed accessory (e.g. \"MAC\" missing)");
     return;
     }
 
