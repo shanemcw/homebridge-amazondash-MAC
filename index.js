@@ -170,8 +170,6 @@ DashPlatform.prototype.addAccessory = function(button) {
     return;
     }
 
-  if (this.debug >= 2) { this.log(button.MAC  + " added as " + button.name); }
-
   var uuid = UUIDGen.generate(button.MAC);
 
   var newAccessory = new Accessory(button.name, uuid, 15); // 15 = PROGRAMMABLE_SWITCH_TCTYPE
@@ -203,11 +201,13 @@ DashPlatform.prototype.addAccessory = function(button) {
     .getService(Service.StatelessProgrammableSwitch)
     .getCharacteristic(Characteristic.ProgrammableSwitchEvent)
     .setProps({minValue: 0, maxValue: 0, validValues: [0]});
-
+  
   this.accessories[newAccessory.context.mac] = newAccessory;
 
   this.alias[newAccessory.context.mac] = newAccessory.context.mac; // self-referential
-
+  
+  if (this.debug >= 2) { this.log(button.MAC  + " added as " + button.name); }
+  
   if (newAccessory.context.alias) {
     // additional aliases optional
     for (var i in newAccessory.context.alias) {
@@ -216,7 +216,7 @@ DashPlatform.prototype.addAccessory = function(button) {
       this.alias[newAccessory.context.alias[i]] = newAccessory.context.mac;
       }
     }
-
+  
   this.api.registerPlatformAccessories("homebridge-amazondash-mac", "AmazonDash-MAC", [newAccessory]);
 }
 
@@ -226,11 +226,10 @@ DashPlatform.prototype.removeAccessory = function(accessory) {
     return;
     }
 
-  if (this.debug >= 2) { this.log("removed: " + accessory.displayName); }
-
   if (accessory) {
     this.api.unregisterPlatformAccessories("homebridge-amazondash-mac", "AmazonDash-MAC", [accessory]);
     delete this.accessories[accessory.context.mac];
+    if (this.debug >= 2) { this.log("removed: " + accessory.displayName); }
   }
 }
 
