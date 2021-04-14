@@ -68,12 +68,11 @@ DashPlatform.prototype.configureAccessory = function(accessory) {
   self.alias[accessory.context.mac] = accessory.context.mac; // self-referential
 
   // optional aliasing
-  if (accessory.context.alias) {
-    for (var i in accessory.context.alias) {
-      accessory.context.alias[i] = accessory.context.alias[i].toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
-      if (self.debug >= 2) { self.log(accessory.displayName + " at " + accessory.context.mac + " also responding to " + accessory.context.alias[i]); }
-      
-      self.alias[accessory.context.alias[i]] = accessory.context.mac;
+  if (accessory.context.alias) {  
+    for (let m of accessory.context.alias) {
+      m = m.toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
+      self.alias[m] = accessory.context.mac;
+      if (self.debug >= 2) { self.log(accessory.displayName + " at " + accessory.context.mac + " also responding to " + m); }
       }
     }
 }
@@ -84,21 +83,19 @@ DashPlatform.prototype.didFinishLaunching = function() {
   if (self.debug == 10) {
     self.log("DEBUG LEVEL 10: removing all cached accessories and recreating from current settings");
     self.log("DEBUG LEVEL 10: change debug level to not 10 and restart homebridge");
-    for (var m in self.accessories) { self.removeAccessory(self.accessories[m]); }
+    for (let a of Object.values(self.accessories)) { self.removeAccessory(a); }
     self.debug = 2;
     }
 
-  for (var i in self.buttons) {
-    if (!self.buttons[i].MAC) {
+  for (let b of self.buttons) {
+    if (!b.MAC) {
       self.log("ERROR: required accessory settings (e.g. \"MAC\") missing");
       return;
       }
 
-    self.buttons[i].MAC = self.buttons[i].MAC.toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
+    b.MAC = b.MAC.toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
    
-    if (!self.accessories[self.buttons[i].MAC]) {
-      self.addAccessory(self.buttons[i]);
-      }
+    if (!self.accessories[b.MAC]) { self.addAccessory(b); }
     }
 
   if (Object.keys(self.accessories).length > 0) {
@@ -115,10 +112,10 @@ DashPlatform.prototype.didFinishLaunching = function() {
 
 DashPlatform.prototype.handleOutput = function(self, data) {
   if (self.accessories && Object.keys(self.accessories).length > 0) {
-    var lines = ('' + data).match(/[^\r\n]+/g);
-    for (line in lines) {
+    let lines = ('' + data).match(/[^\r\n]+/g);
+    for (line of lines) {
       // grab all mac addresses, use first per line; alias to primary mac
-      var matches = /((?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2}))/.exec(lines[line].toUpperCase());
+      var matches = /((?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2}))/.exec(line.toUpperCase());
       if (matches != null && matches.length > 0) {
         if (self.debug >= 3) { self.log("MAC " + matches[0]); } // very verbose
         // additional macs can masquerade as the accessory mac
@@ -135,14 +132,11 @@ DashPlatform.prototype.handleOutput = function(self, data) {
 }
 
 DashPlatform.prototype.handleError = function(self, data) {
-    var lines = ('' + data).match(/[^\r\n]+/g);
-    
-    for (line in lines) { 
-      let l = lines[line];
+    let lines = ('' + data).match(/[^\r\n]+/g);
+    for (let line of lines) {     
+      if (/suppressed/.test(line)) { continue; }
       
-      if (/suppressed/.test(l)) { continue; }
-      
-      if (/sudo/.test(l)) {
+      if (/sudo/.test(line)) {
         let o = require('os');
         let u = o.userInfo().username || "unknown";
         let h = o.hostname || "unknown";
@@ -151,9 +145,9 @@ DashPlatform.prototype.handleError = function(self, data) {
         continue;
       }
       
-      if (/listening/.test(l)) { self.log('now listening'); }
+      if (/listening/.test(line)) { self.log('now listening'); }
       
-      self.log(l); 
+      self.log(line); 
       }
 }
     
@@ -165,8 +159,10 @@ DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
 }
 
 DashPlatform.prototype.addAccessory = function(button) {
+  var self = this;
+ 
   if (!button.MAC) {
-    this.log("ERROR: addAccessory called without required accessory settings (e.g. \"MAC\" missing)");
+    self.log("ERROR: addAccessory called without required accessory settings (e.g. \"MAC\" missing)");
     return;
     }
 
@@ -192,7 +188,7 @@ DashPlatform.prototype.addAccessory = function(button) {
 
   newAccessory
     .getService(Service.AccessoryInformation)
-    .setCharacteristic(Characteristic.Manufacturer,     this.manufacturer)
+    .setCharacteristic(Characteristic.Manufacturer,     self.manufacturer)
     .setCharacteristic(Characteristic.Model,            newAccessory.context.model)
     .setCharacteristic(Characteristic.FirmwareRevision, newAccessory.context.firmware)
     .setCharacteristic(Characteristic.SerialNumber,     newAccessory.context.serial);
@@ -202,34 +198,36 @@ DashPlatform.prototype.addAccessory = function(button) {
     .getCharacteristic(Characteristic.ProgrammableSwitchEvent)
     .setProps({minValue: 0, maxValue: 0, validValues: [0]});
   
-  this.accessories[newAccessory.context.mac] = newAccessory;
+  self.accessories[newAccessory.context.mac] = newAccessory;
 
-  this.alias[newAccessory.context.mac] = newAccessory.context.mac; // self-referential
+  self.alias[newAccessory.context.mac] = newAccessory.context.mac; // self-referential
   
-  if (this.debug >= 2) { this.log(button.MAC  + " added as " + button.name); }
+  if (self.debug >= 2) { self.log(button.MAC  + " added as " + button.name); }
   
+  // optional aliasing
   if (newAccessory.context.alias) {
-    // additional aliases optional
-    for (var i in newAccessory.context.alias) {
-      newAccessory.context.alias[i] = newAccessory.context.alias[i].toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
-      if (this.debug >= 2) { this.log(button.name + " also responding to " + newAccessory.context.alias[i]); }
-      this.alias[newAccessory.context.alias[i]] = newAccessory.context.mac;
+    for (let m of newAccessory.context.alias) {
+      m = m.toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
+      self.alias[m] = newAccessory.context.mac;
+      if (self.debug >= 2) { this.log(button.name + " also responding to " + m); }
       }
     }
   
-  this.api.registerPlatformAccessories("homebridge-amazondash-mac", "AmazonDash-MAC", [newAccessory]);
+  self.api.registerPlatformAccessories("homebridge-amazondash-mac", "AmazonDash-MAC", [newAccessory]);
 }
 
 DashPlatform.prototype.removeAccessory = function(accessory) {
+  var self = this;
+  
   if (!accessory.context.mac) {
-    this.log("ERROR: removeAccessory called for malformed accessory (e.g. \"MAC\" missing)");
+    self.log("ERROR: removeAccessory called for malformed accessory (e.g. \"MAC\" missing)");
     return;
     }
 
   if (accessory) {
-    this.api.unregisterPlatformAccessories("homebridge-amazondash-mac", "AmazonDash-MAC", [accessory]);
-    delete this.accessories[accessory.context.mac];
-    if (this.debug >= 2) { this.log("removed: " + accessory.displayName); }
+    self.api.unregisterPlatformAccessories("homebridge-amazondash-mac", "AmazonDash-MAC", [accessory]);
+    delete self.accessories[accessory.context.mac];
+    if (self.debug >= 2) { self.log("removed: " + accessory.displayName); }
   }
 }
 
