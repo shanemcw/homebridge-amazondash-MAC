@@ -173,7 +173,8 @@ sudo apt-get install tcpdump
 
 If `tcpdump` is not (yet) permitted to run by the `homebridge` user via `sudo` without a password prompt, you will see this log entry on restarting Homebridge:
 ```
-[AmazonDash-MAC] sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+[AmazonDash-MAC] ERROR: additional steps are required to allow user (user name) to run tcpdump via sudo on (host name)
+[AmazonDash-MAC] ERROR: see installation documentation for next steps
 [AmazonDash-MAC] ERROR: tcpdump exited, code 1
 [AmazonDash-MAC] ERROR: tcpdump closed, code 1
 ```
@@ -186,7 +187,7 @@ sudo visudo
 ```
 homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/local/bin/npm, /usr/sbin/tcpdump
 ```
-* Save the file and exit with that text editor's method
+* Save the file and exit with that text editor's method. Accept any default file names during the save and exit step.
 	* `vi` or `vim` sequence 
 		* esc key
 		* :wq
