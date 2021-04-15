@@ -146,14 +146,14 @@ sudo ifconfig wlan0 down
 sudo iwconfig wlan0 mode monitor
 sudo ifconfig wlan0 up
 ```
-* Confirm monitor mode and wifi monitoring interface name (confim "Mode:Monitor"):
+* Confirm monitor mode and wifi monitoring interface name (confirm "Mode:Monitor"):
 ```
 iwconfig
 ```
 
 ## `tcpdump`
 
-This plugin uses `tcpdump`'s ability to report on MAC addresses visible to the wifi device (in *monitor mode*) and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press. `tcpdump` can only see Amazon Dash buttons when conencted to a wifi device in *monitor mode.*
+This plugin uses `tcpdump`'s ability to report on MAC addresses visible to the wifi device (in *monitor mode*) and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press. `tcpdump` can only see Amazon Dash buttons when connected to a wifi device in *monitor mode.*
 
 * [Ubuntu Man Page for tcpdump](http://manpages.ubuntu.com/manpages/trusty/man8/tcpdump.8.html)
 
@@ -165,7 +165,7 @@ sudo tcpdump -i wlan0 --monitor-mode
 ```
 ### Installing `tcpdump`
 
-* if the above test failed becuase `tcpdump` is not installed, install `tcpdump`:
+* if the above test failed because `tcpdump` is not installed, install `tcpdump`:
 ```
 sudo apt-get install tcpdump
 ```

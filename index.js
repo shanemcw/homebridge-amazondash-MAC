@@ -20,7 +20,7 @@ function DashPlatform(log, config, api) {
   self.log          = log;
   self.config       = config                   || { "platform": "AmazonDash-MAC" };
   self.buttons      = self.config.buttons      || [];
-  self.timeout      = self.config.timeout      || 9000; 
+  self.timeout      = self.config.timeout      || 9000; // rate limit triggers greater than connection attempt time in ms
   self.debug        = self.config.debug        || 1; // 0-3, 10
   self.manufacturer = self.config.manufacturer || "Amazon";
 
@@ -99,7 +99,7 @@ DashPlatform.prototype.didFinishLaunching = function() {
     }
 
   if (Object.keys(self.accessories).length > 0) {
-    self.wifidump = spawn('sudo', ['tcpdump', '-i', self.config.interface, '--immediate-mode', '--monitor-mode', '-t', '-q', '-N', '-l', '-e']);
+    self.wifidump = spawn('sudo', ['tcpdump', '-i', self.config.interface, '--immediate-mode', '--monitor-mode', '-t', '-S', '-q', '-N', '-l', '-e', 'broadcast']);
     
     self.wifidump.stdout.on('data', function(data) { self.handleOutput(self, data); });
     self.wifidump.stderr.on('data', function(data) { self.handleError(self, data);  });
@@ -113,14 +113,14 @@ DashPlatform.prototype.didFinishLaunching = function() {
 DashPlatform.prototype.handleOutput = function(self, data) {
   if (self.accessories && Object.keys(self.accessories).length > 0) {
     let lines = ('' + data).match(/[^\r\n]+/g);
-    for (line of lines) {
-      // grab all mac addresses, use first per line; alias to primary mac
+    for (let line of lines) {
+      // grab all MAC addresses, use first per line; alias to primary MAC
       var matches = /((?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2}))/.exec(line.toUpperCase());
       if (matches != null && matches.length > 0) {
         if (self.debug >= 3) { self.log("MAC " + matches[0]); } // very verbose
-        // additional macs can masquerade as the accessory mac
+        // additional MACs can masquerade as the accessory MAC
         var accessory = self.accessories[self.alias[matches[0]]];
-        // also rate limit triggers
+        // rate limit triggers greater than connection attempt time
         if (accessory && (accessory.context.lastTriggered == null || Math.abs((new Date()) - accessory.context.lastTriggered) > self.timeout)) {
           if (self.debug >= 1) { self.log("triggering " + accessory.displayName + " from " + matches[0]); }
           accessory.context.lastTriggered = new Date();

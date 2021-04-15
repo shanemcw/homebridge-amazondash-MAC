@@ -4,8 +4,8 @@
   "description": "A modern Amazon Dash plugin for Homebridge that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network. Requires elevated privileges to configure and a wifi device in monitor mode.",
   "license": "ISC",
   "funding": {
-  "type" : "paypal",
-  "url" : "https://paypal.me/shanemcw"
+    "type": "paypal",
+    "url": "https://paypal.me/shanemcw"
   },
   "contributors": [
     "Khaos Tian <khaos.tian@gmail.com>",
