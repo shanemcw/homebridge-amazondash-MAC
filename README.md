@@ -18,7 +18,7 @@ This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.c
 
 This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng) with
 
-* Removal of requirement to run Homebridge with root privileges
+* Removal of the requirement to run Homebridge with root privileges
 * Switch to `tcpdump` from `airodump-ng` 
 * Support for the Homebridge Plugin Settings GUI
 * Support of and expectation that a Dash button cannot be configured nor connect to the local network
@@ -39,7 +39,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 		* In Apple's *Music*, listen the the song and write down the start and end times of the part of the song to play. Go to *Get Info* on the song and select the `Options` tab. On that screen you can set the start time and end time to play. You can also increase the song's default volume. In Apple's *Home* app, you can set to play the song on "repeat."
 * Keep the product brand sticker on several Amazon Dash buttons and use them to start different playlists. For example create playlists "Mucinex" and "Kraft Mac & Cheese" that are played when you push the Amazon Dash buttons labeled as those products.
 * If a button is configured to play a playlist, configure the *Double Press* action for that button to pause playing.
-        * To execute a *Double Press,* press the button again within 15 seconds after the lights go dark from this first press.
+	* To execute a *Double Press,* press the button again within 15 seconds *after* the lights go dark from this first press.
 * Buy me a beer: look for the `Donate` link and send me $2 USD for a draft [PBR](https://pabstblueribbon.com).
 
 ## Installation Summary
