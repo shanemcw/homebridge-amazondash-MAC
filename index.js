@@ -46,11 +46,11 @@ DashPlatform.prototype.configureAccessory = function(accessory) {
     .setCharacteristic(Characteristic.Model,            accessory.context.model)
     .setCharacteristic(Characteristic.FirmwareRevision, accessory.context.firmware)
     .setCharacteristic(Characteristic.SerialNumber,     accessory.context.serial);
-  // expose single press only (single is 0; double is 1, long press is 2)
+  // single press is 0; double is 1, long press is 2)
   accessory
     .getService(Service.StatelessProgrammableSwitch)
     .getCharacteristic(Characteristic.ProgrammableSwitchEvent)
-    .setProps({minValue: 0, maxValue: 0, validValues: [0]});
+    .setProps({minValue: 0, maxValue: 1, validValues: [0, 1]});
   self.accessories[accessory.context.mac] = accessory;
   self.alias[accessory.context.mac] = accessory.context.mac; // self-referential
   // optional aliasing
@@ -102,8 +102,7 @@ DashPlatform.prototype.handleOutput = function(self, data) {
         var accessory = self.accessories[self.alias[matches[0]]];
         // rate limit triggers less than connection attempt time
         if (accessory && (accessory.context.lastTriggered == null || Math.abs((new Date()) - accessory.context.lastTriggered) > self.timeout)) {
-          if (self.debug >= 1) { self.log("triggering " + accessory.displayName + " from " + matches[0]); }
-          accessory.context.lastTriggered = new Date();
+          if (self.debug >= 2) { self.log('triggering ' + accessory.displayName + ' from ' + matches[0]); }
           self.dashEventWithAccessory(self, accessory);
           }
       }
@@ -137,10 +136,14 @@ DashPlatform.prototype.handleError = function(self, data) {
 }
     
 DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
-    accessory
+  let b = 0; let s = 'single'; // 0 = single, 1 = double, 2 = long press events
+  if (accessory.context.lastTriggered && Math.abs(new Date() - accessory.context.lastTriggered) < (self.timeout + 16000)) { b = 1; s = 'double'; } 
+  accessory
     .getService(Service.StatelessProgrammableSwitch)
     .getCharacteristic(Characteristic.ProgrammableSwitchEvent)
-    .setValue(0); // 0 = single press event
+    .setValue(b); // 
+  if (self.debug >= 1) { self.log(accessory.displayName + ' ' + s + ' press'); }
+  accessory.context.lastTriggered = new Date();
 }
 
 DashPlatform.prototype.addAccessory = function(button) {
@@ -170,7 +173,7 @@ DashPlatform.prototype.addAccessory = function(button) {
   newAccessory
     .getService(Service.StatelessProgrammableSwitch)
     .getCharacteristic(Characteristic.ProgrammableSwitchEvent)
-    .setProps({minValue: 0, maxValue: 0, validValues: [0]});
+    .setProps({minValue: 0, maxValue: 1, validValues: [0, 1]});
   self.accessories[newAccessory.context.mac] = newAccessory;
   self.alias[newAccessory.context.mac] = newAccessory.context.mac; // self-referential
   if (self.debug >= 2) { self.log(button.MAC  + " added as " + button.name); }
