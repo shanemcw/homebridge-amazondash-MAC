@@ -92,6 +92,7 @@ DashPlatform.prototype.didFinishLaunching = function() {
 DashPlatform.prototype.handleOutput = function(self, data) {
   if (self.accessories && Object.keys(self.accessories).length > 0) {
     let lines = ('' + data).match(/[^\r\n]+/g);
+    if (!lines) { return; }
     for (let line of lines) {
       // grab all MAC addresses, use first per line; alias to primary MAC
       var matches = line.toUpperCase().match(/(?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2})/g);
@@ -99,7 +100,7 @@ DashPlatform.prototype.handleOutput = function(self, data) {
         if (self.debug >= 3) { self.log("MAC " + matches[0]); } // very verbose
         // additional MACs can masquerade as the accessory MAC
         var accessory = self.accessories[self.alias[matches[0]]];
-        // rate limit triggers greater than connection attempt time
+        // rate limit triggers less than connection attempt time
         if (accessory && (accessory.context.lastTriggered == null || Math.abs((new Date()) - accessory.context.lastTriggered) > self.timeout)) {
           if (self.debug >= 1) { self.log("triggering " + accessory.displayName + " from " + matches[0]); }
           accessory.context.lastTriggered = new Date();
@@ -112,16 +113,18 @@ DashPlatform.prototype.handleOutput = function(self, data) {
 
 DashPlatform.prototype.handleError = function(self, data) {
     let lines = ('' + data).match(/[^\r\n]+/g);
+    if (!lines) { return; }
     for (let line of lines) {     
       if (/suppressed/.test(line)) { continue; }
+      if (/packets/.test(line))    { continue; }
       if (/sudo/.test(line)) {
         let o = require('os');
         let u = o.userInfo().username || "unknown";
-        let h = o.hostname || "unknown";
+        let h = o.hostname            || "unknown";
         self.log('ERROR: additional steps are required to allow user ' + u + ' to run tcpdump via sudo on ' + h);
         self.log('ERROR: see installation documentation for next steps');
         continue;
-      }
+        }
       if (/listening/.test(line)) { 
         let n = line.match(/on ([^\s,]+)/);
         if (n[1]) {
