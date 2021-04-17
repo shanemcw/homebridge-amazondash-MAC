@@ -1,7 +1,7 @@
-[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
-# homebridge-amazondash-mac
+[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/green)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins) [![npm](https://badgen.net/npm/dt/homebridge-amazondash-mac?color=green)](https://www.npmjs.com/package/homebridge-amazondash-mac)
+# A Modern Amazon Dash Button Plugin for Homebridge
 
-A modern [Homebridge-verified](https://github.com/homebridge/homebridge/wiki/verified-Plugins) Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network.
+A post-2019 modern [Homebridge-verified](https://github.com/homebridge/homebridge/wiki/verified-Plugins) Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network.
 
 By December 31, 2019, Amazon removed the capability to set up a Dash button for connection to a network. Also at that time, all Dash buttons that were connected to a network received an over-the-air update that disabled the button—a process Amazon refers to as "deregistration."
 
@@ -120,7 +120,7 @@ To use this capability, configure one of the buttons as typical—this is the bu
 The buttons corresponding to the MAC addresses in the `alias` list are not intended to be visible as separate accessories in Homekit—do not add the buttons corresponding to the MAC addresses in the `alias` list as separate button accessories.
 
 ## Wifi Device and Monitor Mode
-A wifi device capable of *monitor mode* is needed for `tcpdump` to see Amazon Dash button activity. If your Homebridge computer's connection to the local network is via wifi, you'll need a second wifi device (such as a USB wifi dongle) capable of *monitor mode*. An example USB wifi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
+A wifi device capable of *monitor mode* is needed for `tcpdump` to see Amazon Dash button activity. If your Homebridge computer's connection to the local network is via wifi, you'll need a second wifi device (such as a USB wifi adapter) capable of *monitor mode*. A USB wifi adapter is about $10-$20 with free shipping online. An example USB wifi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**. If you have tested a different USB wifi adapter with this plugin, share your experience (good or bad) with the community in this plugin's discussion.
 
 ### Example Wifi Device Configuration
 This is example-only. There are several and different ways to do this.
