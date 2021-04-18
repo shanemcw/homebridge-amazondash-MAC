@@ -1,14 +1,14 @@
 [![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/green)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins) [![npm](https://badgen.net/npm/dt/homebridge-amazondash-mac?color=green)](https://www.npmjs.com/package/homebridge-amazondash-mac)
 # A Modern Amazon Dash Button Plugin for Homebridge
 
-A post-2019 modern [Homebridge-verified](https://github.com/homebridge/homebridge/wiki/verified-Plugins) Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network.
+A modern (post-2019) [Homebridge-verified](https://github.com/homebridge/homebridge/wiki/verified-Plugins) Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network.
 
 By December 31, 2019, Amazon removed the capability to set up a Dash button for connection to a network. Also at that time, all Dash buttons that were connected to a network received an over-the-air update that disabled the button—a process Amazon refers to as "deregistration."
 
 This plugin:
-* requires a second wifi device (e.g. USB wifi) if the Homebridge computer uses its wifi as its connection to the local network
-* requires the wifi device to support *monitor mode*
-* uses `tcpdump`'s ability to report on MAC addresses visible to the wifi device in *monitor mode*
+* requires a second WiFi device (e.g. USB WiFi) if the Homebridge computer uses its WiFi as its connection to the local network
+* requires the WiFi device to support *monitor mode*
+* uses `tcpdump`'s ability to report on MAC addresses visible to the WiFi device in *monitor mode*
 * converts the Dash button's *failed attempt* to connect to a local network on Dash button press as a HomeKit button single-press
 * does not require [modifying](https://blog.christophermullins.com/2019/12/20/rescue-your-amazon-dash-buttons/) the Dash button
 
@@ -30,6 +30,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 * Code maintenance, bug fixes
 
 ## Ideas
+* Buy me a beer: look for the `Donate` link and send me $2 for a [PBR beer](https://pabstblueribbon.com).
 * Mount an Amazon Dash button as a doorbell and have a HomePod (or more than one) play a [doorbell sound effect](https://music.apple.com/us/album/door-bells-sound-effects/944475720), or a song about someone being at the door.
 	* *Ring My Bell* by Anita Ward
 	* *Someone's Knocking at the Door* by Paul McCartney
@@ -37,7 +38,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 		* In Apple's *Music*, listen the the song and write down the start and end times of the part of the song to play. Go to *Get Info* on the song and select the `Options` tab. On that screen you can set the start time and end time to play. You can also increase the song's default volume. In Apple's *Home* app, you can set to play the song on "repeat."
 * Keep the product brand sticker on several Amazon Dash buttons and use them to start different playlists. For example create playlists "Mucinex" and "Kraft Mac & Cheese" that are played when you push the Amazon Dash buttons labeled as those products.
 * If a button is configured to play a playlist, configure the *Double Press* action for that button to pause playing.
-* Buy me a beer: look for the `Donate` link and send me $2 USD for a draft [PBR](https://pabstblueribbon.com).
+* Do you have a pretty cool idea? Share your experience in [this repository's GitHub discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/3).
 
 ### Single-Press and Double-Press Events
 * To execute a *Double Press,* press the button again within 15 seconds *after* the lights go dark from this first press.
@@ -46,12 +47,12 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 
 ## Installation Summary
 1. **Administrator privileges are required for these steps**
-1. Set up a wifi device with monitor mode capability
-2. Test `tcpdump` and install if needed
-3. Run `sudo tcpdump --monitor-mode` standalone with the wifi device (i.e. `-i` and the wifi interface name) to test usage and visibility of Dash activity
+1. Set up a WiFi device with monitor mode capability
+2. Test `tcpdump` is present on your system and install if needed
+3. Run `sudo tcpdump --monitor-mode` standalone with the WiFi device (i.e. `-i` and the WiFi interface name) to test usage and visibility of Dash activity
 4. Give the `homebridge` user permission to also `sudo tcpdump` without a password
 6. Install this plugin: `npm install -g homebridge-amazondash-mac`
-7. Update the Homebridge Amazondash MAC plugin's config.json via the plugin's settings
+7. Update the *Homebridge Amazondash MAC* plugin's config.json via the plugin's settings
 8. Use `debug` levels during installation experimentation
 
 ## Settings
@@ -91,7 +92,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
    	}
 
 ### Interface
-`Interface` refers to the monitoring wifi interface for `tcpdump` to listen on. Once the wifi monitoring interface is properly set up, this identifier is reported by the `iwconfig` or `tcpdump -D` command.
+`Interface` refers to the monitoring WiFi interface for `tcpdump` to listen on. Once the WiFi monitoring interface is properly set up, this identifier is reported by the `iwconfig` or `tcpdump -D` command.
 
 ### Debug
 * `Silent` (`0`) No reporting.
@@ -106,7 +107,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 The model number is printed on the back of the Dash button.
 
 ### MAC Address, Serial Number, Firmware Version
-An Amazon Dash button can create a wifi access point and can provide its information via an internally-generated web page.
+An Amazon Dash button can create a WiFi access point and can provide its information via an internally-generated web page.
 * Long press on the Dash button until the light flashes blue
 * Join the network `Amazon ConfigureMe` newly created by that Dash button
 * Open the URL `http://192.168.0.1` on the device connected to `Amazon ConfigureMe`
@@ -119,40 +120,42 @@ To use this capability, configure one of the buttons as typical—this is the bu
 
 The buttons corresponding to the MAC addresses in the `alias` list are not intended to be visible as separate accessories in Homekit—do not add the buttons corresponding to the MAC addresses in the `alias` list as separate button accessories.
 
-## Wifi Device and Monitor Mode
-A wifi device capable of *monitor mode* is needed for `tcpdump` to see Amazon Dash button activity. If your Homebridge computer's connection to the local network is via wifi, you'll need a second wifi device (such as a USB wifi adapter) capable of *monitor mode*. A USB wifi adapter is about $10-$20 with free shipping online. An example USB wifi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**. If you have tested a different USB wifi adapter with this plugin, share your experience (good or bad) with the community in this plugin's discussion.
+## WiFi Device and Monitor Mode
+A WiFi device capable of *monitor mode* is needed for `tcpdump` to see Amazon Dash button activity. If your Homebridge computer's connection to the local network is via WiFi, you'll need a second WiFi device (such as a USB WiFi adapter) capable of *monitor mode*. A USB WiFi adapter is about $10-$20 with free shipping online. An example USB WiFi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
 
-### Example Wifi Device Configuration
+If you have tried a USB WiFi adapter with this plugin, share your experience with the community (good or bad) in [this repository's discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/1).
+
+### Example WiFi Device Configuration
 This is example-only. There are several and different ways to do this.
 
-* Confirming the wifi device is working, visible and to get the `interface` name:
+* Confirming the WiFi device is working, visible and to get the `interface` name:
 ```
 sudo iw dev
 ```
-* Test the wifi device can be put in monitor mode (`wlan0` is for example only) (method one):
+* Test the WiFi device can be put in monitor mode (`wlan0` is for example only) (method one):
 ```
 sudo ip link set wlan0 down
 sudo iw wlan0 set monitor none
 sudo ip link set wlan0 up
 ```
-* Test the wifi device can be put in monitor mode (`wlan0` is for example only) (method two):
+* Test the WiFi device can be put in monitor mode (`wlan0` is for example only) (method two):
 ```
 sudo ifconfig wlan0 down
 sudo iwconfig wlan0 mode monitor
 sudo ifconfig wlan0 up
 ```
-* Confirm monitor mode and wifi monitoring interface name (confirm "Mode:Monitor"):
+* Confirm monitor mode and WiFi monitoring interface name (confirm "Mode:Monitor"):
 ```
 iwconfig
 ```
 
 ## `tcpdump`
-This plugin uses `tcpdump`'s ability to report on MAC addresses visible to the wifi device (in *monitor mode*) and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press. `tcpdump` can only see Amazon Dash buttons when connected to a wifi device in *monitor mode.*
+This plugin uses `tcpdump`'s ability to report on MAC addresses visible to the WiFi device (in *monitor mode*) and converts the Dash button's exposure of its MAC address on button press as a Homekit button single-press. `tcpdump` can only see Amazon Dash buttons when connected to a WiFi device in *monitor mode.*
 
 * [Ubuntu Man Page for tcpdump](http://manpages.ubuntu.com/manpages/trusty/man8/tcpdump.8.html)
 
 ### Testing `tcpdump`
-* Test `tcpdump` stand-alone with the wifi monitoring interface name (`wlan0` is for example only):
+* Test `tcpdump` stand-alone with the WiFi monitoring interface name (`wlan0` is for example only):
 ```
 sudo tcpdump -i wlan0 --monitor-mode 
 ```
