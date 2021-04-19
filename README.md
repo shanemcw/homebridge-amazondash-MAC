@@ -58,6 +58,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 ## Settings
 
 ### Example config.json created by settings
+```json
 	{
    	"platform": "AmazonDash-MAC",
    	"name": "AmazonDash-MAC",
@@ -90,6 +91,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
    		}
    		]
    	}
+```
 
 ### Interface
 `Interface` refers to the monitoring WiFi interface for `tcpdump` to listen on. Once the WiFi monitoring interface is properly set up, this identifier is reported by the `iwconfig` or `tcpdump -D` command.
