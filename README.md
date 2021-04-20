@@ -8,6 +8,7 @@ By December 31, 2019, Amazon removed the capability to set up a Dash button for 
 This plugin:
 * requires a second WiFi device (e.g. USB WiFi) if the Homebridge computer uses its WiFi as its connection to the local network
 * requires the WiFi device to support *monitor mode*
+* monitoring is done via `tcpdump` in a separate, non-blocking process 
 * uses `tcpdump`'s ability to report on MAC addresses visible to the WiFi device in *monitor mode*
 * converts the Dash button's *failed attempt* to connect to a local network on Dash button press as a HomeKit button single-press
 * does not require [modifying](https://blog.christophermullins.com/2019/12/20/rescue-your-amazon-dash-buttons/) the Dash button
