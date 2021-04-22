@@ -1,7 +1,7 @@
 {
   "name": "homebridge-amazondash-mac",
   "version": "2.2.0",
-  "description": "A modern Amazon Dash plugin for Homebridge that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network. Requires elevated privileges to configure and a wifi device in monitor mode.",
+  "description": "A modern Amazon Dash plugin for Homebridge that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network. Requires elevated privileges to configure and a WiFi device in monitor mode.",
   "license": "ISC",
   "funding": {
     "type": "paypal",
@@ -13,9 +13,10 @@
     "Shane McWhorter <shane.mcwhorter@uxphd.co>"
   ],
   "keywords": [
-    "homebridge-plugin",
-    "amazon-dash",
+    "Homebridge-plugin",
+    "Amazon-Dash",
     "HomeKit",
+    "Apple-Home",
     "StatelessProgrammableSwitch",
     "button"
   ],
