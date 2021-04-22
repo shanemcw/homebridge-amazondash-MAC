@@ -1,4 +1,5 @@
-[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/green)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins) [![npm](https://badgen.net/npm/dt/homebridge-amazondash-mac?color=green)](https://www.npmjs.com/package/homebridge-amazondash-mac)
+[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/green)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins) [![Donate](https://badgen.net/badge/donate/paypal/yellow)](https://paypal.me/shanemcw) [![npm](https://badgen.net/npm/dt/homebridge-amazondash-mac?color=green)](https://www.npmjs.com/package/homebridge-amazondash-mac)
+
 # A Modern Amazon Dash Button Plugin for Homebridge
 
 A modern (post-2019) [Homebridge-verified](https://github.com/homebridge/homebridge/wiki/verified-Plugins) Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network.
@@ -42,7 +43,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 * Do you have a pretty cool idea? Share your experience in [this repository's GitHub discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/3).
 
 ### Single-Press and Double-Press Events
-* To execute a *Double Press,* press the button again within 15 seconds *after* the lights go dark from this first press.
+* To execute a *Double Press,* press the button again within 15 seconds *after the lights go dark* from this first press.
 * If action(s) are specified for a *Single Press,* they will be immediately executed at that first press, even if a subsequent second press executes a *Double Press* event and actions.
 * In this context, *Double Press* actions are best suited for canceling, stopping or pausing the preceding *Single Press* actions, or executing additional but optional actions to those already executed by the *Single Press.* 
 
@@ -124,9 +125,9 @@ To use this capability, configure one of the buttons as typical—this is the bu
 The buttons corresponding to the MAC addresses in the `alias` list are not intended to be visible as separate accessories in Homekit—do not add the buttons corresponding to the MAC addresses in the `alias` list as separate button accessories.
 
 ## WiFi Device and Monitor Mode
-A WiFi device capable of *monitor mode* is needed for `tcpdump` to see Amazon Dash button activity. If your Homebridge computer's connection to the local network is via WiFi, you'll need a second WiFi device (such as a USB WiFi adapter) capable of *monitor mode*. A USB WiFi adapter is about $10-$20 with free shipping online. An example USB WiFi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
+A WiFi device capable of *monitor mode* is needed for `tcpdump` to see Amazon Dash button activity. If your Homebridge computer's connection to the local network is via WiFi, you'll need a second WiFi device (such as a USB WiFi adapter) capable of *monitor mode*.
 
-If you have tried a USB WiFi adapter with this plugin, share your experience with the community (good or bad) in [this repository's discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/1).
+A USB WiFi adapter is about $10-$20 with free shipping online. If you would like some insight about compatible WiFi adapters or you have tried a USB WiFi adapter with this plugin, learn more from or share your experience with the community (good or bad) in [this repository's discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/1). For example, a USB WiFi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
 
 ### Example WiFi Device Configuration
 This is example-only. There are several and different ways to do this.
