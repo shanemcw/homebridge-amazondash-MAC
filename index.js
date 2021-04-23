@@ -10,7 +10,6 @@ module.exports = function(homebridge) {
   Service        = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen        = homebridge.hap.uuid;
-
   homebridge.registerPlatform("homebridge-amazondash-mac", "AmazonDash-MAC", DashPlatform, true); // dynamic
 }
 
@@ -65,15 +64,19 @@ DashPlatform.prototype.configureAccessory = function(accessory) {
 
 DashPlatform.prototype.didFinishLaunching = function() {
   var self = this;
+  if (!self.config.interface) {
+    self.log("ERROR: required plugin settings (e.g. \"interface\") are not yet specified");
+    return;
+    }
   if (self.debug == 10) {
     self.log("DEBUG LEVEL 10: removing all cached accessories and recreating from current settings");
-    self.log("DEBUG LEVEL 10: change debug level to not 10 and restart homebridge");
+    self.log("DEBUG LEVEL 10: change debug level to other than 10 and restart homebridge");
     for (let a of Object.values(self.accessories)) { self.removeAccessory(a); }
     self.debug = 2;
     }
   for (let b of self.buttons) {
     if (!b.MAC) {
-      self.log("ERROR: required accessory settings (e.g. \"MAC\") missing");
+      self.log("ERROR: required button settings (e.g. \"MAC\") are not yet specified");
       return;
       }
     b.MAC = b.MAC.toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
@@ -149,7 +152,7 @@ DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
 DashPlatform.prototype.addAccessory = function(button) {
   var self = this;
   if (!button.MAC) {
-    self.log("ERROR: addAccessory called without required accessory settings (e.g. \"MAC\" missing)");
+    self.log("ERROR: required button settings (e.g. \"MAC\") are not yet specified");
     return;
     }
   var uuid = UUIDGen.generate(button.MAC);
