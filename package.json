@@ -1,6 +1,6 @@
 {
   "name": "homebridge-amazondash-mac",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "A modern (post-2019) Homebridge-verified Amazon Dash plugin for Homebridge. Requires elevated privileges to configure and a WiFi device in monitor mode.",
   "license": "ISC",
   "funding": {
