@@ -1,12 +1,16 @@
 [![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/green)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins) [![Donate](https://badgen.net/badge/donate/paypal/yellow)](https://paypal.me/shanemcw) [![npm](https://badgen.net/npm/dt/homebridge-amazondash-mac?color=green)](https://www.npmjs.com/package/homebridge-amazondash-mac)
 
 # A Modern Amazon Dash Button Plugin for Homebridge
+A modern (post-2019) [Homebridge-verified](https://github.com/homebridge/homebridge/wiki/verified-Plugins) Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network. Through [Homebridge](https://github.com/nfarina/homebridge), this plugin, and an additional USB WiFi device, Amazon Dash buttons can be used as Homekit buttons.
 
-A modern (post-2019) [Homebridge-verified](https://github.com/homebridge/homebridge/wiki/verified-Plugins) Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network.
+This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of KhaosT's [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
+## About Amazon Dash Buttons
 By December 31, 2019, Amazon removed the capability to set up a Dash button for connection to a network. Also at that time, all Dash buttons that were connected to a network received an over-the-air update that disabled the button—a process Amazon refers to as "deregistration."
 
+## Summary and Purpose
 This plugin:
+
 * requires a second WiFi device (e.g. USB WiFi) if the Homebridge computer uses its WiFi as its connection to the local network
 * requires the WiFi device to support *monitor mode*
 * monitoring is done via `tcpdump` in a separate, non-blocking process 
@@ -14,10 +18,7 @@ This plugin:
 * converts the Dash button's *failed attempt* to connect to a local network on Dash button press as a HomeKit button single-press
 * does not require [modifying](https://blog.christophermullins.com/2019/12/20/rescue-your-amazon-dash-buttons/) the Dash button
 
-This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of KhaosT's [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
-
-## Purpose
-This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng) with
+This plugin is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng) with:
 
 * Removal of the requirement to run Homebridge with root privileges
 * Switch to `tcpdump` from `airodump-ng` 
@@ -32,7 +33,6 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 * Code maintenance, bug fixes
 
 ## Ideas
-* Buy me a beer: look for the `Donate` link and send me $2 for a [PBR beer](https://pabstblueribbon.com).
 * Mount an Amazon Dash button as a doorbell and have a HomePod (or more than one) play a [doorbell sound effect](https://music.apple.com/us/album/door-bells-sound-effects/944475720), or a song about someone being at the door.
 	* *Ring My Bell* by Anita Ward
 	* *Someone's Knocking at the Door* by Paul McCartney
@@ -40,6 +40,7 @@ This is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourd
 		* In Apple's *Music*, listen the the song and write down the start and end times of the part of the song to play. Go to *Get Info* on the song and select the `Options` tab. On that screen you can set the start time and end time to play. You can also increase the song's default volume. In Apple's *Home* app, you can set to play the song on "repeat."
 * Keep the product brand sticker on several Amazon Dash buttons and use them to start different playlists. For example create playlists "Mucinex" and "Kraft Mac & Cheese" that are played when you push the Amazon Dash buttons labeled as those products.
 * If a button is configured to play a playlist, configure the *Double Press* action for that button to pause playing.
+* Buy me a beer: look for the `Donate` link and send me $2 for a [PBR beer](https://pabstblueribbon.com).
 * Do you have a pretty cool idea? Share your experience in [this repository's GitHub discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/3).
 
 ### Single-Press and Double-Press Events
@@ -115,7 +116,8 @@ An Amazon Dash button can create a WiFi access point and can provide its informa
 * Long press on the Dash button until the light flashes blue
 * Join the network `Amazon ConfigureMe` newly created by that Dash button
 * Open the URL `http://192.168.0.1` on the device connected to `Amazon ConfigureMe`
-* MAC address, serial number, firmware version (and battery level) are reported
+* MAC address, serial number, firmware version (and battery level) are displayed
+* The reported information can be copy-pasted as-is individually into the plugin settings fields. To do so, keep the page display (e.g. in a browser tab) and switch over to the local network to access the plugin settings form (e.g. in a second browser tab).
 
 ### Alias
 `alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
