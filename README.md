@@ -6,6 +6,19 @@ A modern (post-2019) [Homebridge-verified](https://github.com/homebridge/homebri
 This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of KhaosT's [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
 ## About Amazon Dash Buttons
+An Amazon Dash button is a discontinued proprietary device for ordering consumer goods over the Internet.
+
+An Amazon Dash button:
+
+* has a rounded, elongated shape with an concave button on one end
+* is white, with a removable product brand sticker
+* is being resold online often as "button pushed once"
+* includes its own removable clip for hanging and adhesive pads for mounting
+* includes an (almost) non-replaceable battery powering an estimated 1,000 clicks
+* can create a WiFi access point reporting device information via HTML
+* has Bluetooth and a microphone
+* is further described [here](https://www.digikey.com/en/maker/blogs/amazon-dash-button-tear-down)
+
 By December 31, 2019, Amazon removed the capability to set up a Dash button for connection to a network. Also at that time, all Dash buttons that were connected to a network received an over-the-air update that disabled the button—a process Amazon refers to as "deregistration."
 
 ## Summary and Purpose
@@ -16,7 +29,7 @@ This plugin:
 * monitoring is done via `tcpdump` in a separate, non-blocking process 
 * uses `tcpdump`'s ability to report on MAC addresses visible to the WiFi device in *monitor mode*
 * converts the Dash button's *failed attempt* to connect to a local network on Dash button press as a HomeKit button single-press
-* does not require [modifying](https://blog.christophermullins.com/2019/12/20/rescue-your-amazon-dash-buttons/) the Dash button
+* may not work with a Dash button that was "deregistered" via the over-the-air firmware update
 
 This plugin is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng) with:
 
