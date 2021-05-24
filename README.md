@@ -57,9 +57,9 @@ This plugin is a fork of jourdant's [homebridge-amazondash-ng](https://github.co
 * Do you have a pretty cool idea? Share your experience in [this repository's GitHub discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/3).
 
 ### Single-Press and Double-Press Events
-* To execute a *Double Press,* press the button again within 15 seconds *after the lights go dark* from this first press.
+* To execute a *Double Press,* press the button a second time within 15 seconds *after the lights go dark* from this first press.
 * If action(s) are specified for a *Single Press,* they will be immediately executed at that first press, even if a subsequent second press executes a *Double Press* event and actions.
-* In this context, *Double Press* actions are best suited for canceling, stopping or pausing the preceding *Single Press* actions, or executing additional but optional actions to those already executed by the *Single Press.* 
+* In this context, *Double Press* is more accurately described as "second press" and is best suited for canceling, stopping or pausing the preceding *Single Press* actions, or executing additional but optional actions to those already executed by the *Single Press.* 
 
 ## Installation Summary
 1. **Administrator privileges are required for these steps**
