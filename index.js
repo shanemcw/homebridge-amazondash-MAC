@@ -32,11 +32,11 @@ function DashPlatform(log, config, api) {
 
 DashPlatform.prototype.configureAccessory = function(accessory) {
   var self = this;
-  if (self.debug >= 2) { self.log(`${accessory.context.mac} configured as ${accessory.displayName}`); }
   if (!accessory.context.mac) {
     self.log(`\x1b[31m[ERROR]\x1b[0m configureAccessory called for malformed accessory (e.g. "MAC") missing`);
     return;
     }
+  if (self.debug >= 2) { self.log(`\x1b[4;97m${accessory.displayName}\x1b[0m is ${accessory.context.mac}`); }
   accessory.reachable = true;
   accessory.context.lastTriggered = null;
   accessory
@@ -57,7 +57,7 @@ DashPlatform.prototype.configureAccessory = function(accessory) {
     for (let m of accessory.context.alias) {
       m = m.toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
       self.alias[m] = accessory.context.mac;
-      if (self.debug >= 2) { self.log(`${accessory.displayName} at ${accessory.context.mac} also responding to ${m}`); }
+      if (self.debug >= 2) { self.log(`\x1b[4;97m${accessory.displayName}\x1b[0m is also ${m}`); }
       }
     }
 }
@@ -86,9 +86,9 @@ DashPlatform.prototype.didFinishLaunching = function() {
     self.wifidump = spawn('sudo', ['tcpdump', '-i', self.config.interface, '--immediate-mode', '--monitor-mode', '-t', '-S', '-q', '-N', '-l', '-e', 'broadcast']);
     self.wifidump.stdout.on('data', function(data) { self.handleOutput(self, data);  });
     self.wifidump.stderr.on('data', function(data) { self.handleError(self, data);   });
-    self.wifidump.on('exit',  (code) => { self.log(` tcpdump exited, code ${code}`); });
-    self.wifidump.on('close', (code) => { self.log(` tcpdump closed, code ${code}`); });
-    self.wifidump.on('error', (err)  => { self.log(` tcpdump error ${err}`);         });
+    self.wifidump.on('exit',  (code) => { self.log(`\x1b[31m[ERROR]\x1b[0m tcpdump exited, code ${code}`); });
+    self.wifidump.on('close', (code) => { self.log(`\x1b[31m[ERROR]\x1b[0m tcpdump closed, code ${code}`); });
+    self.wifidump.on('error', (err)  => { self.log(`\x1b[31m[ERROR]\x1b[0m tcpdump error ${err}`);         });
   }
 }
 
@@ -105,7 +105,7 @@ DashPlatform.prototype.handleOutput = function(self, data) {
         var accessory = self.accessories[self.alias[matches[0]]];
         // rate limit triggers less than connection attempt time
         if (accessory && (accessory.context.lastTriggered == null || Math.abs((new Date()) - accessory.context.lastTriggered) > self.timeout)) {
-          if (self.debug >= 2) { self.log(`triggering ${accessory.displayName} from ${matches[0]}`); }
+          if (self.debug >= 2) { self.log(`\x1b[4;97m${accessory.displayName}\x1b[0m triggered from ${matches[0]}`); }
           self.dashEventWithAccessory(self, accessory);
           }
       }
@@ -123,14 +123,14 @@ DashPlatform.prototype.handleError = function(self, data) {
         let o = require('os');
         let u = o.userInfo().username || "unknown";
         let h = o.hostname            || "unknown";
-        self.log(`\x1b[31m[ERROR]\x1b[0m additional steps are required to allow user ${u} to run tcpdump via sudo on ${h}`);
+        self.log(`\x1b[31m[ERROR]\x1b[0m additional steps are required to allow user \x1b[4;97m${u}\x1b[0m to run tcpdump via sudo on \x1b[4;97m${h}\x1b[0m`);
         self.log(`\x1b[31m[ERROR]\x1b[0m see installation documentation for how to do this`);
         continue;
         }
       if (/listening/.test(line)) { 
         let n = line.match(/on ([^\s,]+)/);
         if (n[1]) {
-          if (self.debug >= 1) { self.log(`now listening on ${n[1]}`); }
+          if (self.debug >= 1) { self.log(`now listening on \x1b[4;97m${n[1]}\x1b[0m`); }
           continue;
           }
         }
@@ -140,12 +140,12 @@ DashPlatform.prototype.handleError = function(self, data) {
     
 DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
   let b = 0; let s = 'single'; // 0 = single, 1 = double, 2 = long press events
-  if (accessory.context.lastTriggered && Math.abs(new Date() - accessory.context.lastTriggered) < (self.timeout + 16000)) { b = 1; s = 'double'; } 
+  if (accessory.context.lastTriggered && Math.abs(new Date() - accessory.context.lastTriggered) < (self.timeout + 18000)) { b = 1; s = 'double'; } 
   accessory
     .getService(Service.StatelessProgrammableSwitch)
     .getCharacteristic(Characteristic.ProgrammableSwitchEvent)
     .setValue(b); // 
-  if (self.debug >= 1) { self.log(`${accessory.displayName} ${s} press`); }
+  if (self.debug >= 1) { self.log(`\x1b[4;97m${accessory.displayName}\x1b[0m ${s} press`); }
   accessory.context.lastTriggered = new Date();
 }
 
@@ -179,13 +179,13 @@ DashPlatform.prototype.addAccessory = function(button) {
     .setProps({minValue: 0, maxValue: 1, validValues: [0, 1]});
   self.accessories[newAccessory.context.mac] = newAccessory;
   self.alias[newAccessory.context.mac] = newAccessory.context.mac; // self-referential
-  if (self.debug >= 2) { self.log(`${button.MAC} added as ${button.name}`); }
+  if (self.debug >= 2) { self.log(`\x1b[4;97m${button.name}\x1b[0m added as ${button.MAC}`); }
   // optional aliasing
   if (newAccessory.context.alias) {
     for (let m of newAccessory.context.alias) {
       m = m.toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
       self.alias[m] = newAccessory.context.mac;
-      if (self.debug >= 2) { this.log(`${button.name} also responding to ${m}`); }
+      if (self.debug >= 2) { this.log(`\x1b[4;97m${button.name}\x1b[0m also as ${m}`); }
       }
     }
   self.api.registerPlatformAccessories("homebridge-amazondash-mac", "AmazonDash-MAC", [newAccessory]);
