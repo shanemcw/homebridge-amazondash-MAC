@@ -1,7 +1,9 @@
 [![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/green)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins) [![Donate](https://badgen.net/badge/donate/paypal/yellow)](https://paypal.me/shanemcw) [![npm](https://badgen.net/npm/dt/homebridge-amazondash-mac?color=green)](https://www.npmjs.com/package/homebridge-amazondash-mac)
 
 # A Modern Amazon Dash Button Plugin for Homebridge
-A modern (post-2019) [Homebridge-verified](https://github.com/homebridge/homebridge/wiki/verified-Plugins) Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network. Through [Homebridge](https://github.com/nfarina/homebridge), this plugin, and an additional USB WiFi device, Amazon Dash buttons can be used as Homekit buttons.
+A modern (post-2019) [Homebridge-verified](https://github.com/homebridge/homebridge/wiki/verified-Plugins) Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network.
+
+Through [Homebridge](https://github.com/nfarina/homebridge), this plugin (and with an additional USB WiFi device typically) Amazon Dash buttons can be used as Homekit buttons.
 
 This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of KhaosT's [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
@@ -24,8 +26,7 @@ By December 31, 2019, Amazon removed the capability to set up a Dash button for 
 ## Summary and Purpose
 This plugin:
 
-* requires a second WiFi device (e.g. USB WiFi) if the Homebridge computer uses its WiFi as its connection to the local network
-* requires the WiFi device to support *monitor mode*
+* requires a second WiFi device (e.g. USB WiFi) if the Homebridge computer uses its native WiFi as its connection to the local network or that native WiFi device does not support *monitor mode* or is not stable in *monitor mode*
 * monitoring is done via `tcpdump` in a separate, non-blocking process 
 * uses `tcpdump`'s ability to report on MAC addresses visible to the WiFi device in *monitor mode*
 * converts the Dash button's *failed attempt* to connect to a local network on Dash button press as a HomeKit button single-press
