@@ -116,8 +116,9 @@ This plugin is a fork of jourdant's [homebridge-amazondash-ng](https://github.co
 ### Debug
 * `Silent` (`0`) No reporting.
 * `Default Runtime Messages` (`1`) Reports when a button is triggered. This debug level is recommended for day-to-day working installations. 
-* `Testing Messages` (`2`) Reports removal, creation or configuration of accessories at initialization. This level is useful when testing a configuration and as a debug level after using the special `Clear Accessories` debug level.
-* `MAC Address Streaming` (`3`) Reports all visible MAC addresses as they are parsed live. This debug is *very* verbose but helpful for initial installation and testing.
+* `Testing Messages` (`2`) Reports removal, creation or configuration of accessories at initialization. This debug level is useful when testing a configuration and a debug level after using the special `Clear Accessories` debug level.
+* `MAC Address Discovery` (`3`) Reports visible MAC addresses only at initial discovery. This debug level is helpful for configuration and testing.
+* `MAC Address Streaming` (`4`) Reports all visible MAC addresses as they are parsed live. This debug level is *very* verbose.
 * `Clear Accessories` (`10`) A special debug level that removes all previously added accessories. This is useful when experimenting during initial configuration when "phantom" accessories may be displayed or accessory characteristics are not being updated due to caching of previous versions of those accessories during configuration experimentation. To use, set `debug` to 10 and restart Homebridge. Reset `debug` to the (non-10) desired debug level (2 is recommended) and restart Homebridge. This second restart will recreate the accessories fresh from the config.json file. Note any Homekit actions previously configured for the button accessories may not be retained and may need to be reconfigured for each.
 
 ## Getting a Dash Button MAC Address, Serial Number, Firmware Version, Model Number
@@ -142,7 +143,7 @@ You may see a different Dash-generated web page such as below.
 
 ![Alternate Amazon Dash Information Page](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/AmazonDash-MAC-2.png)
 
-The Dash button showing a page of this type may or may not work with this plugin. Please try to enter your WiFi credentials and use this plugin in `MAC Address Streaming` debug mode to test if the button's MAC is visible, and that button's MAC address (if it is). If you are (or are not) able to use this technique for buttons showing a page of this type, please share your experiences in [this plugin's GitHub discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/5).
+A Dash button showing a page of this type may or may not work with this plugin. Please try to enter your WiFi credentials and use this plugin in `MAC Address Discovery` debug mode to test if the button's MAC is visible, and that button's MAC address (if it is). If you are (or are not) able to use this technique for buttons showing a page of this type, please share your experiences in [this plugin's GitHub discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/5).
 
 ### Alias
 `alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
