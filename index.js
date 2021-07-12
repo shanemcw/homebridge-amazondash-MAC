@@ -19,10 +19,11 @@ function DashPlatform(log, config, api) {
   self.config       = config                   || { "platform": "AmazonDash-MAC" };
   self.buttons      = self.config.buttons      || [];
   self.timeout      = self.config.timeout      || 9000; // rate limit greater than connection attempt time in ms
-  self.debug        = self.config.debug        || 1; // 0-3, 10
+  self.debug        = self.config.debug        || 1; // 0-4, 10
   self.manufacturer = self.config.manufacturer || "Amazon";
   self.alias        = {}; // additional MACs can masquerade as accessory MAC via this alias map
   self.accessories  = {};
+  self.saw          = {}; // for MAC discovery in debug 3
   self.wifidump     = null;
   if (api) {
     self.api = api;
@@ -93,14 +94,21 @@ DashPlatform.prototype.didFinishLaunching = function() {
 }
 
 DashPlatform.prototype.handleOutput = function(self, data) {
-  if (self.accessories && Object.keys(self.accessories).length > 0) {
+  if ( (self.debug == 3) || (self.debug == 4) || (self.accessories && Object.keys(self.accessories).length > 0) ) {
     let lines = ('' + data).match(/[^\r\n]+/g);
     if (!lines) { return; }
     for (let line of lines) {
       // grab all MAC addresses, use first per line; alias to primary MAC
       var matches = line.toUpperCase().match(/(?:[\dA-Fa-f]{2}\:){5}(?:[\dA-Fa-f]{2})/g);
       if (matches && (matches.length > 0)) {
-        if (self.debug >= 3) { self.log(`\x1b[33m[DEBUG 3]\x1b[0m MAC ${matches[0]}`); } // very verbose
+        if ((self.debug == 3) || (self.debug == 4)) {
+           if (!self.saw[matches[0]]) {
+              self.saw[matches[0]] = 0;
+              if (self.debug == 3) { self.log(`\x1b[33m[DEBUG 3]\x1b[0m New MAC ${matches[0]}`); }
+              }
+              self.saw[matches[0]]++;
+              if (self.debug == 4) { self.log(`\x1b[33m[DEBUG 4]\x1b[0m MAC ${matches[0]} ${self.saw[matches[0]]}`); } // very verbose
+           }   
         // additional MACs can masquerade as the accessory MAC
         var accessory = self.accessories[self.alias[matches[0]]];
         // rate limit triggers less than connection attempt time

@@ -67,7 +67,8 @@
                 { "title": "Silent",                   "enum": [0]  },
                 { "title": "Default Runtime Messages", "enum": [1]  },
                 { "title": "Testing Messages",         "enum": [2]  },
-                { "title": "MAC Address Streaming",    "enum": [3]  },
+                { "title": "MAC Address Discovery",    "enum": [3]  },
+                { "title": "MAC Address Streaming",    "enum": [4]  },
                 { "title": "Clear Accessories",        "enum": [10] }
                 ],
             "description" : "If and after you choose \"Clear Accessories,\" restart homebridge, then change this value to \"Testing Messages\" and restart homebridge again."
