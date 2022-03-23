@@ -46,7 +46,14 @@
                 "required"    : true,
                 "description" : "MAC address of another button to act as this button."
                 }
-          }
+                },
+            "doublePress": {
+                "type"        : "boolean",
+                "title"       : "Enable Double Press",
+                "required"    : false,
+                "default"     : false,
+                "description" : "Register a second press soon after the LEDs go dark as a double press."
+                }
         }
       }
     },
@@ -73,6 +80,13 @@
                 ],
             "description" : "If and after you choose \"Clear Accessories,\" restart homebridge, then change this value to \"Testing Messages\" and restart homebridge again."
           },
+           "wport": {
+           "title"        : "Web API Port",
+           "type"         : "integer",
+           "maximum"      : 65535,
+           "required"     : false,
+           "description"  : "Specify a port to enable virtual button pushes remotely via a web API." 
+          }, 
       "buttons": {
         "title"       : "Dash Buttons",
         "type"        : "array",
