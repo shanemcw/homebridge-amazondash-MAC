@@ -117,7 +117,7 @@ DashPlatform.prototype.didFinishLaunching = function() {
       let accessory = self.accessories[self.alias[m]];
       if (accessory) {
         for (let b of self.buttons) {
-          if (b.MAC == m) { btn = b; break; }
+          if (b.name == accessory.displayName) { btn = b; break; }
           }
         self.dashEventWithAccessory(self, accessory);
         }
@@ -127,7 +127,7 @@ DashPlatform.prototype.didFinishLaunching = function() {
     self.wapi.get('/name/:x', (req, res, next) => {
       var btn;
       for (let b of self.buttons) {
-        if (b.name == req.params.x ) { btn = b; break; }
+        if (b.name == req.params.x) { btn = b; break; }
         }
       if (btn) {
         let accessory = self.accessories[self.alias[btn.MAC]];
