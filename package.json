@@ -1,27 +1,4 @@
 {
-  "_from": "homebridge-amazondash-mac@latest",
-  "_id": "homebridge-amazondash-mac@2.3.0",
-  "_inBundle": false,
-  "_integrity": "sha512-wxKLIMV2VwTty/dZvoRspoD638Dhk83zg0xPENOINs38dVolvGCGNcnKmaxnZnL/0uB0wtKvC4trcFSiRVhYRA==",
-  "_location": "/homebridge-amazondash-mac",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "tag",
-    "registry": true,
-    "raw": "homebridge-amazondash-mac@latest",
-    "name": "homebridge-amazondash-mac",
-    "escapedName": "homebridge-amazondash-mac",
-    "rawSpec": "latest",
-    "saveSpec": null,
-    "fetchSpec": "latest"
-  },
-  "_requiredBy": [
-    "#USER"
-  ],
-  "_resolved": "https://registry.npmjs.org/homebridge-amazondash-mac/-/homebridge-amazondash-mac-2.3.0.tgz",
-  "_shasum": "98350906812e80770e35842ba414fc5d6852435a",
-  "_spec": "homebridge-amazondash-mac@latest",
-  "_where": "/usr",
   "author": {
     "name": "Shane McWhorter"
   },
@@ -72,7 +49,7 @@
   "scripts": {
     "test": "echo \"No tests defined.\" && exit 1"
   },
-  "version": "3.0.0",
+  "version": "3.0.0-beta.1",
   "dependencies": {
     "express": "^4.17.3"
   }
