@@ -3,7 +3,9 @@
 # A Modern Amazon Dash Button Plugin for Homebridge
 A modern (post-2019) [Homebridge-verified](https://github.com/homebridge/homebridge/wiki/verified-Plugins) Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network.
 
-Through [Homebridge](https://github.com/nfarina/homebridge), this plugin (and with an additional USB WiFi device typically) Amazon Dash buttons can be used as Homekit buttons.
+Through [Homebridge](https://github.com/nfarina/homebridge), this plugin (and with an additional supported USB WiFi device typically) Amazon Dash buttons can be used as Homekit buttons.
+
+This plugin also provides an optional web API to virtually push the Amazon Dash buttons via URL.
 
 This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of KhaosT's [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
@@ -38,8 +40,9 @@ This plugin is a fork of jourdant's [homebridge-amazondash-ng](https://github.co
 * Switch to `tcpdump` from `airodump-ng` 
 * Support for the Homebridge Plugin Settings GUI
 * Support of and expectation that a Dash button cannot be configured nor connect to the local network
-* Support for distinct *Single Press* and *Double Press* events
+* Support for distinct *Single Press* and *Double Press* events if enabled for a button.
 * Multiple buttons can appear and act as one button through aliasing
+* An optionally-enabled web API allowing virtual button pushes via URL
 * Support for firmware revision, serial number, model number
 * Multiple logging debug levels 
 * User ability to remove a stale button during setup experimentation
@@ -58,7 +61,7 @@ This plugin is a fork of jourdant's [homebridge-amazondash-ng](https://github.co
 * Do you have a pretty cool idea? Share your experience in [this repository's GitHub discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/3).
 
 ### Single-Press and Double-Press Events
-* As of version 3.0.0, *Double Press* funtionality is enabled on a per-button basis. If you have been using *Double Press* functionality prior to version 3.0.0, re-enable this functionality as needed per-button via `Settings`.
+* As of version 3.0.0, *Double Press* funtionality is enabled on a per-button basis. If you have been using *Double Press* functionality prior to version 3.0.0, re-enable this functionality as needed per-button via `Settings`. It is likely you'll need to remove those device's caches via the "Remove Single Cached Accesssory" function of the "Manage Cached Accessories" section of the Homebridge Settings accessible from the Homebridge UI's upper right menu icon.
 * To execute a *Double Press,* on a *Double Press*-enabled button, press the button a second time within 15 seconds *after the lights go dark* from this first press.
 * If action(s) are specified for a *Single Press,* they will be immediately executed at that first press, even if a subsequent second press executes a *Double Press* event and actions.
 * In this context, *Double Press* is more accurately described as "second press" and is best suited for canceling, stopping or pausing the preceding *Single Press* actions, or executing additional but optional actions to those already executed by the *Single Press.* 
@@ -88,7 +91,8 @@ This plugin is a fork of jourdant's [homebridge-amazondash-ng](https://github.co
    		"MAC": "AA:BB:CC:DD:EE:FF",
    		"serial": "G030QC0400868230",
    		"firmware": "50018520_US",
-		"model": "JK29LP"
+		"model": "JK29LP",
+		"doublePress": false
    		},
    		{
    		"name": "Button One",
@@ -98,14 +102,16 @@ This plugin is a fork of jourdant's [homebridge-amazondash-ng](https://github.co
 		"model": "JK29LP",
   		"alias": [
                 "aabbccddeeff"
-   		]
+   		],
+		"doublePress": false
    		},
    		{
    		"name": "Button Two",
    		"MAC": "aa:bb:cc:dd:ee:ff",
 		"serial": "G030DN0400063350",
 		"firmware": "50018520_US",
-		"model": "JK29LP"
+		"model": "JK29LP",
+		"doublePress": true
    		}
    		]
    	}
@@ -223,6 +229,6 @@ homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/
 	* `GNU nano` sequence
 		* control-x
 
-## Migrating from Versions Prior to 3.0.0
+## Migrating to 3.0.0 from Versions Prior to 3.0.0
 
-As of version 3.0.0, *Double Press* funtionality is enabled on a per-button basis. If you have been using *Double Press* functionality prior to version 3.0.0, re-enable this functionality as needed per-button via this plugin's settings. It is likely you'll need to remove those device's caches via the "Remove Single Cached Accesssory" function of the "Manage Cached Accessories" section of the Homebridge Settings accessible from the Homebridge UI's upper right menu icon.
+As of version 3.0.0, *Double Press* funtionality is enabled on a per-button basis. If you have been using *Double Press* functionality prior to version 3.0.0, re-enable this functionality as needed per-button via this plugin's settings. It is likely you'll need to remove those device's caches via the "Remove Single Cached Accesssory" function of the "Manage Cached Accessories" section of the Homebridge Settings accessible from the Homebridge UI's upper right "three dots" menu icon.
