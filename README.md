@@ -85,6 +85,7 @@ This plugin is a fork of jourdant's [homebridge-amazondash-ng](https://github.co
    	"name": "AmazonDash-MAC",
    	"interface": "wlx9cefd5fa2fdf",
    	"debug": 2,
+	"wport": 3000,
    	"buttons": [
    		{
    		"name": "Doorbell",
@@ -245,7 +246,7 @@ Buttons can be virtually pushed either by MAC address or by button name.
 
 The URL are of the forms:
 
-* `http://IP:PORT/mac/ADDRESS`
+* `http://IP:PORT/mac/MACADDRESS00`
 * `http://IP:PORT/name/ENCODED%20NAME`
 * `http://IP:PORT/buttons`
 
