@@ -231,4 +231,39 @@ homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/
 
 ## Migrating to 3.0.0 from Versions Prior to 3.0.0
 
-As of version 3.0.0, *Double Press* funtionality is enabled on a per-button basis. If you have been using *Double Press* functionality prior to version 3.0.0, re-enable this functionality as needed per-button via this plugin's settings. It is likely you'll need to remove those device's caches via the "Remove Single Cached Accesssory" function of the "Manage Cached Accessories" section of the Homebridge Settings accessible from the Homebridge UI's upper right "three dots" menu icon.
+As of version 3.0.0, *Double Press* funtionality is enabled on a per-button basis. If you have been using *Double Press* functionality prior to version 3.0.0, re-enable this functionality as needed per-button via this plugin's settings.
+
+It is likely you'll need to remove those device's caches via the "Remove Single Cached Accesssory" function of the "Manage Cached Accessories" section of the Homebridge Settings accessible from the Homebridge UI's upper right "three dots" menu icon.
+
+## Pushing Buttons Virtually via the Web API
+
+To enable the ability to push buttons virtually via a web API and URL, specify a port number in "Web API Settings" via `Settings.` An example is `3000`. If the "Web API Settings" is blank, the Web API will not be active.
+
+Buttons can be virtually pushed either by MAC address or by button name.
+
+### URL
+
+The URL are of the forms:
+
+* `http://IP:PORT/mac/ADDRESS`
+* `http://IP:PORT/name/ENCODED%20NAME`
+* `http://IP:PORT/buttons`
+
+where "IP" is the IP address of the computer running Homebridge.
+
+Examples
+
+* `http://192.168.0.50:3000/mac/AA:BB:CC:DD:EE:FF`
+* `http://192.168.0.50:3000/name/Front%20Doorbell`
+* `http://192.168.0.50:3000/buttons`
+
+If a virtual button push is received and valid, the JSON of the virtually pushed button will be returned. Any other condition will return with no data.
+
+When using the "name" form of the URL and a button name contains a space, replace the space with `%20` to encode the space for use in the URL.
+
+The "mac" form of the URL accepts typical formats of a MAC address.
+
+The "buttons" form of the URL will return the JSON of all buttons.
+
+
+
