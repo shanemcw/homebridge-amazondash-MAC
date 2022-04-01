@@ -156,7 +156,7 @@ DashPlatform.prototype.didFinishLaunching = function() {
       res.send(btn) 
       });
       
-    self.wapi.get('/buttons', (req, res, next) => {
+    self.wapi.get(t + '/buttons', (req, res, next) => {
       res.removeHeader('Connection');
       res.set('X-Powered-By', 'AmazonDash-MAC')
       res.send(self.buttons); 
