@@ -31,10 +31,6 @@ function DashPlatform(log, config, api) {
     self.api = api;
     self.api.on('didFinishLaunching', self.didFinishLaunching.bind(this));
   }
-  if (self.config.wport) {
-    self.wapi  = express();
-    self.wport = self.config.wport;
-    }
 }
 
 DashPlatform.prototype.configureAccessory = function(accessory) {
@@ -110,8 +106,14 @@ DashPlatform.prototype.didFinishLaunching = function() {
     self.wifidump.on('error', (err)  => { self.log(`\x1b[31m[ERROR]\x1b[0m tcpdump error ${err}`);         });
     }
   
+  if (self.config.wport) {
+    self.wapi = express();
+    }
+    
   if (self.wapi) {
-    self.wapi.get('/mac/:x', (req, res, next) => {
+    let t = (self.config.wtoken) ? '/' + self.config.wtoken : '';
+    
+    self.wapi.get(t + '/mac/:x', (req, res, next) => {
       let m = req.params.x.toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
       var btn;
       let accessory = self.accessories[self.alias[m]];
@@ -119,35 +121,53 @@ DashPlatform.prototype.didFinishLaunching = function() {
         for (let b of self.buttons) {
           if (b.name == accessory.displayName) { btn = b; break; }
           }
-        self.dashEventWithAccessory(self, accessory);
+        if (accessory.context.lastTriggered == null || Math.abs((new Date()) - accessory.context.lastTriggered) > 5000) {
+          if (self.debug >= 2) { self.log(`\x1b[4;97m${accessory.displayName}\x1b[0m triggered from the web API`); }
+          self.dashEventWithAccessory(self, accessory);
+        } else {
+          res.status(425);
+          btn = null;
+          }
         }
-      res.send(JSON.stringify(btn));  
+      res.removeHeader('Connection');
+      res.set('X-Powered-By', 'AmazonDash-MAC')
+      res.set('Cache-Control', 'no-store')
+      res.send(btn);  
       });
 
-    self.wapi.get('/name/:x', (req, res, next) => {
+    self.wapi.get(t + '/name/:x', (req, res, next) => {
       var btn;
       for (let b of self.buttons) {
         if (b.name == req.params.x) { btn = b; break; }
         }
       if (btn) {
         let accessory = self.accessories[self.alias[btn.MAC]];
-        if (accessory) {
+        if (accessory && (accessory.context.lastTriggered == null || Math.abs((new Date()) - accessory.context.lastTriggered) > 5000)) {
+          if (self.debug >= 2) { self.log(`\x1b[4;97m${accessory.displayName}\x1b[0m triggered from the web API`); }
           self.dashEventWithAccessory(self, accessory);
+        } else {
+          res.status(425);
+          btn = null;
           }
         }
-      res.send(JSON.stringify(btn)); 
+      res.removeHeader('Connection');
+      res.set('X-Powered-By', 'AmazonDash-MAC')
+      res.set('Cache-Control', 'no-store')
+      res.send(btn) 
       });
       
     self.wapi.get('/buttons', (req, res, next) => {
-      res.send(JSON.stringify(self.buttons)); 
+      res.removeHeader('Connection');
+      res.set('X-Powered-By', 'AmazonDash-MAC')
+      res.send(self.buttons); 
       });
       
     self.wapi.use((req, res, next) => {
       res.send();  
       });
       
-    self.wapi.listen(self.wport, () => {
-      self.log(`Web API listening on port \x1b[4;97m${self.wport}\x1b[0m`);
+    self.wapi.listen(self.config.wport, () => {
+      self.log(`Web API listening on port \x1b[4;97m${self.config.wport}\x1b[0m`);
       });
     }
 }
@@ -168,7 +188,7 @@ DashPlatform.prototype.handleOutput = function(self, data) {
               self.saw[matches[0]]++;
               if (self.debug == 4) { self.log(`\x1b[33m[DEBUG 4]\x1b[0m MAC ${matches[0]} ${self.saw[matches[0]]}`); } // very verbose
            }   
-        // additional MACs can masquerade as the accessory MAC
+        // aliased MACs act as the accessory MAC
         let accessory = self.accessories[self.alias[matches[0]]];
         // rate limit triggers less than connection attempt time
         if (accessory && (accessory.context.lastTriggered == null || Math.abs((new Date()) - accessory.context.lastTriggered) > self.timeout)) {
@@ -206,7 +226,7 @@ DashPlatform.prototype.handleError = function(self, data) {
 }
     
 DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
-  let b = 0; let s = 'single'; // 0 = single, 1 = double, 2 = long press events
+  var b = 0; var s = 'single'; // 0 = single, 1 = double, 2 = long press events
   if (accessory.context.doublePress && accessory.context.lastTriggered && Math.abs(new Date() - accessory.context.lastTriggered) < (self.timeout + 18000)) { b = 1; s = 'double'; } 
   accessory
     .getService(Service.StatelessProgrammableSwitch)
