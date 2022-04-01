@@ -87,6 +87,13 @@
            "required"     : false,
            "description"  : "Specify a port to enable virtual button pushes remotely via a web API." 
           }, 
+          "wtoken": {
+           "title"        : "Web API Token",
+           "type"         : "string",
+           "pattern"      : "^[a-zA-Z0-9_.-]*$",
+           "required"     : false,
+           "description"  : "If desired, require this token to be provided for virtual button push execution." 
+          }, 
       "buttons": {
         "title"       : "Dash Buttons",
         "type"        : "array",
