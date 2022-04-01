@@ -238,7 +238,7 @@ It is likely you'll need to remove those device's caches via the "Remove Single 
 
 ## Pushing Buttons Virtually via the Web API
 
-To enable the ability to push buttons virtually via a web API and URL, specify a port number in "Web API Settings" via `Settings.` An example is `3000`. If the "Web API Settings" is blank, the Web API will not be active.
+To enable the ability to push buttons virtually via a web API and URL, specify a port number in "Web API Port" via `Settings`. An example is `3000`. If  "Web API Port" is blank, the Web API will not be active.
 
 Buttons can be virtually pushed either by MAC address or by button name.
 
@@ -246,11 +246,11 @@ Buttons can be virtually pushed either by MAC address or by button name.
 
 The URL are of the forms:
 
-* `http://IP:PORT/mac/MACADDRESS00`
-* `http://IP:PORT/name/ENCODED%20NAME`
-* `http://IP:PORT/buttons`
+* `http://HOST:PORT/mac/MACADDRESS00`
+* `http://HOST:PORT/name/ENCODED%20NAME`
+* `http://HOST:PORT/buttons`
 
-where "IP" is the IP address of the computer running Homebridge.
+where "HOST" is the host name or IP address of the computer running Homebridge.
 
 Examples
 
@@ -260,11 +260,19 @@ Examples
 
 If a virtual button push is received and valid, the JSON of the virtually pushed button will be returned. Any other condition will return with no data.
 
+If a virtual button push is received and valid but sooner than 5 seconds after a request to push that same button, no data and status "too early" will be returned.
+
 When using the "name" form of the URL and a button name contains a space, replace the space with `%20` to encode the space for use in the URL.
 
-The "mac" form of the URL accepts typical formats of a MAC address.
+The "mac" form of the URL accepts typical formats of a MAC address (with or without colons, upper or lower case).
 
 The "buttons" form of the URL will return the JSON of all buttons.
 
+### Requiring a token
 
+To require a token to push buttons virtually via the web API, specify the token string in "Web API Token" via `Settings`. If "Web API Token" is blank, a token will not be required.
+
+When using a token, insert it as the first element of the URL path, following host and port. Example:
+
+* `http://192.168.0.50:3000/yourtokenstring/name/Front%20Doorbell`
 
