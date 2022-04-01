@@ -163,6 +163,8 @@ DashPlatform.prototype.didFinishLaunching = function() {
       });
       
     self.wapi.use((req, res, next) => {
+      res.removeHeader('Connection');
+      res.set('X-Powered-By', 'AmazonDash-MAC')
       res.send();  
       });
       
