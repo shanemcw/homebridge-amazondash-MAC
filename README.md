@@ -260,7 +260,7 @@ Examples
 
 If a virtual button push is received and valid, the JSON of the virtually pushed button will be returned. Any other condition will return with no data.
 
-If a virtual button push is received and valid but sooner than 5 seconds after a request to push that same button, no data and status "too early" will be returned.
+If a virtual button push is received and valid but sooner than 5 seconds after a request to push that same button, no data and status 425 "too early" will be returned.
 
 When using the "name" form of the URL and a button name contains a space, replace the space with `%20` to encode the space for use in the URL.
 
@@ -270,9 +270,10 @@ The "buttons" form of the URL will return the JSON of all buttons.
 
 ### Requiring a token
 
-To require a token to push buttons virtually via the web API, specify the token string in "Web API Token" via `Settings`. If "Web API Token" is blank, a token will not be required. The allowable characters for a token is restricted to be URL path-safe.
+To require a token to get the list of buttons or push buttons virtually via the web API, specify the token string in "Web API Token" via `Settings`. If "Web API Token" is blank, a token will not be required. The allowable characters for a token is restricted for URL path safety.
 
-When using a token, insert it as the first element of the URL path, following host and port. Example:
+When using a token, insert it as the first element of the URL path, following host and port. Examples:
 
 * `http://192.168.0.50:3000/yourtokenstring/name/Front%20Doorbell`
+* `http://192.168.0.50:3000/Your.token_STR-ING/buttons`
 
