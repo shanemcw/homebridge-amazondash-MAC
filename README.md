@@ -270,7 +270,7 @@ The "buttons" form of the URL will return the JSON of all buttons.
 
 ### Requiring a token
 
-To require a token to push buttons virtually via the web API, specify the token string in "Web API Token" via `Settings`. If "Web API Token" is blank, a token will not be required.
+To require a token to push buttons virtually via the web API, specify the token string in "Web API Token" via `Settings`. If "Web API Token" is blank, a token will not be required. The allowable characters for a token is restricted to be URL path-safe.
 
 When using a token, insert it as the first element of the URL path, following host and port. Example:
 
