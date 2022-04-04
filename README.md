@@ -1,6 +1,7 @@
+# A Modern Amazon Dash Button Plugin for Homebridge
+
 [![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/green)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins) [![Donate](https://badgen.net/badge/donate/paypal/yellow)](https://paypal.me/shanemcw) [![npm](https://badgen.net/npm/dt/homebridge-amazondash-mac?color=green)](https://www.npmjs.com/package/homebridge-amazondash-mac)
 
-# A Modern Amazon Dash Button Plugin for Homebridge
 A modern (post-2019) [Homebridge-verified](https://github.com/homebridge/homebridge/wiki/verified-Plugins) Amazon Dash plugin for [Homebridge](https://github.com/nfarina/homebridge) that doesn't require Dash button modification, Dash button setup (through Amazon or other means) nor the Dash button connecting to a local network.
 
 Through [Homebridge](https://github.com/nfarina/homebridge), this plugin (and with an additional supported USB WiFi device typically) Amazon Dash buttons can be used as Homekit buttons.
@@ -277,3 +278,4 @@ When using a token, insert it as the first element of the URL path, following ho
 * `http://192.168.0.50:3000/yourtokenstring/name/Front%20Doorbell`
 * `http://192.168.0.50:3000/Your.token_STR-ING/buttons`
 
+### [![Donate](https://badgen.net/badge/donate/paypal/yellow)](https://paypal.me/shanemcw)
