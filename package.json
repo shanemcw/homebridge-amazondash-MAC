@@ -49,7 +49,7 @@
   "scripts": {
     "test": "echo \"No tests defined.\" && exit 1"
   },
-  "version": "3.0.0-beta.3",
+  "version": "3.0.0",
   "dependencies": {
     "express": "^4.17.3"
   }
