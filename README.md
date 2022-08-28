@@ -146,13 +146,15 @@ An Amazon Dash button can create a WiFi access point and can provide its informa
 * MAC address, serial number, firmware version (and battery level) are displayed
 * The reported information can be copy-pasted as-is individually into the plugin settings fields. To do so, keep the page display (e.g. in a browser tab) and switch over to the local network to access the plugin settings form (e.g. in a second browser tab).
 
-### Is Yours Different?
+### Some Dash Buttons May Not Work with this Plugin
 
 You may see a different Dash-generated web page such as below.
 
 ![Alternate Amazon Dash Information Page](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/AmazonDash-MAC-2.png)
 
 A Dash button showing a page of this type may or may not work with this plugin. Please try to enter your WiFi credentials and use this plugin in `MAC Address Discovery` debug mode to test if the button's MAC is visible, and that button's MAC address (if it is). If you are (or are not) able to use this technique for buttons showing a page of this type, please share your experiences in [this plugin's GitHub discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/5).
+
+On pessing an Amazon Dash button, is the button's light initially red instead of white? If you don't see an inital white light on pressing a Dash button, the button will not work with this plugin. Firmware `40018220_WS` has been seen under these conditions.
 
 ### Alias
 `alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
