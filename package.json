@@ -39,6 +39,7 @@
     "StatelessProgrammableSwitch",
     "button"
   ],
+  "displayName": "Amazon Dash MAC",
   "license": "ISC",
   "main": "index.js",
   "name": "homebridge-amazondash-mac",
@@ -49,7 +50,7 @@
   "scripts": {
     "test": "echo \"No tests defined.\" && exit 1"
   },
-  "version": "3.0.0",
+  "version": "3.0.1",
   "dependencies": {
     "express": "^4.17.3"
   }
