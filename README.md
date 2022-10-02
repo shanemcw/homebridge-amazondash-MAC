@@ -200,13 +200,14 @@ This plugin uses `tcpdump`'s ability to report on MAC addresses visible to the W
 ### Testing `tcpdump`
 * Test `tcpdump` stand-alone with the WiFi monitoring interface name (`wlan0` is for example only):
 ```
-sudo tcpdump -i wlan0 --monitor-mode 
+sudo tcpdump -i wlan0 --monitor-mode
 ```
+* Note: It has been seen that `tcpdump` may fail with `--monitor-mode` with the error "That device doesn't support monitor mode" although the device is reporting it is and seemingly working in monitor mode via `iwconfig` and has been demonstrated to work in an alternate OS version. This issue has been seen with the PAU05 device in *Jammy Jellyfish Ubuntu*.
 
 ### Installing `tcpdump`
 * If the above test failed because `tcpdump` is not installed, install `tcpdump`:
 ```
-sudo apt-get install tcpdump
+sudo apt install tcpdump
 ```
 ### Permitting the `homebridge` User to run `tcpdump` via `sudo` without a password 
 If `tcpdump` is not (yet) permitted to run by the `homebridge` user via `sudo` without a password prompt, you will see this log entry on restarting Homebridge:
@@ -216,22 +217,36 @@ If `tcpdump` is not (yet) permitted to run by the `homebridge` user via `sudo` w
 [AmazonDash-MAC] ERROR: tcpdump exited, code 1
 [AmazonDash-MAC] ERROR: tcpdump closed, code 1
 ```
-* Add `/usr/sbin/tcpdump` at the end of the `homebridge` entry in the `sudoers` file via the `visudo` command to edit that file:
+
+You'll need to configure `tcpdump` to be run via `sudo` by the `homebridge` user without without a password.
+* For this configuration, you'll need the location of `tcpdump` on your system via e.g. `whereis tcpdump`.
+
+#### Method One: If you already have an entry for the `homebridge` user in your `sudoers` file
+
+* Add the full path of `tcpdump` at the end of the `homebridge` entry in the `/etc/sudoers` file via the `visudo` command to edit that file:
 ```
 sudo visudo
 ```
 `visudo` is required and is a text-only editor (e.g. `vi` or `GNU nano`) with editor-specific command keystrokes.
-* Add `, /usr/sbin/tcpdump` to the end of the `homebridge` entry:
+* Add your location of `tcpdump` (e.g. `, /usr/sbin/tcpdump`) to the end of the `homebridge` entry:
 ```
 homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/local/bin/npm, /usr/sbin/tcpdump
 ```
-* Save the file and exit with that text editor's method. Accept any default file names during the save and exit step.
+* If there is no entry for the `homebridge` user such as the above in the `sudoers` file, proceed to *Method Two*.
+* Save the file and exit with that text editor's method. Accept any default file names during the save-and-exit step.
 	* `vi` or `vim` sequence 
 		* esc key
 		* :wq
 		* enter key
 	* `GNU nano` sequence
 		* control-x
+
+#### Method Two: If you don't have an entry for the `homebridge` user in your `sudoers` file
+
+This method is creating a new file in the `/etc/sudoers.d` directory. All files in the `/etc/sudoers.d` directory are included via the `/etc/sudoers` file by the `#includedir /etc/sudoers.d`. Note the `#` does not indicate a comment, as one would think.
+
+1. Create a new file (e.g. named `amazondash`—it could be anything) with `root` permissions (e.g. via `sudo gedit amazondash`) in the `/etc/sudoers.d` directory.
+1. Add the line `homebridge ALL=(ALL) NOPASSWD: /usr/sbin/tcpdump` (with your path to `tcpdump`). Save and exit.
 
 ## Migrating to 3.0.0 from Versions Prior to 3.0.0
 
