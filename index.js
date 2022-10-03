@@ -26,6 +26,7 @@ function DashPlatform(log, config, api) {
   self.alias        = {}; // additional MACs can masquerade as accessory MAC via this alias map
   self.accessories  = {};
   self.saw          = {}; // for MAC discovery in debug 3
+  self.init         = null;
   self.wifidump     = null;
   if (api) {
     self.api = api;
@@ -93,12 +94,15 @@ DashPlatform.prototype.didFinishLaunching = function() {
         self.removeAccessory(self.accessories[b.MAC]);
         self.addAccessory(b);
         }
-    
-    // self.log(`\x1b[33m[DEBUG]\x1b[0m ${self.accessories[b.MAC].displayName} ${b.doublePress} ${self.accessories[b.MAC].context.doublePress}`);
     }
     
   if (Object.keys(self.accessories).length > 0) {
-    self.wifidump = spawn('sudo', ['tcpdump', '-i', self.config.interface, '--immediate-mode', '--monitor-mode', '-t', '-S', '-q', '-N', '-l', '-e', 'broadcast']);
+    if (self.config.airInstead) {
+      self.wifidump = spawn('sudo', ['airodump-ng', self.config.interface, '--berlin', 1]);
+    } else {
+      self.wifidump = spawn('sudo', ['tcpdump', '-i', self.config.interface, '--immediate-mode', '--monitor-mode', '-t', '-S', '-q', '-N', '-l', '-e', 'broadcast']);
+      }
+    
     self.wifidump.stdout.on('data', function(data) { self.handleOutput(self, data); });
     self.wifidump.stderr.on('data', function(data) { self.handleError(self, data);  });
     self.wifidump.on('exit',  (code) => { self.log(`\x1b[31m[ERROR]\x1b[0m tcpdump exited, code ${code}`); });
@@ -175,6 +179,10 @@ DashPlatform.prototype.didFinishLaunching = function() {
 }
 
 DashPlatform.prototype.handleOutput = function(self, data) {
+  if (!self.init && self.config.airInstead) {
+      self.log(`Wifi listening on interface \x1b[4;97m${self.config.interface}\x1b[0m`);
+      self.init = true;
+      }
   if ( (self.debug == 3) || (self.debug == 4) || (self.accessories && Object.keys(self.accessories).length > 0) ) {
     let lines = ('' + data).match(/[^\r\n]+/g);
     if (!lines) { return; }

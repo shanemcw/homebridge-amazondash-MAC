@@ -94,6 +94,13 @@
            "required"     : false,
            "description"  : "If desired, require this token to be provided for virtual button push execution." 
           }, 
+          "airInstead": {
+           "type"        : "boolean",
+           "title"       : "Use airodump-ng instead of tcpdump",
+           "required"    : false,
+           "default"     : false,
+           "description" : "tcpdump may not be usable in some environments where airodump-ng is a working option."
+          },
       "buttons": {
         "title"       : "Dash Buttons",
         "type"        : "array",
