@@ -28,6 +28,7 @@ function DashPlatform(log, config, api) {
   self.saw          = {}; // for MAC discovery in debug 3
   self.init         = null;
   self.wifidump     = null;
+  self.dumpname     = null;
   if (api) {
     self.api = api;
     self.api.on('didFinishLaunching', self.didFinishLaunching.bind(this));
@@ -98,16 +99,18 @@ DashPlatform.prototype.didFinishLaunching = function() {
     
   if (Object.keys(self.accessories).length > 0) {
     if (self.config.airInstead) {
-      self.wifidump = spawn('sudo', ['airodump-ng', self.config.interface, '--berlin', 1]);
+      self.dumpname = 'airodump-ng';
+      self.wifidump = spawn('sudo', [self.dumpname, self.config.interface, '--berlin', 1]);
     } else {
-      self.wifidump = spawn('sudo', ['tcpdump', '-i', self.config.interface, '--immediate-mode', '--monitor-mode', '-t', '-S', '-q', '-N', '-l', '-e', 'broadcast']);
+      self.dumpname = 'tcpdump';
+      self.wifidump = spawn('sudo', [self.dumpname, '-i', self.config.interface, '--immediate-mode', '--monitor-mode', '-t', '-S', '-q', '-N', '-l', '-e', 'broadcast']);
       }
     
     self.wifidump.stdout.on('data', function(data) { self.handleOutput(self, data); });
     self.wifidump.stderr.on('data', function(data) { self.handleError(self, data);  });
-    self.wifidump.on('exit',  (code) => { self.log(`\x1b[31m[ERROR]\x1b[0m tcpdump exited, code ${code}`); });
-    self.wifidump.on('close', (code) => { self.log(`\x1b[31m[ERROR]\x1b[0m tcpdump closed, code ${code}`); });
-    self.wifidump.on('error', (err)  => { self.log(`\x1b[31m[ERROR]\x1b[0m tcpdump error ${err}`);         });
+    self.wifidump.on('exit',  (code) => { self.log(`\x1b[31m[ERROR]\x1b[0m ${self.dumpname} exited, code ${code}`); });
+    self.wifidump.on('close', (code) => { self.log(`\x1b[31m[ERROR]\x1b[0m ${self.dumpname} closed, code ${code}`); });
+    self.wifidump.on('error', (err)  => { self.log(`\x1b[31m[ERROR]\x1b[0m ${self.dumpname} error ${err}`);         });
     }
   
   if (self.config.wport) {
@@ -220,7 +223,7 @@ DashPlatform.prototype.handleError = function(self, data) {
         let o = require('os');
         let u = o.userInfo().username || "unknown";
         let h = o.hostname            || "unknown";
-        self.log(`\x1b[31m[ERROR]\x1b[0m additional steps are required to allow user \x1b[4;97m${u}\x1b[0m to run tcpdump via sudo on \x1b[4;97m${h}\x1b[0m`);
+        self.log(`\x1b[31m[ERROR]\x1b[0m additional steps are required to allow user \x1b[4;97m${u}\x1b[0m to run ${self.dumpname} via sudo on \x1b[4;97m${h}\x1b[0m`);
         self.log(`\x1b[31m[ERROR]\x1b[0m see installation documentation for how to do this`);
         continue;
         }
