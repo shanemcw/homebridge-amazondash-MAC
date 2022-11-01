@@ -202,7 +202,7 @@ This plugin uses `tcpdump`'s ability to report on MAC addresses visible to the W
 ```
 sudo tcpdump -i wlan0 --monitor-mode
 ```
-* Note: It has been seen that `tcpdump` may fail with `--monitor-mode` with the error "That device doesn't support monitor mode" although the device is reporting it is and seemingly working in monitor mode via `iwconfig` and has been demonstrated to work in an alternate OS version. This issue has been seen with the PAU05 device in *Jammy Jellyfish Ubuntu*.
+* Note: It has been seen that `tcpdump` may fail with `--monitor-mode` with the error "That device doesn't support monitor mode" although the device is reporting it is in and seemingly working in monitor mode via `iwconfig`, and demonstrated to work in an alternate OS version. This issue has been seen with the PAU05 device in *Jammy Jellyfish Ubuntu*. Under these conditions, using `airodump-ng` as an alternate to `tcpdump` is likely a workable option. To use this option, follow the instructions for `tcpdump` but install `aircrack-ng` and permit `airodump-ng` to be run via `sudo` without a password. Enable the setting *Use airodump-ng instead of tcpdump* in this plugin's settings.
 
 ### Installing `tcpdump`
 * If the above test failed because `tcpdump` is not installed, install `tcpdump`:
