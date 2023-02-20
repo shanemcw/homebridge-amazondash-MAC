@@ -103,7 +103,7 @@ This plugin is a fork of jourdant's [homebridge-amazondash-ng](https://github.co
    		"firmware": "40018220_US",
 		"model": "JK29LP",
   		"alias": [
-                "aabbccddeeff"
+                "a0b0c0d0e0f0"
    		],
 		"doublePress": false
    		},
