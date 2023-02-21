@@ -13,16 +13,20 @@ This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.c
 ## About Amazon Dash Buttons
 An Amazon Dash button is a discontinued proprietary device for ordering consumer goods over the Internet.
 
+![Amazon Dash Front](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/homebridge-amazondash-mac-front.jpeg)
+
 An Amazon Dash button:
 
 * has a rounded, elongated shape with an concave button on one end
 * is white, with a removable product brand sticker
 * is being resold online often as "button pushed once"
 * includes its own removable clip for hanging and adhesive pads for mounting
-* includes an (almost) non-replaceable battery powering an estimated 1,000 clicks
+* includes an (almost, see [below](#replacing-the-battery-may-be-possible)) non-replaceable battery powering an estimated 1,000 clicks
 * can create a WiFi access point reporting device information via HTML
 * has Bluetooth and a microphone
 * is further described [here](https://www.digikey.com/en/maker/blogs/amazon-dash-button-tear-down)
+
+![Amazon Dash Front](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/homebridge-amazondash-mac-back.jpeg)
 
 By December 31, 2019, Amazon removed the capability to set up a Dash button for connection to a network. Also at that time, all Dash buttons that were connected to a network received an over-the-air update that disabled the button—a process Amazon refers to as "deregistration."
 
@@ -146,15 +150,26 @@ An Amazon Dash button can create a WiFi access point and can provide its informa
 * MAC address, serial number, firmware version (and battery level) are displayed
 * The reported information can be copy-pasted as-is individually into the plugin settings fields. To do so, keep the page display (e.g. in a browser tab) and switch over to the local network to access the plugin settings form (e.g. in a second browser tab).
 
-### Some Dash Buttons May Not Work with this Plugin
+### Is the Returned Page Blank?
+It has been seen (e.g., after the battery is replaced) that the web page at `192.168.0.1` from the `Amazon ConfigureMe` WiFi access point may return an apparently blank page. On view of the page source, the serial number, firmware and MAC address may be present within the `<style></style>` structure:
 
+```
+<style type="text/css" media="screen">
+<input type="hidden" name="amzn_devid" value="G030QC0373341981">
+<input type="hidden" name="amzn_macid" value="FCA6676697C5">
+<input type="hidden" name="amzn_fwver" value="60019520">
+</style>
+```
+
+### Some Dash Buttons May Not Work with this Plugin
 You may see a different Dash-generated web page such as below.
 
 ![Alternate Amazon Dash Information Page](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/AmazonDash-MAC-2.png)
 
 A Dash button showing a page of this type may or may not work with this plugin. Please try to enter your WiFi credentials and use this plugin in `MAC Address Discovery` debug mode to test if the button's MAC is visible, and that button's MAC address (if it is). If you are (or are not) able to use this technique for buttons showing a page of this type, please share your experiences in [this plugin's GitHub discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/5).
 
-On pessing an Amazon Dash button, is the button's light initially red instead of white? If you don't see an inital white light on pressing a Dash button, the button will not work with this plugin. Firmware `40018220_WS` has been seen under these conditions.
+### No White Light on Button Press?
+On pessing an Amazon Dash button, is the button's light initially red instead of white? If you don't see an inital white light on pressing a Dash button, it is not attempting to connect to a network, therefore the button will not work with this plugin. Firmware `40018220_WS` has been seen under these conditions, as has Dash buttons that had fully-depleted batteries before battery replacement. Under these conditions, the Dash button may still be capable of reporting its MAC address and battery level via its `Amazon ConfigureMe` WiFi access point at `192.168.0.1` (activated by a long press until the light pulses blue) but it no longer attempts to connect to a network on button press (during the missing "white light" phase). As it can report its MAC address, etc. it may still be recoverable by flashing it.
 
 ### Alias
 `alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
@@ -294,5 +309,34 @@ When using a token, insert it as the first element of the URL path, following ho
 
 * `http://192.168.0.50:3000/yourtokenstring/name/Front%20Doorbell`
 * `http://192.168.0.50:3000/Your.token_STR-ING/buttons`
+
+## Replacing the Battery May Be Possible
+
+### Change the Battery Before It is Fully Depleted
+
+If the unit boots (i.e. from a button press) while "low power" it will be "bricked"—i.e., a red light only and no white light—even after a new battery is installed. It can still report its MAC address and battery level via its `Amazon ConfigureMe` WiFi access point at `192.168.0.1` (activated by a long press until the light pulses blue) but it no longer attempts to connect to a network on button press (during the "white light" phase). As it can report its MAC address, etc. it may still be recoverable by flashing it.
+
+**Change the battery before the battery level becomes too low.**
+
+**Do not press the button if the battery is low.**
+
+* Version 1 (the one with the screws under the slicker) has a spot-welded lithium AAA that is not easily replaced.
+
+* Version 2 (without the screws) from the factory has a Duracell AAA battery in a conventional battery holder.
+
+However, an access door is not provided. 
+
+An access slot is easily cut-in from the back with a rotary tool. A back cut-in slot directly exposes the battery area.
+Cut a rectangular slot 4mm inset from all sides of the oval groove on the flat back side.
+
+### Amazon Dash Button, Version 1: Spot-Welded Lithium Battery
+
+![Amazon Dash Version 1: Spot-Welded Battery](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/homebridge-amazondash-mac-ver-1.jpeg)
+
+### Amazon Dash Button, Version 2: Cutouts, Placement and Rotary Tool Bit
+
+![Amazon Dash Version 2: Spacing and Tool Bit](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/homebridge-amazondash-mac-battery-a.jpeg)
+
+![Amazon Dash Version 2: Cutouts](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/homebridge-amazondash-mac-battery-b.jpeg)
 
 ### [![Donate](https://badgen.net/badge/donate/paypal/yellow)](https://paypal.me/shanemcw)
