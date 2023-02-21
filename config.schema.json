@@ -24,7 +24,10 @@
                 },
             "serial": {
                 "type"        : "string",
-                "title"       : "Serial Number"
+                "title"       : "Serial Number",
+                "pattern"     : "^(?!.)|^(\\S){2,}$",
+                "required"    : false,
+                "description" : "Blank, or two or more characters with no spaces."
                 },
             "firmware": {
                 "type"        : "string",
