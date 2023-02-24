@@ -193,9 +193,7 @@ DashPlatform.prototype.spawnDump = (self) => {
                                 
     self.wifidump.on('close', (code) => {
         self.log(`\x1b[31m[ERROR]\x1b[0m ${self.dumpname} closed, code ${code}`);
-        
         self.log(`\x1b[33m[INFO]\x1b[0m attempting ${self.dumpname} restart in 60 seconds`);
-        
         setTimeout( () => { self.spawnDump(self); }, 60000 );
         });
         
@@ -266,7 +264,7 @@ DashPlatform.prototype.handleError = (self, data) => {
       
       if (/doesn't support monitor mode/.test(line)) {
         self.log(`\x1b[33m[INFO]\x1b[0m tcpdump may have bug preventing it from functioning with your device in your ${or} ${ot} environment`);
-        self.log(`\x1b[33m[INFO]\x1b[0m consult the readme for a workaround alternative`);
+        self.log(`\x1b[33m[INFO]\x1b[0m consult the README for a workaround alternative`);
         }
       }
 }
