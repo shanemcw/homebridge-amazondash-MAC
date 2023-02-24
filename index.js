@@ -98,19 +98,7 @@ DashPlatform.prototype.didFinishLaunching = function() {
     }
     
   if (Object.keys(self.accessories).length > 0) {
-    if (self.config.airInstead) {
-      self.dumpname = 'airodump-ng';
-      self.wifidump = spawn('sudo', [self.dumpname, self.config.interface, '--berlin', 1]);
-    } else {
-      self.dumpname = 'tcpdump';
-      self.wifidump = spawn('sudo', [self.dumpname, '-i', self.config.interface, '--immediate-mode', '--monitor-mode', '-t', '-S', '-q', '-N', '-l', '-e', 'broadcast']);
-      }
-    
-    self.wifidump.stdout.on('data', function(data) { self.handleOutput(self, data); });
-    self.wifidump.stderr.on('data', function(data) { self.handleError(self, data);  });
-    self.wifidump.on('exit',  (code) => { self.log(`\x1b[31m[ERROR]\x1b[0m ${self.dumpname} exited, code ${code}`); });
-    self.wifidump.on('close', (code) => { self.log(`\x1b[31m[ERROR]\x1b[0m ${self.dumpname} closed, code ${code}`); });
-    self.wifidump.on('error', (err)  => { self.log(`\x1b[31m[ERROR]\x1b[0m ${self.dumpname} error ${err}`);         });
+    self.spawnDump(self);
     }
   
   if (self.config.wport) {
@@ -181,7 +169,42 @@ DashPlatform.prototype.didFinishLaunching = function() {
     }
 }
 
-DashPlatform.prototype.handleOutput = function(self, data) {
+DashPlatform.prototype.spawnDump = (self) => {
+    var sa;
+    
+    self.init = false;
+    
+    if (self.config.airInstead) {
+      self.dumpname = 'airodump-ng';
+      sa = [self.dumpname, self.config.interface, '--berlin', 1];
+    } else {
+      self.dumpname = 'tcpdump';
+      sa = [self.dumpname, '-i', self.config.interface, '--immediate-mode', '--monitor-mode', '-t', '-S', '-q', '-N', '-l', '-e', 'broadcast'];
+      }
+    
+    self.wifidump = spawn('sudo', sa);
+    
+    self.wifidump.stdout.on('data', (data) => { self.handleOutput(self, data); });
+    self.wifidump.stderr.on('data', (data) => { self.handleError(self, data);  });
+    
+    self.wifidump.on('exit',  (code) => {
+        self.log(`\x1b[31m[ERROR]\x1b[0m ${self.dumpname} exited, code ${code}`); 
+        });
+                                
+    self.wifidump.on('close', (code) => {
+        self.log(`\x1b[31m[ERROR]\x1b[0m ${self.dumpname} closed, code ${code}`);
+        
+        self.log(`\x1b[33m[INFO]\x1b[0m attempting ${self.dumpname} restart in 60 seconds`);
+        
+        setTimeout( () => { self.spawnDump(self); }, 60000 );
+        });
+        
+    self.wifidump.on('error', (err)  => {
+        self.log(`\x1b[31m[ERROR]\x1b[0m ${self.dumpname} error ${err}`);        
+        });
+}
+
+DashPlatform.prototype.handleOutput = (self, data) => {
   if (!self.init && self.config.airInstead) {
       self.log(`Wifi listening on interface \x1b[4;97m${self.config.interface}\x1b[0m`);
       self.init = true;
@@ -213,18 +236,22 @@ DashPlatform.prototype.handleOutput = function(self, data) {
   }
 }
 
-DashPlatform.prototype.handleError = function(self, data) {
+DashPlatform.prototype.handleError = (self, data) => {
     let lines = ('' + data).match(/[^\r\n]+/g);
     if (!lines) { return; }
+    
+    let o  = require('os');
+    let ou = o.userInfo().username || "unknown";
+    let oh = o.hostname            || "unknown";
+    let ot = o.type                || "unknown";
+    let or = o.release             || "unknown";
+        
     for (let line of lines) {     
-      if (/suppressed/.test(line)) { continue; }
-      if (/packets/.test(line))    { continue; }
+      if (/suppressed|packets/.test(line))  { continue; }
+      if (/SIOCSIWMODE|Warning/.test(line)) { continue; }
       if (/sudo/.test(line)) {
-        let o = require('os');
-        let u = o.userInfo().username || "unknown";
-        let h = o.hostname            || "unknown";
-        self.log(`\x1b[31m[ERROR]\x1b[0m additional steps are required to allow user \x1b[4;97m${u}\x1b[0m to run ${self.dumpname} via sudo on \x1b[4;97m${h}\x1b[0m`);
-        self.log(`\x1b[31m[ERROR]\x1b[0m see installation documentation for how to do this`);
+        self.log(`\x1b[31m[ERROR]\x1b[0m additional steps are required to allow user \x1b[4;97m${ou}\x1b[0m to run ${self.dumpname} via sudo on \x1b[4;97m${oh}\x1b[0m`);
+        self.log(`\x1b[33m[INFO]\x1b[0m see installation documentation for how to do this`);
         continue;
         }
       if (/listening/.test(line)) { 
@@ -234,7 +261,13 @@ DashPlatform.prototype.handleError = function(self, data) {
           continue;
           }
         }
-      self.log(line); 
+
+      self.log(`\x1b[31m[ERROR]\x1b[0m ${line}`); 
+      
+      if (/doesn't support monitor mode/.test(line)) {
+        self.log(`\x1b[33m[INFO]\x1b[0m tcpdump may have bug preventing it from functioning with your device in your ${or} ${ot} environment`);
+        self.log(`\x1b[33m[INFO]\x1b[0m consult the readme for a workaround alternative`);
+        }
       }
 }
     
