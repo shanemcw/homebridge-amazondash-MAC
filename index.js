@@ -38,7 +38,7 @@ function DashPlatform(log, config, api) {
 DashPlatform.prototype.configureAccessory = function(accessory) {
   var self = this;
   if (!accessory.context.mac) {
-    self.log(`\x1b[31m[ERROR]\x1b[0m configureAccessory called for malformed accessory (e.g. "MAC") missing`);
+    self.log(`\x1b[31m[ERROR]\x1b[0m configureAccessory called for malformed accessory (i.e., "MAC" missing)`);
     return;
     }
   if (self.debug >= 2) { self.log(`\x1b[4;97m${accessory.displayName}\x1b[0m is ${accessory.context.mac}`); }
@@ -72,7 +72,7 @@ DashPlatform.prototype.didFinishLaunching = function() {
   var self = this;
   
   if (!self.config.interface) {
-    self.log(`\x1b[31m[ERROR]\x1b[0m required plugin settings (e.g. "interface") are not yet specified`);
+    self.log(`\x1b[31m[ERROR]\x1b[0m required plugin settings (i.e., "interface") are not yet specified`);
     return;
     }
     
@@ -85,7 +85,7 @@ DashPlatform.prototype.didFinishLaunching = function() {
     
   for (let b of self.buttons) {
     if (!b.MAC) {
-      self.log(`\x1b[31m[ERROR]\x1b[0m required button settings (e.g. "MAC") are not yet specified`);
+      self.log(`\x1b[31m[ERROR]\x1b[0m required button settings (i.e., "MAC") are not yet specified`);
       return;
       }
     b.MAC = b.MAC.toUpperCase().replace(/([\dA-F]{2}\B)/g, "$1:");
@@ -97,6 +97,21 @@ DashPlatform.prototype.didFinishLaunching = function() {
         }
     }
     
+  // remove accessories not found (no longer found) in buttons   
+  for (let a of Object.values(self.accessories)) { 
+    var matched = false;
+    for (let b of self.buttons) {
+      if (a.context.mac === b.MAC) {
+        matched = true;
+        continue;
+        }
+      }
+    if (!matched) {
+      self.log(`\x1b[33m[INFO]\x1b[0m a button was found that is no longer specified (\x1b[4;97m${a.displayName}\x1b[0m at ${a.context.mac}); it will be removed`);
+      self.removeAccessory(a);
+      }
+    }
+     
   if (Object.keys(self.accessories).length > 0) {
     self.spawnDump(self);
     }
@@ -275,7 +290,7 @@ DashPlatform.prototype.dashEventWithAccessory = function(self, accessory) {
   accessory
     .getService(Service.StatelessProgrammableSwitch)
     .getCharacteristic(Characteristic.ProgrammableSwitchEvent)
-    .setValue(b); // 
+    .setValue(b);
   if (self.debug >= 1) { self.log(`\x1b[4;97m${accessory.displayName}\x1b[0m ${s} press`); }
   accessory.context.lastTriggered = new Date();
 }
@@ -331,9 +346,10 @@ DashPlatform.prototype.removeAccessory = function(accessory) {
     return;
     }
   if (accessory) {
+   if (self.debug >= 1) { self.log(`\x1b[33m[INFO]\x1b[0m removing \x1b[4;97m${accessory.displayName}\x1b[0m`);
     self.api.unregisterPlatformAccessories("homebridge-amazondash-mac", "AmazonDash-MAC", [accessory]);
     delete self.accessories[accessory.context.mac];
-    if (self.debug >= 2) { self.log(`removed ${accessory.displayName}`); }
+    }
   }
 }
 

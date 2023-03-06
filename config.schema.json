@@ -104,12 +104,12 @@
            "default"     : false,
            "description" : "tcpdump may not be usable in some environments where airodump-ng is a working option."
           },
-      "buttons": {
-        "title"       : "Dash Buttons",
-        "type"        : "array",
-        "description" : "Add more with \"Add Button\" below. See the readme linked above for more information about finding these values.",
-        "items"       : { "$ref": "#/definitions/button_obj", "extendRefs": true }
-      }
+          "buttons": {
+            "title"       : "Dash Buttons",
+            "type"        : "array",
+            "description" : "Add more with \"Add Button\" below. See the readme linked above for more information about finding these values.",
+            "items"       : { "$ref": "#/definitions/button_obj", "extendRefs": true }
+            }
     },
     "required": [ "buttons" ]
   }
