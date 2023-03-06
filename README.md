@@ -339,4 +339,10 @@ Cut a rectangular slot 4mm inset from all sides of the oval groove on the flat b
 
 ![Amazon Dash Version 2: Cutouts](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/homebridge-amazondash-mac-battery-b.jpeg)
 
+### Restored Battery Level and 3M Mounting Strip Covering New Battery Access 
+
+![Restored Battery Level](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/battery-level.png)
+
+![3M Mounting Strip Covering New Battery Access](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/dash-battery-3M.jpeg)
+
 ### [![Donate](https://badgen.net/badge/donate/paypal/yellow)](https://paypal.me/shanemcw)
