@@ -314,7 +314,7 @@ When using a token, insert it as the first element of the URL path, following ho
 
 ### Change the Battery Before It is Fully Depleted
 
-If the unit boots (i.e. from a button press) while "low power" it will be "bricked"—i.e., a red light only and no white light—even after a new battery is installed. It can still report its MAC address and battery level via its `Amazon ConfigureMe` WiFi access point at `192.168.0.1` (activated by a long press until the light pulses blue) but it no longer attempts to connect to a network on button press (during the "white light" phase). As it can report its MAC address, etc. it may still be recoverable by flashing it.
+If the unit boots (i.e. from a button press) while "low power" it will stop attempting to connect to a network—i.e., a red light only and no white light—even after a new battery is installed. It can still report its MAC address and battery level via its `Amazon ConfigureMe` WiFi access point at `192.168.0.1` (activated by a long press until the light pulses blue) but it no longer attempts to connect to a network on button press (during the "white light" phase). As it can report its MAC address, etc. it may still be recoverable by flashing it via the microphone method, depending on the firmware version.
 
 **Change the battery before the battery level becomes too low.**
 
