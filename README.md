@@ -142,7 +142,7 @@ The model number is printed on the back of the Dash button.
 ### MAC Address, Serial Number, Firmware Version
 An Amazon Dash button can create a WiFi access point and can provide its information via an internally-generated web page.
 
-![Amazon Dash Information Page](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/AmazonDash-MAC-1.png)
+![Amazon Dash Information Page](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/homebridge-amazondash-mac-configure-1.png)
 
 * Long press on the Dash button until the light flashes blue
 * Join the network `Amazon ConfigureMe` newly created by that Dash button
@@ -164,7 +164,7 @@ It has been seen (e.g., after the battery is replaced) that the web page at `192
 ### Some Dash Buttons May Not Work with this Plugin
 You may see a different Dash-generated web page such as below.
 
-![Alternate Amazon Dash Information Page](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/AmazonDash-MAC-2.png)
+![Alternate Amazon Dash Information Page](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/homebridge-amazondash-mac-configure-2.png)
 
 A Dash button showing a page of this type may or may not work with this plugin. Please try to enter your WiFi credentials and use this plugin in `MAC Address Discovery` debug mode to test if the button's MAC is visible, and that button's MAC address (if it is). If you are (or are not) able to use this technique for buttons showing a page of this type, please share your experiences in [this plugin's GitHub discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/5).
 
@@ -341,8 +341,8 @@ Cut a rectangular slot 4mm inset from all sides of the oval groove on the flat b
 
 ### Restored Battery Level and 3M Mounting Strip Covering New Battery Access 
 
-![Restored Battery Level](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/battery-level.png)
+![Restored Battery Level](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/homebridge-amazondash-mac-battery-level.png)
 
-![3M Mounting Strip Covering New Battery Access](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/dash-battery-3M.jpeg)
+![3M Mounting Strip Covering New Battery Access](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/homebridge-amazondash-mac-battery-3M.jpeg)
 
 ### [![Donate](https://badgen.net/badge/donate/paypal/yellow)](https://paypal.me/shanemcw)
