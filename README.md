@@ -169,7 +169,7 @@ You may see a different Dash-generated web page such as below.
 A Dash button showing a page of this type may or may not work with this plugin. Please try to enter your WiFi credentials and use this plugin in `MAC Address Discovery` debug mode to test if the button's MAC is visible, and that button's MAC address (if it is). If you are (or are not) able to use this technique for buttons showing a page of this type, please share your experiences in [this plugin's GitHub discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/5).
 
 ### No White Light on Button Press?
-On pessing an Amazon Dash button, is the button's light initially red instead of white? If you don't see an inital white light on pressing a Dash button, it is not attempting to connect to a network, therefore the button in its curent state will not work with this plugin. Dash buttons that had fully-depleted batteries before battery replacement or the button was pushed while the battery was low have exhibited this condition. Under these conditions, the Dash button may still be capable of reporting its MAC address and battery level via its `Amazon ConfigureMe` WiFi access point at `192.168.0.1` (activated by a long press until the light pulses blue) but it no longer attempts to connect to a network on button press (the "white light" phase is missing). As it can report its MAC address, etc., it may still be recoverable, depending on its firmware version, by flashing it via the "play a specific audio WAV file via an earbud up to its microphone while the light is pulsing blue, a green light means success" method. Firmware `40018220_US` may allow a recovery; firmware `50018520_US` and `60019520_US` may not.
+On pessing an Amazon Dash button, is the button's light initially red instead of white? If you don't see an inital white light on pressing a Dash button, it is not attempting to connect to a network, therefore the button in its curent state will not work with this plugin. Dash buttons that had fully-depleted batteries before battery replacement or the button was pushed while the battery was low have exhibited this condition. Under these conditions, the Dash button may still be capable of reporting its MAC address and battery level via its `Amazon ConfigureMe` WiFi access point at `192.168.0.1` (activated by a long press until the light pulses blue) but it no longer attempts to connect to a network on button press (the "white light" phase is missing). As it can report its MAC address, etc., it may still be recoverable, depending on its firmware version, by flashing it via the "play a specific audio WAV file via an earbud up to its microphone while the light is pulsing blue; a green light means success" method. Firmware `40018220_US` may allow a recovery; firmware `50018520_US` and `60019520_US` may not.
 
 ### Alias
 `alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
@@ -341,9 +341,11 @@ Cut a rectangular slot 4mm inset from all sides of the oval groove on the flat b
 
 ![Amazon Dash Version 2: Cutouts](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/homebridge-amazondash-mac-battery-b.jpeg)
 
-### Restored Battery Level and 3M Mounting Strip Covering New Battery Access 
+### Restored Battery Level
 
 ![Restored Battery Level](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/homebridge-amazondash-mac-battery-level.png)
+
+### 3M Mounting Strip Covering New Battery Access 
 
 ![3M Mounting Strip Covering New Battery Access](https://github.com/shanemcw/homebridge-amazondash-mac/blob/master/media/homebridge-amazondash-mac-battery-3M.jpeg)
 
