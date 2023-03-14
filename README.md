@@ -41,6 +41,7 @@ This plugin:
 
 This plugin is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng) with:
 
+* Code maintenance, bug fixes
 * Removal of the requirement to run Homebridge with root privileges
 * Switch to `tcpdump` from `airodump-ng` 
 * Support for the Homebridge Plugin Settings GUI
@@ -50,9 +51,10 @@ This plugin is a fork of jourdant's [homebridge-amazondash-ng](https://github.co
 * An optionally-enabled web API allowing virtual button pushes via URL
 * Support for firmware revision, serial number, model number
 * Multiple logging debug levels 
-* User ability to remove a stale button during setup experimentation
+* User ability to remove and reload all buttons during setup experimentation
+* Automatic removal of stale buttons that are no longer configured
 * Installation and usage documentation
-* Code maintenance, bug fixes
+* Documentation of possible battery replacement
 
 ## Ideas
 * Mount an Amazon Dash button as a doorbell and have a HomePod (or more than one) play a [doorbell sound effect](https://music.apple.com/us/album/door-bells-sound-effects/944475720), or a song about someone being at the door.
