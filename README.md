@@ -6,7 +6,7 @@ A modern (post-2019) [Homebridge-verified](https://github.com/homebridge/homebri
 
 Through [Homebridge](https://github.com/nfarina/homebridge), this plugin (and with an additional supported USB WiFi device typically) Amazon Dash buttons can be used as Homekit buttons.
 
-This plugin also provides an optional web API to virtually push the Amazon Dash buttons via URL.
+This plugin also provides an optional web API to push the Amazon Dash buttons via URL virtually.
 
 This project is a fork of jourdant's [homebridge-amazondash-ng](https://github.com/jourdant/homebridge-amazondash-ng), which is a fork of KhaosT's [homebridge-amazondash](https://github.com/KhaosT/homebridge-amazondash).
 
@@ -17,7 +17,7 @@ An Amazon Dash button is a discontinued proprietary device for ordering consumer
 
 An Amazon Dash button:
 
-* has a rounded, elongated shape with an concave button on one end
+* has a rounded, elongated shape with a concave button on one end
 * is white, with a removable product brand sticker
 * is being resold online often as "button pushed once"
 * includes its own removable clip for hanging and adhesive pads for mounting
@@ -171,7 +171,7 @@ You may see a different Dash-generated web page such as below.
 A Dash button showing a page of this type may or may not work with this plugin. Please try to enter your WiFi credentials and use this plugin in `MAC Address Discovery` debug mode to test if the button's MAC is visible, and that button's MAC address (if it is). If you are (or are not) able to use this technique for buttons showing a page of this type, please share your experiences in [this plugin's GitHub discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/5).
 
 ### No White Light on Button Press?
-On pressing an Amazon Dash button, is the button's light initially red instead of white? If you don't see an inital white light on pressing a Dash button, it is not attempting to connect to a network, therefore the button in its curent state will not work with this plugin. Dash buttons that had fully-depleted batteries before battery replacement or the button was pushed while the battery was low have exhibited this condition. Under these conditions, the Dash button may still be capable of reporting its MAC address and battery level via its `Amazon ConfigureMe` WiFi access point at `192.168.0.1` (activated by a long press until the light pulses blue) but it no longer attempts to connect to a network on button press (the "white light" phase is missing). As it can report its MAC address, etc., it may still be recoverable, depending on its firmware version, by flashing it via the "play a specific audio WAV file via an earbud up to its microphone while the light is pulsing blue; a green light means success" method. Firmware `40018220_US` may allow a recovery; firmware `50018520_US` and `60019520_US` may not.
+On pressing an Amazon Dash button, is the button's light initially red instead of white? If you don't see an initial white light on pressing a Dash button, it is not attempting to connect to a network. Therefore, the button in its current state will not work with this plugin. Dash buttons that had fully-depleted batteries before battery replacement or the button was pushed while the battery was low have exhibited this condition. Under these conditions, the Dash button may still be capable of reporting its MAC address and battery level via its `Amazon ConfigureMe` WiFi access point at `192.168.0.1` (activated by a long press until the light pulses blue) but it no longer attempts to connect to a network on button press (the "white light" phase is missing). If the light pulses blue on long press, it is likely recoverable, depending on its firmware version, by flashing it via the "play a specific audio WAV file via an earbud up to its microphone while the light is pulsing blue; a green light means success" method. Firmware `40018220_US` may allow a recovery; firmware such as `50018520_US` and `60019520_US` may not. If the light does not pulse blue on long press, it is likely not recoverable. It has been seen the light lit and remained a faint blue on battery insertion when replacing the battery on some formerly fully-depleted units. These units showing this condition did not respond with a pulsing blue on long press.
 
 ### Alias
 `alias` is an optional configuration for situations where a button is meant to act just as another. For example, you may have a need for more than one doorbell button for multiple doors. Another example is a button to trigger a "Goodnight" scene—however you want one on each nightstand on each side of the bed.
@@ -186,9 +186,9 @@ A WiFi device capable of *monitor mode* is needed for `tcpdump` to see Amazon Da
 A USB WiFi adapter is about $10-$20 with free shipping online. If you would like some insight about compatible WiFi adapters or you have tried a USB WiFi adapter with this plugin, learn more from or share your experience with the community (good or bad) in [this repository's discussion](https://github.com/shanemcw/homebridge-amazondash-mac/discussions/1). For example, a USB WiFi device known to work in some contexts for these purposes is the **Panda 300Mbps Wireless 802.11n USB Adapter (PAU05)**.
 
 ### Example WiFi Device Configuration
-This is example-only. There are several and different ways to do this.
+This is example-only. There are several different ways to do this.
 
-* Confirming the WiFi device is working, visible and to get the `interface` name:
+* Confirming the WiFi device is working and visible and get the `interface` name:
 ```
 sudo iw dev
 ```
@@ -219,7 +219,7 @@ This plugin uses `tcpdump`'s ability to report on MAC addresses visible to the W
 ```
 sudo tcpdump -i wlan0 --monitor-mode
 ```
-* Note: It has been seen that `tcpdump` may fail with `--monitor-mode` with the error "That device doesn't support monitor mode" although the device is reporting it is in and seemingly working in monitor mode via `iwconfig`, and demonstrated to work in an alternate OS version. This issue has been seen with the PAU05 device in *Jammy Jellyfish Ubuntu*. Under these conditions, using `airodump-ng` as an alternate to `tcpdump` is likely a workable option. To use this option, follow the instructions for `tcpdump` but install `aircrack-ng` and permit `airodump-ng` to be run via `sudo` without a password. Enable the setting *Use airodump-ng instead of tcpdump* in this plugin's settings.
+* Note: It has been seen that `tcpdump` may fail with `--monitor-mode` with the error "That device doesn't support monitor mode" although the device is reporting it is in and seemingly working in monitor mode via `iwconfig`, and demonstrated to work in an alternate OS version. This issue has been seen with the PAU05 device in *Jammy Jellyfish Ubuntu*. Under these conditions, using `airodump-ng` as an alternative to `tcpdump` is likely a workable option. To use this option, follow the instructions for `tcpdump` but install `aircrack-ng` and permit `airodump-ng` to be run via `sudo` without a password. Enable the setting *Use airodump-ng instead of tcpdump* in this plugin's settings.
 
 ### Installing `tcpdump`
 * If the above test failed because `tcpdump` is not installed, install `tcpdump`:
@@ -235,7 +235,7 @@ If `tcpdump` is not (yet) permitted to run by the `homebridge` user via `sudo` w
 [AmazonDash-MAC] ERROR: tcpdump closed, code 1
 ```
 
-You'll need to configure `tcpdump` to be run via `sudo` by the `homebridge` user without without a password.
+You'll need to configure `tcpdump` to be run via `sudo` by the `homebridge` user without a password.
 * For this configuration, you'll need the location of `tcpdump` on your system via e.g. `whereis tcpdump`.
 
 #### Method One: If you already have an entry for the `homebridge` user in your `sudoers` file
@@ -249,7 +249,7 @@ sudo visudo
 ```
 homebridge    ALL=(ALL) NOPASSWD:SETENV: /usr/sbin/shutdown, /usr/bin/npm, /usr/local/bin/npm, /usr/sbin/tcpdump
 ```
-* If there is no entry for the `homebridge` user such as the above in the `sudoers` file, proceed to *Method Two*.
+* If there is no entry for the `homebridge` user, such as the above in the `sudoers` file, proceed to *Method Two*.
 * Save the file and exit with that text editor's method. Accept any default file names during the save-and-exit step.
 	* `vi` or `vim` sequence 
 		* esc key
